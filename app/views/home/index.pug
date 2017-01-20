@@ -1,0 +1,15 @@
+extends ../layout/layout.pug
+
+block content
+  #root
+block dynamicCss
+  link(rel="stylesheet" href=helpers.assetUrl('index.css'))
+block dynamicJsIe
+  script.
+    window.__PRELOADED_STATE__ = !{ JSON.stringify(preloadedState) }
+  script(src=helpers.assetUrl('index.js'))
+block dynamicJs
+  script.
+    window.__PRELOADED_STATE__ = !{ JSON.stringify(preloadedState) }
+  script(src=helpers.assetUrl('index.js'))
+

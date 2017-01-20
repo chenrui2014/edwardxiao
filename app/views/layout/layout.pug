@@ -1,0 +1,46 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    meta(name="description" content=(description || "Edward Xiao"))
+    meta(name="author" content=(author || "Edward Xiao"))
+    title
+      = title || 'Edward Xiao'
+    link(rel='stylesheet' href=helpers.assetUrl('base.css'))
+    block dynamicCss
+    link(href="/favicon.png" rel="shortcut icon" type="image/png")
+    meta(name="csrf-param" content="_csrf")
+    meta(name="csrf-token" content=csrf)
+  body
+    block content
+    footer.footer
+    <!--[if lte IE 8]>
+    script.
+      document.body.innerHTML = '<div style="position:absolute;height:100%;bottom:0;top:0;left:0;right:0;text-align:center;">' +
+                                '<div style="display:table;width:100%;height:100%;">' +
+                                '<div style="display:table-cell;vertical-align:middle;">抱歉，您的浏览器实在太旧啦！请升级至ie9以上，或使用chrome，safari，360等现代浏览器访问。</div>' +
+                                '</div>'
+                                '</div>';
+    <![endif]-->
+    <!--[if gt IE 8]>
+    script.
+      window.CSRF = !{ JSON.stringify(csrf) };
+      window.LOCALE = !{ JSON.stringify(locale) };
+      window.USERINFO = !{ JSON.stringify(currentUser) };
+    script(src=helpers.vendorAssetUrl('react_vendors.js'))
+    script(src=helpers.assetUrl('common.js'))
+    script(src=helpers.assetUrl('base.js'))
+    block dynamicJsIe
+    <![endif]-->
+    <!--[if !IE]>-->
+    script.
+      window.CSRF = !{ JSON.stringify(csrf) };
+      window.LOCALE = !{ JSON.stringify(locale) };
+      window.USERINFO = !{ JSON.stringify(currentUser) };
+    script(src=helpers.vendorAssetUrl('react_vendors.js'))
+    script(src=helpers.assetUrl('common.js'))
+    script(src=helpers.assetUrl('base.js'))
+    block dynamicJs
+    <!--<![endif]-->

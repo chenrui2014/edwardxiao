@@ -1,0 +1,59 @@
+import logger from 'koa-logger';
+import helpers from '../helpers';
+import models from '../models';
+import _ from 'lodash';
+
+async function catchError(ctx, next) {
+  // console.log(ctx);
+  try {
+    await next();
+    if (ctx.status === 404) ctx.throw(404);
+  } catch(err) {
+    console.log(err);
+    let status = err.status || 500;
+    ctx.status = status;
+    ctx.state = {
+      status: status,
+      helpers: helpers,
+      currentUser: null
+    };
+    await ctx.render('error/error', {});
+  }
+}
+
+async function addHelper(ctx, next) {
+  var currentUser = null;
+  // ctx.session.userId = null;
+  if(ctx.session.userId){
+    await models.User.findById(ctx.session.userId).exec((err, res) => {
+      if (_.isNull(err) && res.length){
+        let user = res[0];
+        currentUser = {
+          '_id': user._id,
+          'name': user.name,
+          'role': user.role,
+          'phone': user.phone,
+          'email': user.email,
+          'createdAt': user.createdAt,
+        }
+      }
+    });
+  }
+  let locale = 'zh-CN';
+  if(typeof ctx.session.locale !== 'undefined' && ctx.session.locale !== null && ctx.session.locale !== ''){
+    locale = ctx.session.locale;
+  }
+  ctx.state = {
+    csrf: ctx.csrf,
+    locale: locale,
+    helpers: helpers,
+    currentUser: currentUser,
+    isUserSignIn: (currentUser != null)
+  };
+  await next();
+}
+
+export default {
+  catchError,
+  addHelper,
+};
