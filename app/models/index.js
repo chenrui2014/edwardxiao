@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import mongoose from 'mongoose';
+import config from '../../config/config';
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/edwardxiao');
+// mongoose.connect('mongodb://localhost/edwardxiao');
+mongoose.connect(config.dbUrl);
 const basename = path.basename(module.filename);
 const db = {};
 

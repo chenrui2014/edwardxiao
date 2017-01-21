@@ -1,0 +1,16 @@
+module.exports = {
+  'login': '登录',
+  'logout': '登出',
+  'signup': '注册',
+  'username': '账号',
+  'password': '密码',
+  'repeat-password': '重复密码',
+  'reset': '重置',
+  'nickname': '花名',
+  'phone': '电话',
+  'email': '邮件',
+  'verify-code': '验证码',
+  'fetch-verify-code': '获取验证码',
+  'avatar': '头像',
+  'use': '使用',
+};

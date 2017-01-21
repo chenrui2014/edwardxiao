@@ -6,9 +6,10 @@ let validator = new Validator();
 
 import {
   login,
+  setIsLogin,
 } from '../../actions/index';
 
-class AccountModal extends Component {
+class Login extends Component {
 
   constructor(props) {
     super(props);
@@ -26,6 +27,10 @@ class AccountModal extends Component {
   setPassword(){
     let password = this.refs.password.value;
     this.setState({password});
+  }
+
+  setIsLogin(val){
+    this.props.setIsLogin(val);
   }
 
   login(e){
@@ -47,11 +52,11 @@ class AccountModal extends Component {
       username,
       password,
     } = this.state;
-    let LANG = require('../../../../../locales/' + locale);
+    let LANG_USER = require('../../../../../locales/' + locale + '/user');
     return(
       <div className="modal-content">
         <div className="modal-header">
-          <span className="modal-title" id="exampleModalLabel">{LANG.users.login}</span>
+          <span className="modal-title" id="exampleModalLabel">{LANG_USER.login}</span>
           <button type="button" className="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -70,7 +75,7 @@ class AccountModal extends Component {
                 data-my-validator-required="true"
                 data-my-validator-name=""
                 data-my-validator-type="text"
-                placeholder={LANG.users.username}
+                placeholder={LANG_USER.username}
                 style={{'float':'none','display':'inline-block'}}
                 onChange={this.setUsername.bind(this)}
               />
@@ -88,7 +93,7 @@ class AccountModal extends Component {
                 data-my-validator-min-length="6"
                 data-my-validator-max-length="20"
                 data-my-validator-type="password"
-                placeholder={LANG.users.password}
+                placeholder={LANG_USER.password}
                 style={{'float':'none','display':'inline-block'}}
                 onChange={this.setPassword.bind(this)}
               />
@@ -98,7 +103,11 @@ class AccountModal extends Component {
           </form>
         </div>
         <div className="modal-footer">
-          <div className="my-button my-button--blue width-100pc" onClick={this.login.bind(this)}>{LANG.actions.confirm}</div>
+          <div className="my-button my-button--blue width-100pc" onClick={this.login.bind(this)}>{LANG_USER.login}</div>
+          <div className="height-15"></div>
+          <div className="border-h"></div>
+          <div className="height-15"></div>
+          <div className="my-button my-button--red width-100pc" onClick={this.setIsLogin.bind(this, false)}>{LANG_USER.signup}</div>
         </div>
       </div>
     );
@@ -118,16 +127,19 @@ function mapDispatchToProps(dispatch) {
     login: (username, password) => {
       dispatch(login(username, password));
     },
+    setIsLogin: (val) => {
+      dispatch(setIsLogin(val));
+    },
   };
 }
 
-AccountModal.contextTypes = {
+Login.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 
-AccountModal.propTypes = {
+Login.propTypes = {
   locale: React.PropTypes.string.isRequired,
   login: React.PropTypes.func.isRequired,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AccountModal);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,0 +1,16 @@
+module.exports = {
+  'please': '请',
+  'invalid': '无效',
+  'empty': '空',
+  'please-enter': '请输入',
+  'please-confirm': '请确认',
+  'failed': '失败',
+  'failure': '失败',
+  'error': '故障',
+  'success': '成功',
+  'successful': '成功',
+  'successfully': '成功',
+  'network': '网络',
+  'try-again': '重试',
+  'invalid-password': '密码错误',
+};

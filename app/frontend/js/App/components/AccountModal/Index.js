@@ -10,17 +10,10 @@ class AccountModal extends Component {
     super(props);
   }
 
-  changeLocale(){
-    let val = this.refs.locale.value;
-    this.props.changeLocale(val);
-  }
-
   render() {
     let {
-      locale,
       isLogin,
     } = this.props;
-    let LANG = require('../../../../../locales/' + locale);
     let title;
     let content;
     if (isLogin){
@@ -41,11 +34,9 @@ class AccountModal extends Component {
 
 function mapStateToProps(state) {
   let {
-    locale,
     isLogin,
   } = state;
   return {
-    locale,
     isLogin,
   };
 }
@@ -60,7 +51,6 @@ AccountModal.contextTypes = {
 };
 
 AccountModal.propTypes = {
-  locale: React.PropTypes.string.isRequired,
   isLogin: React.PropTypes.bool.isRequired,
 }
 

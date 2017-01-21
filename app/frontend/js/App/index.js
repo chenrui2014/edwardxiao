@@ -59,7 +59,6 @@ class Index extends Component {
     let {
       locale,
     } = this.props;
-    let LANG = require('../../../locales/' + locale);
     let content = (
       <div className="container-full">
         <MobileNav/>

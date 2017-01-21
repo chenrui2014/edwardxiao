@@ -2,10 +2,15 @@ import _ from 'lodash';
 class MyValidator {
 
   constructor() {
-    this.init();
+
   }
 
-  validate($this) {
+  validate($this, name = '', locale = window.LOCALE) {
+    const LANG_FILE = {
+      'zh-CN': require('../../../locales/zh-CN/validator'),
+      'zh-HK': require('../../../locales/zh-HK/validator'),
+      'en-US': require('../../../locales/en-US/validator'),
+    };
     let isMyValidator = $this.data('my-validator');
     let $parent = $this.parent();
     let $message = $parent.next('div[class^="my-validator-message"]');
@@ -14,7 +19,9 @@ class MyValidator {
     let error = false;
     let message;
     let validatorRequired = $this.data('my-validator-required');
-    let name = $this.data('my-validator-name');
+    if (name == ''){
+      name = $this.data('my-validator-name');
+    }
     if ($inputType == 'text' || $inputType == 'tel' || $inputType == 'date' || $this.is('textarea') || $elType == 'select-one' || $elType == 'password'){
       if (isMyValidator){
         let $val = $this.val();
@@ -22,8 +29,7 @@ class MyValidator {
         if (validatorRequired){
           if (isEmpty){
             error = true;
-            // message = name + '不能为空';
-            message = '请完善内容';
+            message = LANG_FILE[locale]['please-complete'];
           }
         }
         let validatorType = $this.data('my-validator-type');
@@ -38,35 +44,33 @@ class MyValidator {
         if (validatorType == 'email'){
           if (!this.isEmail($val) && !isEmpty){
             error = true;
-            // message = name + '格式不正确';
-            message = '格式错误';
+            message = LANG_FILE[locale]['invalid-format'];
           }
         }
         if (validatorType == 'number' && !isEmpty){
           if ((_.isNaN(_.toNumber($val)) || !_.isNumber(_.toNumber($val))) && !isEmpty){
             error = true;
-            // message = name + '必须为数字';
-            message = '格式错误';
+            message = LANG_FILE[locale]['invalid-format'];
           }
         }
         if (!error && validatorLength){
-          let result = this.validateExactLength($val, name, validatorLength);
+          let result = this.validateExactLength($val, name, validatorLength, locale);
           error = result.error;
           message = result.message;
         }
         if (!error && (validatorMinLength || validatorMaxLength)){
-          let result = this.validateLength($val, name, validatorMinLength, validatorMaxLength);
+          let result = this.validateLength($val, name, validatorMinLength, validatorMaxLength, locale);
           error = result.error;
           message = result.message;
         }
         if (!error && (validatorMinAmount || validatorMaxAmount)){
-          let result = this.validateAmount($val, name, validatorMinAmount, validatorMaxAmount);
+          let result = this.validateAmount($val, name, validatorMinAmount, validatorMaxAmount, locale);
           error = result.error;
           message = result.message;
         }
         if (!error && !_.isUndefined(compareId) && compareId != ''){
           let compareVal = $('#' + compareId).val();
-          let result = this.validateEqualValue(name, $this.val(), compareVal);
+          let result = this.validateEqualValue(name, $this.val(), compareVal, locale);
           error = result.error;
           message = result.message;
         }
@@ -77,7 +81,7 @@ class MyValidator {
           }
           else{
             if (showValidMessage){
-              message = '正确';
+              message = LANG_FILE[locale]['correct'];
               $parent.addClass('has-success');
               this.createMessage($parent, message, 'success');
             }
@@ -95,7 +99,7 @@ class MyValidator {
       if (isMyValidator && $message.length <= 0){
         if (validatorRequired){
           if (!$this.is(':checked')){
-            message = '请勾选' + name;
+            message = LANG_FILE[locale]['please-check'] + name;
             $parent.addClass('has-error');
             this.createMessage($parent, message, 'error');
             error = true;
@@ -112,7 +116,12 @@ class MyValidator {
     return true;
   }
 
-  validateLength (val, name, validatorMinLength, validatorMaxLength){
+  validateLength (val, name, validatorMinLength, validatorMaxLength, locale = window.LOCALE){
+    const LANG_FILE = {
+      'zh-CN': require('../../../locales/zh-CN/validator'),
+      'zh-HK': require('../../../locales/zh-HK/validator'),
+      'en-US': require('../../../locales/en-US/validator'),
+    };
     validatorMinLength = _.toNumber(validatorMinLength);
     validatorMaxLength = _.toNumber(validatorMaxLength);
     let result = {
@@ -121,18 +130,23 @@ class MyValidator {
     };
     if (validatorMinLength && val.length < validatorMinLength){
       result.error = true;
-      result.message = name + '不能小于' + validatorMinLength + '个字节';
+      result.message = name +  LANG_FILE[locale]['cannot-less-than'] + validatorMinLength + LANG_FILE[locale]['charactor-number'];
       // result.message = '输入错误';
     }
     if (validatorMinLength && val.length > validatorMaxLength){
       result.error = true;
-      result.message = name + '不能超过' + validatorMaxLength + '个字节';
+      result.message = name + LANG_FILE[locale]['cannot-great-than'] + validatorMaxLength + LANG_FILE[locale]['charactor-number'];
       // result.message = '输入错误';
     }
     return result;
   }
 
-  validateExactLength (val, name, validatorLength){
+  validateExactLength (val, name, validatorLength, locale = window.LOCALE){
+    const LANG_FILE = {
+      'zh-CN': require('../../../locales/zh-CN/validator'),
+      'zh-HK': require('../../../locales/zh-HK/validator'),
+      'en-US': require('../../../locales/en-US/validator'),
+    };
     validatorLength = _.toNumber(validatorLength);
     let result = {
       error: false,
@@ -141,12 +155,17 @@ class MyValidator {
     if (validatorLength && (val.length != validatorLength)){
       result.error = true;
       // result.message = name + '长度必须为' + validatorLength;
-      result.message = '格式错误';
+      result.message = LANG_FILE[locale]['invalid-format'];
     }
     return result;
   }
 
-  validateAmount (val, name, validatorMinAmount, validatorMaxAmount){
+  validateAmount (val, name, validatorMinAmount, validatorMaxAmount, locale = window.LOCALE){
+    const LANG_FILE = {
+      'zh-CN': require('../../../locales/zh-CN/validator'),
+      'zh-HK': require('../../../locales/zh-HK/validator'),
+      'en-US': require('../../../locales/en-US/validator'),
+    };
     val = _.toNumber(val);
     validatorMinAmount = _.toNumber(validatorMinAmount);
     validatorMaxAmount = _.toNumber(validatorMaxAmount);
@@ -157,17 +176,22 @@ class MyValidator {
     if (validatorMinAmount && val < validatorMinAmount){
       result.error = true;
       // result.message = name + '不能小于' + validatorMinAmount;
-      result.message = '输入错误';
+      result.message = LANG_FILE[locale]['invalid-amount'];
     }
     if (validatorMaxAmount && val > validatorMaxAmount){
       result.error = true;
       // result.message = name + '不能超过' + validatorMaxAmount;
-      result.message = '输入错误';
+      result.message = LANG_FILE[locale]['invalid-amount'];
     }
     return result;
   }
 
-  validateEqualValue(name, val1, val2){
+  validateEqualValue(name, val1, val2, locale = window.LOCALE){
+    const LANG_FILE = {
+      'zh-CN': require('../../../locales/zh-CN/validator'),
+      'zh-HK': require('../../../locales/zh-HK/validator'),
+      'en-US': require('../../../locales/en-US/validator'),
+    };
     val1 = _.toString(val1);
     val2 = _.toString(val2);
     let result = {
@@ -176,7 +200,7 @@ class MyValidator {
     };
     if (val1 != val2){
       result.error = true;
-      result.message = `两次${name}不一致`;
+      result.message = LANG_FILE[locale]['twice-times'] + name + LANG_FILE[locale]['not-equal'];
     }
     return result;
   }

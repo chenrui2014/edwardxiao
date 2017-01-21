@@ -108,12 +108,47 @@
 
 /*login*/
 
+.signup,
 .login {
   width: 100%;
 }
 
 .login .input-group {
   margin-bottom: 10px;
+}
+
+.signup .input-title,
+.login .input-title {
+  background: #505050;
+  font-size: 12px;
+  padding: 3px;
+  border: 1px solid #2d2d2d;
+  color: #fff;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, .2);
+}
+
+.signup .fetch-verify-code {
+  position: absolute;
+  right: 0;
+  top: 19px;
+  height: 30px;
+}
+
+.signup .verify-method {
+  position: absolute;
+  right: 0;
+  top: 25px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.signup .row-wrapper {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.signup .row-wrapper:last-child {
+  margin-bottom: 0;
 }
 
 .login .input-wapper .input-group:last-child {

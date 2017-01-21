@@ -1,13 +1,19 @@
 'use strict'
+var bcrypt = require('bcrypt');
 var mongoose = require('../db/index');
 var Schema = mongoose.Schema;
 
+const saltRounds = 10;
+const password = '123456';
+
+var hash = bcrypt.hashSync(password, saltRounds);
+
 var usersList = [{
-  name:'admin',
+  name: 'admin',
   role: 'admin',
   phone: '0123456789',
   email: 'admin@example.com',
-  password: '123456',
+  password: hash,
 }];
 var UserSchema = new Schema({
   name: { type: String, required: true },
@@ -25,6 +31,6 @@ exports.up = function(next) {
 };
 
 exports.down = function(next) {
-  User.remove({}, function (err) {});
+  User.remove({}, function(err) {});
   next();
 };

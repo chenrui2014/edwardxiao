@@ -7,5 +7,5 @@ module.exports = {
   assetHost: process.env.ASSET_HOST_PRO || '',
   redisUrl: process.env.REDIS_URL_PRO,
   secretKeyBase: process.env.SECRET_KEY_BASE,
-  dbUrl: 'mongodb://localhost/edwardxiao'
+  dbUrl: 'mongodb://edward:123321@127.0.0.1:27017/edwardxiao'
 };

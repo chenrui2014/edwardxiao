@@ -1,0 +1,16 @@
+module.exports = {
+  'login': 'login',
+  'logout': 'logout',
+  'signup': 'signup',
+  'username': 'username',
+  'password': 'password',
+  'repeat-password': 'repeat password',
+  'reset': 'reset',
+  'nickname': 'nickname',
+  'phone': 'phone',
+  'email': 'email',
+  'verify-code': 'verify code',
+  'fetch-verify-code': 'fetch verify code',
+  'avatar': 'avatar',
+  'use': 'use ',
+};

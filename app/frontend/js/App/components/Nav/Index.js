@@ -33,14 +33,16 @@ class Nav extends Component {
       locale,
       userInfo,
     } = this.props;
-    let LANG = require('../../../../../locales/' + locale);
+    let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
+    let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
+    let LANG_USER = require('../../../../../locales/' + locale + '/user');
     let userHtml;
     if (_.isNull(userInfo)){
       userHtml = (
         <div className="user-nav__item">
-          <div className="user-nav__item no-mobile-990 cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, true)}>{LANG.users.login}</div>
+          <div className="user-nav__item no-mobile-990 cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, true)}>{LANG_USER.login}</div>
           <div className="user-nav__item no-mobile-990">&nbsp;/&nbsp;</div>
-          <div className="user-nav__item no-mobile-990 cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, false)}>{LANG.users.signup}</div>
+          <div className="user-nav__item no-mobile-990 cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, false)}>{LANG_USER.signup}</div>
         </div>
       );
     }
@@ -51,7 +53,7 @@ class Nav extends Component {
           <div className="mo-dropdown__menu">
             <div className="mo-dropdown__container">
               <div className="mo-dropdown__item" onClick={this.logout.bind(this)}>
-                {LANG.users.logout}
+                {LANG_USER.logout}
               </div>
             </div>
           </div>
@@ -64,16 +66,16 @@ class Nav extends Component {
           <span className="mobile-menu-icon glyphicon glyphicon-menu-hamburger grey-4a" aria-hidden="true"></span>
           <a className="no-mobile-990" href="/">
             <div className="logo"><span className="icon icon-edwardxiao"></span></div>
-            <div className="site-name"><span>{LANG.sites.name}</span></div>
+            <div className="site-name"><span>{LANG_GENERAL.name}</span></div>
           </a>
-          <a href="#intros" className="menu__item no-mobile-990" data-menuanchor="intros"><div>{LANG.nav.home}</div></a>
-          <a href="#designs" className="menu__item no-mobile-990" data-menuanchor="designs"><div>{LANG.nav.portfolio}</div></a>
-          <a href="#articles" className="menu__item no-mobile-990" data-menuanchor="articles"><div>{LANG.nav.article}</div></a>
-          <a href="#contacts" className="menu__item no-mobile-990" data-menuanchor="contacts"><div>{LANG.nav.contact}</div></a>
+          <a href="#intros" className="menu__item no-mobile-990" data-menuanchor="intros"><div>{LANG_NAV.home}</div></a>
+          <a href="#designs" className="menu__item no-mobile-990" data-menuanchor="designs"><div>{LANG_NAV.portfolio}</div></a>
+          <a href="#articles" className="menu__item no-mobile-990" data-menuanchor="articles"><div>{LANG_NAV.article}</div></a>
+          <a href="#contacts" className="menu__item no-mobile-990" data-menuanchor="contacts"><div>{LANG_NAV.contact}</div></a>
         </div>
         <div className="nav__center show-mobile-tbl-cel-990">
           <a href="/">
-            <div className="site-name"><span>{LANG.sites.name}</span></div>
+            <div className="site-name"><span>{LANG_GENERAL.name}</span></div>
           </a>
         </div>
         <div className="nav__right user-nav">

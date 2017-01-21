@@ -29,6 +29,8 @@ html
       window.CSRF = !{ JSON.stringify(csrf) };
       window.LOCALE = !{ JSON.stringify(locale) };
       window.USERINFO = !{ JSON.stringify(currentUser) };
+    script(src='/static/js/plupload.full.min.js')
+    script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src=helpers.vendorAssetUrl('react_vendors.js'))
     script(src=helpers.assetUrl('common.js'))
     script(src=helpers.assetUrl('base.js'))
@@ -39,6 +41,8 @@ html
       window.CSRF = !{ JSON.stringify(csrf) };
       window.LOCALE = !{ JSON.stringify(locale) };
       window.USERINFO = !{ JSON.stringify(currentUser) };
+    script(src='/static/js/plupload.full.min.js')
+    script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src=helpers.vendorAssetUrl('react_vendors.js'))
     script(src=helpers.assetUrl('common.js'))
     script(src=helpers.assetUrl('base.js'))

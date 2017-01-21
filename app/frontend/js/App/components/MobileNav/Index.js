@@ -31,14 +31,15 @@ class Nav extends Component {
       userInfo,
     } = this.props;
     let userHtml;
-    let LANG = require('../../../../../locales/' + locale);
+    let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
+    let LANG_USER = require('../../../../../locales/' + locale + '/user');
     if (_.isNull(userInfo)){
       userHtml = (
         <div className="mo-nav-column__item">
           <div className="mo-nav-column__item user-nav">
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, true)}>{LANG.users.login}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, true)}>{LANG_USER.login}</span>
             <span className="user-nav__item">&nbsp;/&nbsp;</span>
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, false)}>{LANG.users.signup}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, false)}>{LANG_USER.signup}</span>
           </div>
         </div>
       );
@@ -49,7 +50,7 @@ class Nav extends Component {
           <div className="mo-nav-column__item user-nav">
             <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal">{userInfo.name}</span>
             <span className="user-nav__item">&nbsp;/&nbsp;</span>
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.logout.bind(this, false)}>{LANG.users.logout}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.logout.bind(this, false)}>{LANG_USER.logout}</span>
           </div>
         </div>
       );
@@ -67,28 +68,28 @@ class Nav extends Component {
                 <a className="mo-nav-column__item" href="#intros" data-menuanchor="intros">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
-                      {LANG.nav.home}
+                      {LANG_NAV.home}
                     </div>
                   </div>
                 </a>
                 <a className="mo-nav-column__item" href="#designs" data-menuanchor="designs">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
-                      {LANG.nav.portfolio}
+                      {LANG_NAV.portfolio}
                     </div>
                   </div>
                 </a>
                 <a className="mo-nav-column__item" href="#articles" data-menuanchor="articles">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
-                      {LANG.nav.article}
+                      {LANG_NAV.article}
                     </div>
                   </div>
                 </a>
                 <a className="mo-nav-column__item" href="#contacts" data-menuanchor="contacts">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
-                      {LANG.nav.contact}
+                      {LANG_NAV.contact}
                     </div>
                   </div>
                 </a>
