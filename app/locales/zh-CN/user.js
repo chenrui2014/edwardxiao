@@ -11,6 +11,9 @@ module.exports = {
   'email': '邮件',
   'verify-code': '验证码',
   'fetch-verify-code': '获取验证码',
+  're-fetch-verify-code': '后重新发送',
   'avatar': '头像',
   'use': '使用',
+  'upload': '上传',
+  're-upload': '重新上传',
 };

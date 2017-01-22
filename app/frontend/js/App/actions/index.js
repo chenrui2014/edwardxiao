@@ -31,6 +31,18 @@ export const setIsLogin = (isLogin) => ({
   isLogin
 });
 
+export const SET_IS_SEND_VERIFY_CODE = 'SET_IS_SEND_VERIFY_CODE';
+export const setIsSendVerifyCode = (isSendVerifyCode) => ({
+  type: SET_IS_SEND_VERIFY_CODE,
+  isSendVerifyCode
+});
+
+export const SET_IS_CAPTCHA = 'SET_IS_CAPTCHA';
+export const setCaptcha = (captcha) => ({
+  type: SET_IS_CAPTCHA,
+  captcha
+});
+
 export const changeLocale = (locale) => (dispatch) => {
    changeLocaleApi(locale).then((res) => {
       console.log(res);
@@ -63,17 +75,59 @@ function changeLocaleApi(locale) {
   })
 }
 
-export const login = (username, password) => (dispatch) => {
-   loginApi(username, password).then((res) => {
+export const changeCaptcha = () => (dispatch) => {
+   changeCaptchaApi().then((res) => {
+      console.log(res);
+      if (res.code === 0){
+        dispatch(setCaptcha(res.data.captcha));
+      }
+      else{
+        if(res.msg){
+          alert(res.msg);
+        }
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+function changeCaptchaApi() {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/api/users/captcha',
+      type: 'post',
+      success: (data) => {
+        resolve(data);
+      },
+      error: (error) => {
+        reject(error);
+      }
+    });
+  })
+}
+
+export const login = (username, password, captchaCode) => (dispatch) => {
+   loginApi(username, password, captchaCode).then((res) => {
       console.log(res);
       if (res.code === 0){
         dispatch(setUserInfo(res.data.currentUser));
         $('#accountModal').modal('toggle');
       }
       else{
-        if(res.msg){
-          if (!$('#password').parent().siblings('.my-validator-message').length){
-            validator.createMessage($('#password').parent(), res.msg, 'error');
+        if (res.data.captcha){
+          console.log(res.data.captcha);
+          dispatch(setCaptcha(res.data.captcha));
+          if(res.msg){
+            if (!$('#captchaCode').parent().siblings('.my-validator-message').length){
+              validator.createMessage($('#captchaCode').parent(), res.msg, 'error');
+            }
+          }
+        }
+        else{
+          if(res.msg){
+            if (!$('#password').parent().siblings('.my-validator-message').length){
+              validator.createMessage($('#password').parent(), res.msg, 'error');
+            }
           }
         }
       }
@@ -82,11 +136,57 @@ export const login = (username, password) => (dispatch) => {
     });
   }
 
-function loginApi(username, password) {
+function loginApi(username, password, captchaCode) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/users/login',
-      data: {username, password},
+      data: {username, password, captchaCode},
+      type: 'post',
+      success: (data) => {
+        resolve(data);
+      },
+      error: (error) => {
+        reject(error);
+      }
+    });
+  })
+}
+
+export const signup = (nickname, phone, email, verifyCode, password, avatar, captchaCode) => (dispatch) => {
+   signupApi(nickname, phone, email, verifyCode, password, avatar, captchaCode).then((res) => {
+      console.log(res);
+      if (res.code === 0){
+        dispatch(setUserInfo(res.data.currentUser));
+        $('#accountModal').modal('toggle');
+      }
+      else{
+        if (res.data.captcha){
+          console.log(res.data.captcha);
+          dispatch(setCaptcha(res.data.captcha));
+          if(res.msg){
+            if (!$('#captchaCode').parent().siblings('.my-validator-message').length){
+              validator.createMessage($('#captchaCode').parent(), res.msg, 'error');
+            }
+          }
+        }
+        else{
+          if(res.msg){
+            if (!$('#password').parent().siblings('.my-validator-message').length){
+              validator.createMessage($('#password').parent(), res.msg, 'error');
+            }
+          }
+        }
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+function signupApi(nickname, phone, email, verifyCode, password, avatar, captchaCode) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/api/users/signup',
+      data: {nickname, phone, email, verifyCode, password, avatar, captchaCode},
       type: 'post',
       success: (data) => {
         resolve(data);
@@ -118,6 +218,43 @@ function logoutApi() {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/users/logout',
+      type: 'post',
+      success: (data) => {
+        resolve(data);
+      },
+      error: (error) => {
+        reject(error);
+      }
+    });
+  })
+}
+
+export const fetchVerifyCode = (phone) => (dispatch) => {
+  dispatch(setIsSendVerifyCode(true));
+  fetchVerifyCodeApi(phone).then((res) => {
+    console.log(res);
+    if (res.code === 0){
+      // Utils.stopSpin('spin-loader');
+    }
+    else{
+      if(res.msg){
+        alert(res.msg);
+      }
+    }
+    // dispatch(setIsSendVerifyCode(false));
+  }).catch((err) => {
+    // debugger;
+    // alert('网络错误，请重试');
+    // dispatch(setIsSendVerifyCode(false));
+    console.log(err);
+  });
+}
+
+function fetchVerifyCodeApi(phone) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/api/register/sms',
+      data: {phone},
       type: 'post',
       success: (data) => {
         resolve(data);

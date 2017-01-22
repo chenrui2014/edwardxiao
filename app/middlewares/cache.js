@@ -51,10 +51,26 @@ module.exports = function (options) {
     return data;
   };
 
+  const delCache = async function(key) {
+    if(!redisAvailable){
+      return;
+    }
+    key = prefix + key;
+    // success 1, faild: 0
+    let data = await redisClient.del(key);
+    if (data === 1){
+      return true;
+    }
+    else{
+      return false;
+    }
+  };
+
   const cacheMiddle = async function(ctx, next) {
     ctx.cache = {
       get: getCache,
-      set: setCache
+      set: setCache,
+      del: delCache,
     };
     await next();
   };

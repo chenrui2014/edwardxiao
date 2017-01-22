@@ -1,6 +1,8 @@
 export const DEFAULT_STATE = {
   locale: LOCALE,
-  userInfo: USERINFO,
+  userInfo: USER_INFO,
   isFetching: false,
   isLogin: true,
+  isSendVerifyCode: false,
+  captcha: CAPTCHA_DATA,
 };

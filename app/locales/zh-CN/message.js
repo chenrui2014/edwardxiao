@@ -13,4 +13,6 @@ module.exports = {
   'network': '网络',
   'try-again': '重试',
   'invalid-password': '密码错误',
+  'invalid-captcha': '验证码错误',
+  'please-enter-captcha': '请输入验证码',
 };

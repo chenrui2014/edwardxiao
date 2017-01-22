@@ -36,3 +36,21 @@ export function isLogin(isLogin = DEFAULT_STATE.isLogin, action) {
       return isLogin;
   }
 }
+
+export function isSendVerifyCode(isSendVerifyCode = DEFAULT_STATE.isSendVerifyCode, action) {
+  switch (action.type) {
+    case ACTION.SET_IS_SEND_VERIFY_CODE:
+      return action.isSendVerifyCode;
+    default:
+      return isSendVerifyCode;
+  }
+}
+
+export function captcha(captcha = DEFAULT_STATE.captcha, action) {
+  switch (action.type) {
+    case ACTION.SET_IS_CAPTCHA:
+      return action.captcha;
+    default:
+      return captcha;
+  }
+}

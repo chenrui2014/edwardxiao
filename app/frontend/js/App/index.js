@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import 'fullpage.js/dist/jquery.fullpage.min.js';
-import 'fullpage.js/dist/jquery.fullpage.min.css';
 import {
   changeLocale,
 } from './actions/index';

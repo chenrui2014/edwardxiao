@@ -11,6 +11,9 @@ module.exports = {
   'email': 'email',
   'verify-code': 'verify code',
   'fetch-verify-code': 'fetch verify code',
+  're-fetch-verify-code': ' later to fetch again',
   'avatar': 'avatar',
   'use': 'use ',
+  'upload': 'upload',
+  're-upload': 'change',
 };

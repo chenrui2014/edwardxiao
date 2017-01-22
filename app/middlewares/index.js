@@ -2,6 +2,7 @@ import logger from 'koa-logger';
 import helpers from '../helpers';
 import models from '../models';
 import _ from 'lodash';
+import config from '../../config/config';
 
 async function catchError(ctx, next) {
   // console.log(ctx);
@@ -43,8 +44,17 @@ async function addHelper(ctx, next) {
   if(typeof ctx.session.locale !== 'undefined' && ctx.session.locale !== null && ctx.session.locale !== ''){
     locale = ctx.session.locale;
   }
+  else{
+    ctx.session.locale = locale;
+  }
+  let captchaData = '';
+  if(typeof ctx.session.captchaData !== 'undefined' && ctx.session.captchaData !== null && ctx.session.captchaData !== ''){
+    captchaData = ctx.session.captchaData
+  }
   ctx.state = {
     csrf: ctx.csrf,
+    captchaData: captchaData,
+    qiniuDomain: config.qiniu.domain,
     locale: locale,
     helpers: helpers,
     currentUser: currentUser,

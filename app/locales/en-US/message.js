@@ -13,4 +13,6 @@ module.exports = {
   'network': 'network ',
   'try-again': 'try again ',
   'invalid-password': 'Invalid password',
+  'invalid-captcha': 'invalid captcha',
+  'please-enter-captcha': 'please enter captcha',
 };

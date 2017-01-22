@@ -13,4 +13,6 @@ module.exports = {
   'network': '網路',
   'try-again': '重試',
   'invalid-password': '密碼錯誤',
+  'invalid-captcha': '驗證碼錯誤',
+  'please-enter-captcha': '請輸入驗證碼',
 };
