@@ -37,9 +37,9 @@ class Nav extends Component {
       userHtml = (
         <div className="mo-nav-column__item">
           <div className="mo-nav-column__item user-nav">
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, true)}>{LANG_USER.login}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setIsLogin.bind(this, true)}>{LANG_USER.login}</span>
             <span className="user-nav__item">&nbsp;/&nbsp;</span>
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, false)}>{LANG_USER.signup}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setIsLogin.bind(this, false)}>{LANG_USER.signup}</span>
           </div>
         </div>
       );
@@ -48,9 +48,9 @@ class Nav extends Component {
       userHtml = (
         <div className="mo-nav-column__item">
           <div className="mo-nav-column__item user-nav">
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal">{userInfo.nickname}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal">{userInfo.nickname}</span>
             <span className="user-nav__item">&nbsp;/&nbsp;</span>
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.logout.bind(this, false)}>{LANG_USER.logout}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.logout.bind(this, false)}>{LANG_USER.logout}</span>
           </div>
         </div>
       );

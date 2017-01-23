@@ -30,7 +30,7 @@ async function addHelper(ctx, next) {
       if (_.isNull(err) && res.length){
         let user = res[0];
         currentUser = {
-          '_id': user._id,
+          'id': user._id,
           'nickname': user.nickname,
           'role': user.role,
           'phone': user.phone,

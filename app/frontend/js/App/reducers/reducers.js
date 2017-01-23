@@ -28,12 +28,12 @@ export function isFetching(isFetching = DEFAULT_STATE.isFetching, action) {
   }
 }
 
-export function isLogin(isLogin = DEFAULT_STATE.isLogin, action) {
+export function modalContentName(modalContentName = DEFAULT_STATE.modalContentName, action) {
   switch (action.type) {
-    case ACTION.SET_IS_LOGIN:
-      return action.isLogin;
+    case ACTION.SET_MODAL_CONTENT_NAME:
+      return action.modalContentName;
     default:
-      return isLogin;
+      return modalContentName;
   }
 }
 

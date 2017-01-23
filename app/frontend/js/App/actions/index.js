@@ -21,16 +21,10 @@ export const setUserInfo = (userInfo) => ({
   userInfo
 });
 
-export const SET_ROLE = 'SET_ROLE';
-export const setRole = (role) => ({
-  type: SET_ROLE,
-  role
-});
-
-export const SET_IS_LOGIN = 'SET_IS_LOGIN';
-export const setIsLogin = (isLogin) => ({
-  type: SET_IS_LOGIN,
-  isLogin
+export const SET_MODAL_CONTENT_NAME = 'SET_MODAL_CONTENT_NAME';
+export const setModalContentName = (modalContentName) => ({
+  type: SET_MODAL_CONTENT_NAME,
+  modalContentName
 });
 
 export const SET_IS_SEND_VERIFY_CODE = 'SET_IS_SEND_VERIFY_CODE';
@@ -111,7 +105,7 @@ export const login = (username, password, captchaCode) => (dispatch) => {
     console.log(res);
     if (res.code === 0) {
       dispatch(setUserInfo(res.data.currentUser));
-      $('#accountModal').modal('toggle');
+      $('#myModal').modal('toggle');
       dispatch(setCaptcha(''));
       window.CAPTCHA_DATA = '';
       if (res.msg){
@@ -155,13 +149,20 @@ function loginApi(username, password, captchaCode) {
   })
 }
 
-export const signup = (nickname, phone, email, verifyCode, password, avatar, captchaCode) => (dispatch) => {
-  signupApi(nickname, phone, email, verifyCode, password, avatar, captchaCode).then((res) => {
+export const signup = (id, nickname, phone, email, verifyCode, password, avatar, captchaCode) => (dispatch) => {
+  signupApi(id, nickname, phone, email, verifyCode, password, avatar, captchaCode).then((res) => {
     console.log(res);
     if (res.code === 0) {
-      dispatch(setIsLogin(true));
-      dispatch(setCaptcha(''));
-      window.CAPTCHA_DATA = '';
+      if (res.data.currentUser){
+        dispatch(setUserInfo(res.data.currentUser));
+        dispatch(setCaptcha(''));
+        window.CAPTCHA_DATA = '';
+      }
+      else{
+        dispatch(setModalContentName('Login'));
+        dispatch(setCaptcha(''));
+        window.CAPTCHA_DATA = '';
+      }
       if (res.msg){
         message.showMessage(res.msg);
       }
@@ -203,11 +204,11 @@ export const signup = (nickname, phone, email, verifyCode, password, avatar, cap
   });
 }
 
-function signupApi(nickname, phone, email, verifyCode, password, avatar, captchaCode) {
+function signupApi(id, nickname, phone, email, verifyCode, password, avatar, captchaCode) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/users/signup',
-      data: { nickname, phone, email, verifyCode, password, avatar, captchaCode },
+      data: { id, nickname, phone, email, verifyCode, password, avatar, captchaCode },
       type: 'post',
       success: (data) => {
         resolve(data);

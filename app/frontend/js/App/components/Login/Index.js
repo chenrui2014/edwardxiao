@@ -6,7 +6,7 @@ let validator = new Validator();
 
 import {
   login,
-  setIsLogin,
+  setModalContentName,
   changeCaptcha,
 } from '../../actions/index';
 
@@ -33,8 +33,8 @@ class Login extends Component {
     this.setState({password});
   }
 
-  setIsLogin(val){
-    this.props.setIsLogin(val);
+  setModalContentName(val){
+    this.props.setModalContentName(val);
   }
 
   setCaptchaCode(e){
@@ -129,7 +129,7 @@ class Login extends Component {
                     data-my-validator-required="true"
                     data-my-validator-name=""
                     data-my-validator-type="text"
-                    placeholder={LANG_USER.username}
+                    placeholder={`${LANG_USER.username}/${LANG_USER.phone}/${LANG_USER.email}`}
                     style={{'float':'none','display':'inline-block'}}
                     onBlur={this.onBlur.bind(this)}
                     onChange={this.setUsername.bind(this)}
@@ -166,7 +166,7 @@ class Login extends Component {
           <div className="height-15"></div>
           <div className="border-h"></div>
           <div className="height-15"></div>
-          <div className="my-button my-button--red width-100pc" onClick={this.setIsLogin.bind(this, false)}>{LANG_USER.signup}</div>
+          <div className="my-button my-button--red width-100pc" onClick={this.setModalContentName.bind(this, 'Signup')}>{LANG_USER.signup}</div>
         </div>
       </div>
     );
@@ -188,8 +188,8 @@ function mapDispatchToProps(dispatch) {
     login: (username, password, captchaCode) => {
       dispatch(login(username, password, captchaCode));
     },
-    setIsLogin: (val) => {
-      dispatch(setIsLogin(val));
+    setModalContentName: (val) => {
+      dispatch(setModalContentName(val));
     },
     changeCaptcha: () => {
       dispatch(changeCaptcha());
@@ -205,6 +205,7 @@ Login.propTypes = {
   locale: React.PropTypes.string.isRequired,
   captcha: React.PropTypes.string.isRequired,
   login: React.PropTypes.func.isRequired,
+  setModalContentName: React.PropTypes.func.isRequired,
   changeCaptcha: React.PropTypes.func.isRequired,
 }
 

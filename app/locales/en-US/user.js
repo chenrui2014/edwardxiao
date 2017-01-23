@@ -6,6 +6,7 @@ module.exports = {
   'password': 'password',
   'passwords': 'password(s)',
   'repeat-password': 'repeat password',
+  'repeat-new-password': 'repeat new password',
   'reset': 'reset',
   'nickname': 'nickname',
   'phone': 'phone',
@@ -18,4 +19,9 @@ module.exports = {
   'use': 'use ',
   'upload': 'upload',
   're-upload': 'change',
+  'my-account': 'my account',
+  'change': 'change ',
+  'forgot': 'forgot ',
+  'new': 'new ',
+  'unset': 'did not set yet',
 };

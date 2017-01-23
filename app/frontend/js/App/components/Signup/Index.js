@@ -7,7 +7,7 @@ let validator = new Validator();
 
 import {
   signup,
-  setIsLogin,
+  setModalContentName,
   fetchVerifyCode,
   changeCaptcha,
 } from '../../actions/index';
@@ -73,9 +73,9 @@ class Signup extends Component {
               Utils.initSpin('avatar-spin-loader', {
                 lines: 9,
                 length: 12,
-                width: 2,
+                width: 10,
                 radius: 14,
-                scale: 0.4,
+                scale: 0.3,
               });
               this.setState({
                 isUploading: true,
@@ -93,10 +93,9 @@ class Signup extends Component {
               var res = JSON.parse(info);
               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
               this.setState({
-                avatar: `${sourceLink}?imageView/1/w/${100}/h/${100}`,
+                avatar: `${sourceLink}`,
                 isUploading: false
               });
-              Utils.stopSpin('avatar-spin-loader');
             },
             'Error': (up, err, errTip) => {
                    //上传出错时,处理相关的事情
@@ -151,12 +150,6 @@ class Signup extends Component {
   setIsPhone(val){
     this.removeErrorMessage('phone');
     this.removeErrorMessage('email');
-    if (val){
-      this.setState({phone: ''});
-    }
-    else{
-      this.setState({email: ''});
-    }
     this.setState({isPhone: val});
   }
 
@@ -179,8 +172,8 @@ class Signup extends Component {
     this.setState({repassword});
   }
 
-  setIsLogin(val){
-    this.props.setIsLogin(val);
+  setModalContentName(val){
+    this.props.setModalContentName(val);
   }
 
   fetchVerifyCode(){
@@ -270,9 +263,13 @@ class Signup extends Component {
         avatar,
         captchaCode,
       } = this.state;
-      this.props.signup(nickname, phone, email, verifyCode, password, avatar, captchaCode);
+      this.props.signup('', nickname, phone, email, verifyCode, password, avatar, captchaCode);
     }
     e.preventDefault();
+  }
+
+  handleImageLoaded() {
+    Utils.stopSpin('avatar-spin-loader');
   }
 
   render() {
@@ -295,10 +292,11 @@ class Signup extends Component {
       isUploading,
     } = this.state;
     let LANG_USER = require('../../../../../locales/' + locale + '/user');
-    let usernameHtml;
+    let phoneHtml;
+    let emailHtml;
     let methodHtml;
     if (isPhone){
-      usernameHtml = (
+      phoneHtml = (
         <div className="input-group" style={{'width':'75%'}}>
           <span className="input-title">{LANG_USER['phone']}</span>
           <input
@@ -315,6 +313,7 @@ class Signup extends Component {
             onBlur={this.onBlur.bind(this)}
             style={{'float':'none','display':'inline-block'}}
             onChange={this.setPhone.bind(this)}
+            autoComplete="off"
           />
         </div>
       );
@@ -323,7 +322,7 @@ class Signup extends Component {
       );
     }
     else{
-      usernameHtml = (
+      emailHtml = (
         <div className="input-group" style={{'width':'75%'}}>
           <span className="input-title">{LANG_USER['email']}</span>
           <input
@@ -340,6 +339,7 @@ class Signup extends Component {
             onBlur={this.onBlur.bind(this)}
             style={{'float':'none','display':'inline-block'}}
             onChange={this.setEmail.bind(this)}
+            autoComplete="off"
           />
         </div>
       );
@@ -365,6 +365,7 @@ class Signup extends Component {
             onBlur={this.onBlur.bind(this)}
             style={{'float':'none','display':'inline-block'}}
             onChange={this.setVerifyCode.bind(this)}
+            autoComplete="off"
           />
         </div>
         <div className={!isSendVerifyCode ? `fetch-verify-code my-button my-button--gray-border` : `fetch-verify-code my-button my-button--gray-border disabled`} onClick={!isSendVerifyCode ? this.fetchVerifyCode.bind(this) : ``}><div className="spin-loader" id="verify-code-spin-loader"></div>{!isSendVerifyCode ? LANG_USER['fetch-verify-code'] : `${counter}s${LANG_USER['re-fetch-verify-code']}`}</div>
@@ -390,6 +391,7 @@ class Signup extends Component {
               style={{'float':'none','display':'inline-block'}}
               onBlur={this.onBlur.bind(this)}
               onChange={this.setCaptchaCode.bind(this)}
+              autoComplete="off"
             />
           </div>
           <div className="fetch-captcha-code" onClick={this.changeCaptcha.bind(this)} dangerouslySetInnerHTML={this.createCaptcha()}></div>
@@ -401,12 +403,12 @@ class Signup extends Component {
     let previewClass;
     let cameraHtml = (<div className="camera-mask"><span className="icon icon-camera-alt"></span></div>);
     if (!isUploading && avatar != ''){
-      avatarImageHtml = (<img className="" src={avatar} style={{'width':'100%'}}/>);
+      avatarImageHtml = (<img className="" src={`${avatar}?imageView/1/w/${100}/h/${100}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
       previewClass = 'preview';
     }
     avatarHtml = (
       <div className={`avatar-holder ${previewClass}`}>
-        <div className="spin-loader" id="avatar-spin-loader"></div>
+        <div className="spin-loader" id="avatar-spin-loader" style={{'zIndex':'999'}}></div>
         {avatarImageHtml}
         {cameraHtml}
       </div>
@@ -420,7 +422,7 @@ class Signup extends Component {
           </button>
         </div>
         <div className="modal-body">
-          <form className="signup" id="signup" onSubmit={this.signup.bind(this)}>
+          <form className="signup" id="signup" onSubmit={this.signup.bind(this)} autoComplete="off">
             <div className="input-wapper">
               <div id="container" className="avatar-container">
                 <div className="avatar-picker" id="pickfiles">
@@ -444,11 +446,13 @@ class Signup extends Component {
                     onBlur={this.onBlur.bind(this)}
                     style={{'float':'none','display':'inline-block'}}
                     onChange={this.setNickname.bind(this)}
+                    autoComplete="off"
                   />
                 </div>
               </div>
               <div className="row-wrapper">
-                {usernameHtml}
+                {phoneHtml}
+                {emailHtml}
                 {methodHtml}
               </div>
                 {verifyCodeHtml}
@@ -470,6 +474,7 @@ class Signup extends Component {
                     onBlur={this.onBlur.bind(this)}
                     style={{'float':'none','display':'inline-block'}}
                     onChange={this.setPassword.bind(this)}
+                    autoComplete="off"
                   />
                 </div>
               </div>
@@ -492,6 +497,7 @@ class Signup extends Component {
                     data-my-validator-compare-id="password"
                     style={{'float':'none','display':'inline-block'}}
                     onChange={this.setRepassword.bind(this)}
+                    autoComplete="off"
                   />
                 </div>
               </div>
@@ -505,7 +511,7 @@ class Signup extends Component {
           <div className="height-15"></div>
           <div className="border-h"></div>
           <div className="height-15"></div>
-          <div className="my-button my-button--blue width-100pc" onClick={this.setIsLogin.bind(this, true)}>{LANG_USER.login}</div>
+          <div className="my-button my-button--blue width-100pc" onClick={this.setModalContentName.bind(this, 'Login')}>{LANG_USER.login}</div>
         </div>
       </div>
     );
@@ -524,11 +530,11 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    signup: (nickname, phone, email, verifyCode, password, avatar, captchaCode) => {
-      dispatch(signup(nickname, phone, email, verifyCode, password, avatar, captchaCode));
+    signup: (id, nickname, phone, email, verifyCode, password, avatar, captchaCode) => {
+      dispatch(signup(id, nickname, phone, email, verifyCode, password, avatar, captchaCode));
     },
-    setIsLogin: (val) => {
-      dispatch(setIsLogin(val));
+    setModalContentName: (val) => {
+      dispatch(setModalContentName(val));
     },
     changeCaptcha: () => {
       dispatch(changeCaptcha());
@@ -544,6 +550,7 @@ Signup.propTypes = {
   locale: React.PropTypes.string.isRequired,
   captcha: React.PropTypes.string.isRequired,
   signup: React.PropTypes.func.isRequired,
+  setModalContentName: React.PropTypes.func.isRequired,
   changeCaptcha: React.PropTypes.func.isRequired,
 }
 

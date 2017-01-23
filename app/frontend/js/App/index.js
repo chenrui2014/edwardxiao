@@ -8,7 +8,7 @@ import {
 
 import Nav from './components/Nav/index';
 import MobileNav from './components/MobileNav/index';
-import AccountModal from './components/AccountModal/index';
+import Modal from './components/Modal/index';
 import Utils from '../common/utils';
 
 class Index extends Component {
@@ -76,7 +76,7 @@ class Index extends Component {
           <div className="section contact" data-anchor="contacts">
           </div>
         </div>
-        <AccountModal/>
+        <Modal/>
       </div>
     );
     return(

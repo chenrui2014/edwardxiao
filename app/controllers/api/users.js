@@ -1,6 +1,9 @@
 import models from '../../models/index';
 import _ from 'lodash';
 import svgCaptcha from 'svg-captcha';
+import bcrypt from 'bcrypt';
+
+const saltRounds = 10;
 
 const login = async(ctx, _next) => {
   let clientIp = ctx.request.ip;
@@ -62,7 +65,6 @@ const login = async(ctx, _next) => {
   }
 
   if (!isSeveralTimes) {
-    var bcrypt = require('bcrypt');
     if (_.isUndefined(username) || username === '') {
       isInvalidParams = true;
       msg = LANG_MESSAGE.invalid + LANG_USER.username;
@@ -79,20 +81,19 @@ const login = async(ctx, _next) => {
     let nicknameRes = await models.User.findByNickName(username);
     let phoneRes = await models.User.findByPhone(username);
     let emailRes = await models.User.findByEmail(username);
-    if (nicknameRes.length){
+
+    if (nicknameRes.length) {
       user = nicknameRes[0];
-    }
-    else if (phoneRes.length){
+    } else if (phoneRes.length) {
       user = phoneRes[0];
-    }
-    else if (emailRes.length){
+    } else if (emailRes.length) {
       user = emailRes[0];
     }
     if (!_.isUndefined(user)) {
       let isValidPassword = await bcrypt.compare(password, user.password);
       if (isValidPassword) {
         currentUser = {
-          '_id': user._id,
+          'id': user._id,
           'nickname': user.nickname,
           'role': user.role,
           'phone': user.phone,
@@ -140,11 +141,14 @@ const signup = async(ctx, _next) => {
   // return;
   let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
   let LANG_USER = require('../../locales/' + ctx.session.locale + '/user');
+  let LANG_ACTION = require('../../locales/' + ctx.session.locale + '/action');
 
   let data = {};
   let msg = '';
+  let hash;
 
   let {
+    id,
     nickname,
     username,
     password,
@@ -154,6 +158,7 @@ const signup = async(ctx, _next) => {
     verifyCode,
     captchaCode,
   } = ctx.request.body;
+
 
   let isSeveralTimes = false;
   let isInvalidParams = false;
@@ -181,12 +186,12 @@ const signup = async(ctx, _next) => {
             console.log('user: ' + captchaCode);
             if (captchaCode === '') {
               msg = LANG_MESSAGE['please-enter-captcha'];
-              ctx.body = { code: 5, data: data, msg: msg };//5: captcha
+              ctx.body = { code: 5, data: data, msg: msg }; //5: captcha
               return false;
             } else {
               if (ctx.session.captcha !== captchaCode) {
                 msg = LANG_MESSAGE['invalid-captcha'];
-                ctx.body = { code: 5, data: data, msg: msg };//5: captcha
+                ctx.body = { code: 5, data: data, msg: msg }; //5: captcha
                 return false;
               }
             }
@@ -225,70 +230,93 @@ const signup = async(ctx, _next) => {
 
   let code = 0;
 
-  if (!isSeveralTimes && !isInvalidParams) {
-    let res;
-    res = await models.User.findByNickName(nickname);
-    if (res.length) {
-      isDuplicateUser = true;
-      code = 1;
-      msg = LANG_USER.nickname + LANG_MESSAGE['already-exist'];
-    } else {
-      if (phone != ''){
-        res = await models.User.findByPhone(phone);
-        if (res.length) {
-          isDuplicateUser = true;
-          code = 2;
-          msg = LANG_USER.phone + LANG_MESSAGE['already-exist'];
+  if (id == '') {
+    if (!isSeveralTimes && !isInvalidParams) {
+      let res;
+      res = await models.User.findByNickName(nickname);
+      if (res.length) {
+        isDuplicateUser = true;
+        code = 1;
+        msg = LANG_USER.nickname + LANG_MESSAGE['already-exist'];
+      } else {
+        if (phone != '') {
+          res = await models.User.findByPhone(phone);
+          if (res.length) {
+            isDuplicateUser = true;
+            code = 2;
+            msg = LANG_USER.phone + LANG_MESSAGE['already-exist'];
+          }
+        }
+        if (email != '') {
+          res = await models.User.findByEmail(email);
+          if (res.length) {
+            isDuplicateUser = true;
+            code = 3;
+            msg = LANG_USER.email + LANG_MESSAGE['already-exist'];
+          }
         }
       }
-      if (email != ''){
-        res = await models.User.findByEmail(email);
-        if (res.length) {
-          isDuplicateUser = true;
-          code = 3;
-          msg = LANG_USER.email + LANG_MESSAGE['already-exist'];
-        }
-      }
+      // ctx.body = { code: code, data: data, msg: msg };
+      // return;
+      // else if
+      // res = await models.User.findByPhone(phone);
+      // if (res.length){
+      //   isDuplicateUser = true;
+      // }
     }
-    // ctx.body = { code: code, data: data, msg: msg };
-    // return;
-    // else if
-    // res = await models.User.findByPhone(phone);
-    // if (res.length){
-    //   isDuplicateUser = true;
-    // }
   }
 
   if (!isSeveralTimes && !isInvalidParams && !isDuplicateUser) {
 
-    var bcrypt = require('bcrypt');
-    const saltRounds = 10;
-
-    var hash = bcrypt.hashSync(password, saltRounds);
     var usersList = [{
       nickname: nickname,
       role: 'user',
       phone: phone,
       email: email,
       avatar: avatar,
-      password: hash,
+      password: bcrypt.hashSync(password, saltRounds),
     }];
 
     let result;
-    await models.User.insertMany(usersList, (err, docs) => {
-      if(!_.isNull(err)){
-        result = false;
-        code = 4;// faild
+    console.log(1);
+    console.log(id);
+    if (id == '') {
+      await models.User.insertMany(usersList, (err, docs) => {
+        if (!_.isNull(err)) {
+          result = false;
+          code = 4; // faild
+        } else {
+          result = true;
+          code = 0;
+          msg = LANG_USER['signup'] + LANG_MESSAGE['successfully'] + ', ' + LANG_MESSAGE['please'] + LANG_USER['login'];
+        }
+      });
+    } else {
+      let newData = {
+        id: id,
+        nickname: nickname,
+        role: 'user',
+        phone: phone,
+        email: email,
+        avatar: avatar,
+        password: bcrypt.hashSync(password, saltRounds),
       }
-      else{
-        result = true;
-        code = 0;
-      }
-    });
+      await models.User.findOneAndUpdate({ _id: id }, newData, { upsert: true }).exec((err, doc) => {
+        console.log(err);
+        if (!_.isNull(err)) {
+          result = false;
+          code = 4; // faild
+        } else {
+          result = true;
+          code = 0;
+          msg = LANG_ACTION['update'] + LANG_MESSAGE['successfully'];
+          data['currentUser'] = newData;
+        }
+      });
+    }
     ctx.cache.set('signup:ip-' + clientIp, 0);
     ctx.session.captcha = null;
     ctx.session.captchaData = null;
-    msg = LANG_USER['signup'] + LANG_MESSAGE['successfully'] + ', ' + LANG_MESSAGE['please'] + LANG_USER['login'];
     ctx.body = { code: code, data: data, msg: msg };
     return true;
   } else {

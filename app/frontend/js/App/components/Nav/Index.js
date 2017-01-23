@@ -5,7 +5,7 @@ import 'bootstrap-sass/assets/javascripts/bootstrap/transition.js';
 import _ from 'lodash';
 import {
   changeLocale,
-  setIsLogin,
+  setModalContentName,
   logout,
 } from './../../actions/index';
 
@@ -20,12 +20,16 @@ class Nav extends Component {
     this.props.changeLocale(val);
   }
 
-  setIsLogin(val){
-    this.props.setIsLogin(val);
+  setModalContentName(val){
+    this.props.setModalContentName(val);
   }
 
   logout(){
     this.props.logout();
+  }
+
+  handleImageLoaded(){
+
   }
 
   render() {
@@ -40,18 +44,35 @@ class Nav extends Component {
     if (_.isNull(userInfo)){
       userHtml = (
         <div className="user-nav__item">
-          <div className="user-nav__item no-mobile-990 cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, true)}>{LANG_USER.login}</div>
+          <div className="user-nav__item no-mobile-990 cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setModalContentName.bind(this, 'Login')}>{LANG_USER.login}</div>
           <div className="user-nav__item no-mobile-990">&nbsp;/&nbsp;</div>
-          <div className="user-nav__item no-mobile-990 cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.setIsLogin.bind(this, false)}>{LANG_USER.signup}</div>
+          <div className="user-nav__item no-mobile-990 cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setModalContentName.bind(this, 'Signup')}>{LANG_USER.signup}</div>
         </div>
       );
     }
     else{
+      let avatarImageHtml;
+      if (userInfo.avatar != ''){
+        avatarImageHtml = (
+          <div className={`avatar-container dp-tbl-cel middle`}>
+            <div className={`avatar-holder`}>
+              <img className="" src={`${userInfo.avatar}?imageView/1/w/${100}/h/${100}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>
+            </div>
+          </div>
+        );
+      }
       userHtml = (
-        <div className="user-nav__item mo-dropdown">
-          {userInfo.nickname}
+        <div className="user-nav__item mo-dropdown no-mobile-990">
+          <div className="dp-tbl">
+            {avatarImageHtml}
+            <div className="dp-tbl-cel middle">&nbsp;</div>
+            <div className="dp-tbl-cel middle">{userInfo.nickname}</div>
+          </div>
           <div className="mo-dropdown__menu">
             <div className="mo-dropdown__container">
+              <div className="mo-dropdown__item" data-toggle="modal" data-target="#myModal" onClick={this.setModalContentName.bind(this, 'MyAccount')}>
+                {LANG_USER['my-account']}
+              </div>
               <div className="mo-dropdown__item" onClick={this.logout.bind(this)}>
                 {LANG_USER.logout}
               </div>
@@ -115,8 +136,8 @@ function mapDispatchToProps(dispatch) {
     changeLocale: (val) => {
       dispatch(changeLocale(val));
     },
-    setIsLogin: (val) => {
-      dispatch(setIsLogin(val));
+    setModalContentName: (val) => {
+      dispatch(setModalContentName(val));
     },
     logout: () => {
       dispatch(logout());
@@ -132,7 +153,7 @@ Nav.propTypes = {
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,
   changeLocale: React.PropTypes.func.isRequired,
-  setIsLogin: React.PropTypes.func.isRequired,
+  setModalContentName: React.PropTypes.func.isRequired,
   logout: React.PropTypes.func.isRequired,
 }
 
