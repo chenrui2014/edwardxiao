@@ -20,7 +20,6 @@ const uptoken = async(ctx, _next) => {
   }
 
   let token = uptoken(bucket);
-  console.log(token);
   ctx.body = { 'uptoken': token };
 };
 

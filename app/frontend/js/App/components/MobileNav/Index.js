@@ -48,7 +48,7 @@ class Nav extends Component {
       userHtml = (
         <div className="mo-nav-column__item">
           <div className="mo-nav-column__item user-nav">
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal">{userInfo.name}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal">{userInfo.nickname}</span>
             <span className="user-nav__item">&nbsp;/&nbsp;</span>
             <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#accountModal" onClick={this.logout.bind(this, false)}>{LANG_USER.logout}</span>
           </div>

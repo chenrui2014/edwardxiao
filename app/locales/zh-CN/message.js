@@ -15,4 +15,7 @@ module.exports = {
   'invalid-password': '密码错误',
   'invalid-captcha': '验证码错误',
   'please-enter-captcha': '请输入验证码',
+  'duplicate': '重复 ',
+  'already-exist': '已存在',
+  'welcome-back': '欢迎回来',
 };

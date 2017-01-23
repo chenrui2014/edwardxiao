@@ -1,5 +1,7 @@
 import { PATH } from '../../common/path';
 import Utils from '../../common/utils';
+import MyMessage from '../../common/my_message';
+let message = new MyMessage();
 import _ from 'lodash';
 import { browserHistory } from 'react-router';
 import update from 'react-addons-update';
@@ -44,26 +46,25 @@ export const setCaptcha = (captcha) => ({
 });
 
 export const changeLocale = (locale) => (dispatch) => {
-   changeLocaleApi(locale).then((res) => {
-      console.log(res);
-      if (res.code === 0){
-        dispatch(setLocale(res.data.locale));
+  changeLocaleApi(locale).then((res) => {
+    console.log(res);
+    if (res.code === 0) {
+      dispatch(setLocale(res.data.locale));
+    } else {
+      if (res.msg) {
+        alert(res.msg);
       }
-      else{
-        if(res.msg){
-          alert(res.msg);
-        }
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+    }
+  }).catch((err) => {
+    console.log(err);
+  });
+}
 
 function changeLocaleApi(locale) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/settings/locale',
-      data: {locale},
+      data: { locale },
       type: 'post',
       success: (data) => {
         resolve(data);
@@ -76,20 +77,19 @@ function changeLocaleApi(locale) {
 }
 
 export const changeCaptcha = () => (dispatch) => {
-   changeCaptchaApi().then((res) => {
-      console.log(res);
-      if (res.code === 0){
-        dispatch(setCaptcha(res.data.captcha));
+  changeCaptchaApi().then((res) => {
+    console.log(res);
+    if (res.code === 0) {
+      dispatch(setCaptcha(res.data.captcha));
+    } else {
+      if (res.msg) {
+        alert(res.msg);
       }
-      else{
-        if(res.msg){
-          alert(res.msg);
-        }
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+    }
+  }).catch((err) => {
+    console.log(err);
+  });
+}
 
 function changeCaptchaApi() {
   return new Promise((resolve, reject) => {
@@ -107,40 +107,43 @@ function changeCaptchaApi() {
 }
 
 export const login = (username, password, captchaCode) => (dispatch) => {
-   loginApi(username, password, captchaCode).then((res) => {
-      console.log(res);
-      if (res.code === 0){
-        dispatch(setUserInfo(res.data.currentUser));
-        $('#accountModal').modal('toggle');
+  loginApi(username, password, captchaCode).then((res) => {
+    console.log(res);
+    if (res.code === 0) {
+      dispatch(setUserInfo(res.data.currentUser));
+      $('#accountModal').modal('toggle');
+      dispatch(setCaptcha(''));
+      window.CAPTCHA_DATA = '';
+      if (res.msg){
+        message.showMessage(res.msg);
       }
-      else{
-        if (res.data.captcha){
-          console.log(res.data.captcha);
-          dispatch(setCaptcha(res.data.captcha));
-          if(res.msg){
-            if (!$('#captchaCode').parent().siblings('.my-validator-message').length){
-              validator.createMessage($('#captchaCode').parent(), res.msg, 'error');
-            }
+    } else {
+      if (res.data.captcha) {
+        console.log(res.data.captcha);
+        dispatch(setCaptcha(res.data.captcha));
+        if (res.msg) {
+          if (!$('#captchaCode').parent().siblings('.my-validator-message').length) {
+            validator.createMessage($('#captchaCode').parent(), res.msg, 'error');
           }
         }
-        else{
-          if(res.msg){
-            if (!$('#password').parent().siblings('.my-validator-message').length){
-              validator.createMessage($('#password').parent(), res.msg, 'error');
-            }
+      } else {
+        if (res.msg) {
+          if (!$('#password').parent().siblings('.my-validator-message').length) {
+            validator.createMessage($('#password').parent(), res.msg, 'error');
           }
         }
       }
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+    }
+  }).catch((err) => {
+    console.log(err);
+  });
+}
 
 function loginApi(username, password, captchaCode) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/users/login',
-      data: {username, password, captchaCode},
+      data: { username, password, captchaCode },
       type: 'post',
       success: (data) => {
         resolve(data);
@@ -153,40 +156,58 @@ function loginApi(username, password, captchaCode) {
 }
 
 export const signup = (nickname, phone, email, verifyCode, password, avatar, captchaCode) => (dispatch) => {
-   signupApi(nickname, phone, email, verifyCode, password, avatar, captchaCode).then((res) => {
-      console.log(res);
-      if (res.code === 0){
-        dispatch(setUserInfo(res.data.currentUser));
-        $('#accountModal').modal('toggle');
+  signupApi(nickname, phone, email, verifyCode, password, avatar, captchaCode).then((res) => {
+    console.log(res);
+    if (res.code === 0) {
+      dispatch(setIsLogin(true));
+      dispatch(setCaptcha(''));
+      window.CAPTCHA_DATA = '';
+      if (res.msg){
+        message.showMessage(res.msg);
       }
-      else{
-        if (res.data.captcha){
-          console.log(res.data.captcha);
-          dispatch(setCaptcha(res.data.captcha));
-          if(res.msg){
-            if (!$('#captchaCode').parent().siblings('.my-validator-message').length){
-              validator.createMessage($('#captchaCode').parent(), res.msg, 'error');
-            }
-          }
-        }
-        else{
-          if(res.msg){
-            if (!$('#password').parent().siblings('.my-validator-message').length){
-              validator.createMessage($('#password').parent(), res.msg, 'error');
-            }
-          }
+    }
+    else if (res.code === 1) {
+      if (res.msg) {
+        if (!$('#nickname').parent().siblings('.my-validator-message').length) {
+          validator.createMessage($('#nickname').parent(), res.msg, 'error');
         }
       }
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+    }
+    else if (res.code === 2) {
+      if (res.msg) {
+        if (!$('#phone').parent().siblings('.my-validator-message').length) {
+          validator.createMessage($('#phone').parent(), res.msg, 'error');
+        }
+      }
+    }
+    else if (res.code === 3) {
+      if (res.msg) {
+        if (!$('#email').parent().siblings('.my-validator-message').length) {
+          validator.createMessage($('#email').parent(), res.msg, 'error');
+        }
+      }
+    }
+    else if (res.code === 5){
+      if (res.data.captcha) {
+        console.log(res.data.captcha);
+        dispatch(setCaptcha(res.data.captcha));
+        if (res.msg) {
+          if (!$('#captchaCode').parent().siblings('.my-validator-message').length) {
+            validator.createMessage($('#captchaCode').parent(), res.msg, 'error');
+          }
+        }
+      }
+    }
+  }).catch((err) => {
+    console.log(err);
+  });
+}
 
 function signupApi(nickname, phone, email, verifyCode, password, avatar, captchaCode) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/users/signup',
-      data: {nickname, phone, email, verifyCode, password, avatar, captchaCode},
+      data: { nickname, phone, email, verifyCode, password, avatar, captchaCode },
       type: 'post',
       success: (data) => {
         resolve(data);
@@ -199,20 +220,19 @@ function signupApi(nickname, phone, email, verifyCode, password, avatar, captcha
 }
 
 export const logout = () => (dispatch) => {
-   logoutApi().then((res) => {
-      console.log(res);
-      if (res.code === 0){
-        window.location = '/';
+  logoutApi().then((res) => {
+    console.log(res);
+    if (res.code === 0) {
+      window.location = '/';
+    } else {
+      if (res.msg) {
+        alert(res.msg);
       }
-      else{
-        if(res.msg){
-          alert(res.msg);
-        }
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+    }
+  }).catch((err) => {
+    console.log(err);
+  });
+}
 
 function logoutApi() {
   return new Promise((resolve, reject) => {
@@ -233,11 +253,10 @@ export const fetchVerifyCode = (phone) => (dispatch) => {
   dispatch(setIsSendVerifyCode(true));
   fetchVerifyCodeApi(phone).then((res) => {
     console.log(res);
-    if (res.code === 0){
+    if (res.code === 0) {
       // Utils.stopSpin('spin-loader');
-    }
-    else{
-      if(res.msg){
+    } else {
+      if (res.msg) {
         alert(res.msg);
       }
     }
@@ -254,7 +273,7 @@ function fetchVerifyCodeApi(phone) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/register/sms',
-      data: {phone},
+      data: { phone },
       type: 'post',
       success: (data) => {
         resolve(data);

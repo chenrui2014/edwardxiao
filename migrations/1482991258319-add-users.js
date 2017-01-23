@@ -9,17 +9,19 @@ const password = '123456';
 var hash = bcrypt.hashSync(password, saltRounds);
 
 var usersList = [{
-  name: 'admin',
+  nickname: 'admin',
   role: 'admin',
   phone: '0123456789',
   email: 'admin@example.com',
+  avatar: '',
   password: hash,
 }];
 var UserSchema = new Schema({
-  name: { type: String, required: true },
+  nickname: { type: String, required: true },
   role: { type: String, required: true },
   phone: { type: String },
-  email: { type: String, required: true },
+  email: { type: String },
+  avatar: { type: String },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });

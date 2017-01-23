@@ -49,7 +49,7 @@ class Nav extends Component {
     else{
       userHtml = (
         <div className="user-nav__item mo-dropdown">
-          {userInfo.name}
+          {userInfo.nickname}
           <div className="mo-dropdown__menu">
             <div className="mo-dropdown__container">
               <div className="mo-dropdown__item" onClick={this.logout.bind(this)}>

@@ -15,4 +15,7 @@ module.exports = {
   'invalid-password': '密碼錯誤',
   'invalid-captcha': '驗證碼錯誤',
   'please-enter-captcha': '請輸入驗證碼',
+  'duplicate': '重複 ',
+  'already-exist': '已存在',
+  'welcome-back': '歡迎回來',
 };

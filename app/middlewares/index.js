@@ -31,10 +31,11 @@ async function addHelper(ctx, next) {
         let user = res[0];
         currentUser = {
           '_id': user._id,
-          'name': user.name,
+          'nickname': user.nickname,
           'role': user.role,
           'phone': user.phone,
           'email': user.email,
+          'avatar': user.avatar,
           'createdAt': user.createdAt,
         }
       }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import Utils from '../../../common/Utils';
 import Validator from '../../../common/my_validator';
 let validator = new Validator();
 
@@ -69,6 +70,13 @@ class Signup extends Component {
             },
             'UploadProgress': (up, file) => {
               // 每个文件上传时,处理相关的事情
+              Utils.initSpin('avatar-spin-loader', {
+                lines: 9,
+                length: 12,
+                width: 2,
+                radius: 14,
+                scale: 0.4,
+              });
               this.setState({
                 isUploading: true,
               });
@@ -85,9 +93,10 @@ class Signup extends Component {
               var res = JSON.parse(info);
               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
               this.setState({
-                avatar: sourceLink,
+                avatar: `${sourceLink}?imageView/1/w/${100}/h/${100}`,
                 isUploading: false
               });
+              Utils.stopSpin('avatar-spin-loader');
             },
             'Error': (up, err, errTip) => {
                    //上传出错时,处理相关的事情
@@ -97,6 +106,14 @@ class Signup extends Component {
             },
         }
     });
+  }
+
+  createCaptcha() {
+   return {__html: this.props.captcha};
+  }
+
+  changeCaptcha(){
+    this.props.changeCaptcha();
   }
 
   setCaptchaCode(e){
@@ -119,7 +136,8 @@ class Signup extends Component {
     this.setState({isSendVerifyCode:val});
   }
 
-  setNickname(){
+  setNickname(e){
+    this.removeErrorMessage(e.target.id);
     let nickname = this.refs.nickname.value;
     this.setState({nickname});
   }
@@ -131,6 +149,14 @@ class Signup extends Component {
   }
 
   setIsPhone(val){
+    this.removeErrorMessage('phone');
+    this.removeErrorMessage('email');
+    if (val){
+      this.setState({phone: ''});
+    }
+    else{
+      this.setState({email: ''});
+    }
     this.setState({isPhone: val});
   }
 
@@ -142,6 +168,7 @@ class Signup extends Component {
 
   setPassword(e){
     this.removeErrorMessage(e.target.id);
+    this.removeErrorMessage('repassword');
     let password = this.refs.password.value;
     this.setState({password});
   }
@@ -283,7 +310,7 @@ class Signup extends Component {
             data-my-validator="true"
             data-my-validator-required="true"
             data-my-validator-name=""
-            data-my-validator-type="text"
+            data-my-validator-type="number"
             placeholder={LANG_USER.phone}
             onBlur={this.onBlur.bind(this)}
             style={{'float':'none','display':'inline-block'}}
@@ -308,7 +335,7 @@ class Signup extends Component {
             data-my-validator="true"
             data-my-validator-required="true"
             data-my-validator-name=""
-            data-my-validator-type="text"
+            data-my-validator-type="email"
             placeholder={LANG_USER.email}
             onBlur={this.onBlur.bind(this)}
             style={{'float':'none','display':'inline-block'}}
@@ -369,16 +396,21 @@ class Signup extends Component {
         </div>
       );
     }
-    let previewHtml;
-    if (!isUploading && avatar){
-      previewHtml = (
-        <div className="dp-tbl-cel">
-          <div className="avatar">
-            <img className="" src={avatar} style={{'width':'100%'}}/>
-          </div>
-        </div>
-      );
+    let avatarHtml;
+    let avatarImageHtml;
+    let previewClass;
+    let cameraHtml = (<div className="camera-mask"><span className="icon icon-camera-alt"></span></div>);
+    if (!isUploading && avatar != ''){
+      avatarImageHtml = (<img className="" src={avatar} style={{'width':'100%'}}/>);
+      previewClass = 'preview';
     }
+    avatarHtml = (
+      <div className={`avatar-holder ${previewClass}`}>
+        <div className="spin-loader" id="avatar-spin-loader"></div>
+        {avatarImageHtml}
+        {cameraHtml}
+      </div>
+    );
     return(
       <div className="modal-content">
         <div className="modal-header">
@@ -390,6 +422,11 @@ class Signup extends Component {
         <div className="modal-body">
           <form className="signup" id="signup" onSubmit={this.signup.bind(this)}>
             <div className="input-wapper">
+              <div id="container" className="avatar-container">
+                <div className="avatar-picker" id="pickfiles">
+                  {avatarHtml}
+                </div>
+              </div>
               <div className="row-wrapper">
                 <div className="input-group width-100pc">
                   <span className="input-title">{LANG_USER['nickname']}</span>
@@ -423,14 +460,13 @@ class Signup extends Component {
                     id="password"
                     ref="password"
                     className="form-control input-sm"
-
                     data-my-validator="true"
                     data-my-validator-required="true"
                     data-my-validator-name=""
                     data-my-validator-min-length="6"
                     data-my-validator-max-length="20"
                     data-my-validator-type="password"
-                    placeholder={LANG_USER.password}
+                    placeholder={LANG_USER['password']}
                     onBlur={this.onBlur.bind(this)}
                     style={{'float':'none','display':'inline-block'}}
                     onChange={this.setPassword.bind(this)}
@@ -447,11 +483,11 @@ class Signup extends Component {
                     className="form-control input-sm"
                     data-my-validator="true"
                     data-my-validator-required="true"
-                    data-my-validator-name={LANG_USER['password']}
+                    data-my-validator-name={LANG_USER['passwords']}
                     data-my-validator-min-length="6"
                     data-my-validator-max-length="20"
                     data-my-validator-type="password"
-                    placeholder={LANG_USER.password}
+                    placeholder={LANG_USER['password']}
                     onBlur={this.onBlur.bind(this)}
                     data-my-validator-compare-id="password"
                     style={{'float':'none','display':'inline-block'}}
@@ -460,12 +496,6 @@ class Signup extends Component {
                 </div>
               </div>
               {captchaHtml}
-              <div className="dp-tbl row-wrapper">
-                <div id="container" className="dp-tbl-cel">
-                  <div className="my-button my-button--gray-border" id="pickfiles">{avatar == '' ? `${LANG_USER['upload']}${LANG_USER['avatar']}` : `${LANG_USER['re-upload']}`}</div>
-                </div>
-                {previewHtml}
-              </div>
             </div>
             <input type="submit" className="hidden"/>
           </form>

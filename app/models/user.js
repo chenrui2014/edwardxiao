@@ -3,10 +3,11 @@ const Schema = mongoose.Schema;
 
 // define a schema
 const UserSchema = new Schema({
-  name: { type: String, required: true },
+  nickname: { type: String, required: true },
   role: { type: String, required: true },
-  phone: String,
-  email: { type: String, required: true },
+  phone: { type: String },
+  email: { type: String },
+  avatar: { type: String },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
@@ -16,19 +17,27 @@ const UserSchema = new Schema({
 //   return this.model('User').find({ type: this.type }, cb);
 // };
 
-UserSchema.query.byName = function(name) {
-  return this.find({ name: new RegExp(name, 'i') });
+UserSchema.statics.findById = function(val, cb) {
+  return this.find({ _id: val }, cb);
 };
 
-UserSchema.statics.findByName = function(name, cb) {
-  return this.find({ name: name }, cb);
+UserSchema.query.byName = function(val) {
+  return this.find({ name: new RegExp(val, 'i') });
 };
 
-UserSchema.statics.findById = function(id, cb) {
-  return this.find({ _id: id }, cb);
+UserSchema.statics.findByNickName = function(val, cb) {
+  return this.find({ nickname: val }, cb);
 };
 
-UserSchema.statics.findAll = function(name, cb) {
+UserSchema.statics.findByPhone = function(val, cb) {
+  return this.find({ phone: val }, cb);
+};
+
+UserSchema.statics.findByEmail = function(val, cb) {
+  return this.find({ email: val }, cb);
+};
+
+UserSchema.statics.findAll = function(val, cb) {
   return this.find({}, cb);
 };
 
