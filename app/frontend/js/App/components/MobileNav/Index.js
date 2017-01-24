@@ -29,6 +29,8 @@ class Nav extends Component {
     let {
       locale,
       userInfo,
+      isIndex,
+      activeTab,
     } = this.props;
     let userHtml;
     let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
@@ -65,28 +67,28 @@ class Nav extends Component {
                   <div className="logo"><span className="icon icon-edwardxiao"></span></div>
                 </a>
                 {userHtml}
-                <a className="mo-nav-column__item" href="#intros" data-menuanchor="intros">
+                <a className={!isIndex && activeTab == 'intros' ? `mo-nav-column__item active` : `mo-nav-column__item`} href={isIndex ? `#intros` : `/`} data-menuanchor="intros">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
                       {LANG_NAV.home}
                     </div>
                   </div>
                 </a>
-                <a className="mo-nav-column__item" href="#designs" data-menuanchor="designs">
+                <a className={!isIndex && activeTab == 'designs' ? `mo-nav-column__item active` : `mo-nav-column__item`} href={isIndex ? `#designs` : `/designs`} data-menuanchor="designs">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
                       {LANG_NAV.portfolio}
                     </div>
                   </div>
                 </a>
-                <a className="mo-nav-column__item" href="#articles" data-menuanchor="articles">
+                <a className={!isIndex && activeTab == 'articles' ? `mo-nav-column__item active` : `mo-nav-column__item`} href={isIndex ? `#articles` : `/articles`} data-menuanchor="articles">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
                       {LANG_NAV.article}
                     </div>
                   </div>
                 </a>
-                <a className="mo-nav-column__item" href="#contacts" data-menuanchor="contacts">
+                <a className={!isIndex && activeTab == 'contacts' ? `mo-nav-column__item active` : `mo-nav-column__item`} href={isIndex ? `#contacts` : `/contacts`} data-menuanchor="contacts">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
                       {LANG_NAV.contact}

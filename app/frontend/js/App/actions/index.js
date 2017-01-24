@@ -39,6 +39,36 @@ export const setCaptcha = (captcha) => ({
   captcha
 });
 
+export const SET_ARTICLE_LIST = 'SET_ARTICLE_LIST';
+export const setArticleList = (articleList) => ({
+  type: SET_ARTICLE_LIST,
+  articleList
+});
+
+export const SET_ARTICLE = 'SET_ARTICLE';
+export const setArticle = (article) => ({
+  type: SET_ARTICLE,
+  article
+});
+
+export const SET_ARTICLE_CURRENT_PAGE = 'SET_ARTICLE_CURRENT_PAGE';
+export const setArticleCurrentPage = (articleCurrentPage) => ({
+  type: SET_ARTICLE_CURRENT_PAGE,
+  articleCurrentPage
+});
+
+export const SET_ARTICLE_TOTAL_PAGE = 'SET_ARTICLE_TOTAL_PAGE';
+export const setArticleTotalPage = (articleTotalPage) => ({
+  type: SET_ARTICLE_TOTAL_PAGE,
+  articleTotalPage
+});
+
+export const SET_IS_NOT_FOUND = 'SET_IS_NOT_FOUND';
+export const setIsNotFound = (isNotFound) => ({
+  type: SET_IS_NOT_FOUND,
+  isNotFound
+});
+
 export const changeLocale = (locale) => (dispatch) => {
   changeLocaleApi(locale).then((res) => {
     console.log(res);

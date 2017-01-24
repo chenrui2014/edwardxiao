@@ -9,6 +9,11 @@ export const DEFAULT_STATE = {
   modalContentName: 'Login',
   isSendVerifyCode: false,
   captcha: CAPTCHA_DATA,
+  articleList: null,
+  article: null,
+  articleCurrentPage: 0,
+  articleTotalPage: 0,
+  isNotFound: false,
 };
 
 export const MODAL_CONTENT_COMPONENT_OBJECT = {
@@ -16,3 +21,5 @@ export const MODAL_CONTENT_COMPONENT_OBJECT = {
   Signup,
   MyAccount,
 };
+
+export const ARTICLE_PER_PAGE = 15;

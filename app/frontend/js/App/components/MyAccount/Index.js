@@ -39,7 +39,7 @@ class MyAccount extends Component {
     this.initQiniu();
   }
 
-  componentDidUpdate(prevProps){
+  componentDidUpdate(prevProps, prevState){
     if (prevProps.isSendVerifyCode && !this.props.isSendVerifyCode){
       this.clearTime();
     }
@@ -179,6 +179,9 @@ class MyAccount extends Component {
   }
 
   setIsPreview(isPreview){
+    if (isPreview){
+      if(this.setState({avatar: this.props.userInfo.avatar}));
+    }
     this.setState({isPreview});
   }
 
@@ -621,12 +624,17 @@ class MyAccount extends Component {
       avatarImageHtml = (<img className="" src={`${avatar}?imageView/1/w/${100}/h/${100}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
       previewClass = 'preview';
     }
+    else{
+      avatarImageHtml = (
+        <span className="icon icon-camera-alt"></span>
+      );
+    }
     avatarHtml = (
-      <div className="avatar-picker" id={isPreview ? `` : `pickfiles`}>
+      <div className="avatar-picker" id={`pickfiles`} onClick={isPreview ? this.setIsPreview.bind(this, false) : ``}>
         <div className={`avatar-holder ${previewClass}`}>
           <div className="spin-loader" id="avatar-spin-loader" style={{'zIndex':'999'}}></div>
           {avatarImageHtml}
-          {isPreview ? `` : cameraHtml}
+          {cameraHtml}
         </div>
       </div>
     );
@@ -642,9 +650,10 @@ class MyAccount extends Component {
         <div className="modal-body">
           <form className="signup" id="userInfo" onSubmit={this.signup.bind(this)} autoComplete="off">
             <div className="input-wapper">
-              <div id="container" className="avatar-container">
-                {!isDelete ? avatarHtml : ``}
+              <div id="container" className={!isDelete ? `avatar-container` : `avatar-container hidden`}>
+                {avatarHtml}
               </div>
+              <div className={!isDelete ? `height-10` : `height-10 hidden`}></div>
               {newNicknameHtml}
               {nicknameHtml}
               {newPhoneHtml}

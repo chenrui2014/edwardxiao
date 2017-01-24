@@ -26,6 +26,9 @@ class Index extends Component {
   }
 
   componentDidMount() {
+    if (typeof $.fn.fullpage.destroy == 'function') {
+      $.fn.fullpage.destroy('all');
+    }
     this.initFullpage();
   }
 
@@ -35,6 +38,10 @@ class Index extends Component {
 
   componentWillReceiveProps(nextProps) {
 
+  }
+
+  go(url) {
+    this.context.router.push(url);
   }
 
   initFullpage(){
@@ -58,10 +65,14 @@ class Index extends Component {
     let {
       locale,
     } = this.props;
+    let articleListHtml;
+    articleListHtml = (
+      <Link>文章</Link>
+    );
     let content = (
       <div className="container-full">
-        <MobileNav/>
-        <Nav/>
+        <MobileNav isIndex={true}/>
+        <Nav isIndex={true}/>
         <div id="fullpage">
           <div className="section intros" data-anchor="intros">
           </div>
@@ -71,7 +82,8 @@ class Index extends Component {
             <div className="slide"> Slide 3 </div>
             <div className="slide"> Slide 4 </div>
           </div>
-          <div className="section article" data-anchor="articles">
+          <div className="section article" data-anchor="articles" onClick={this.go.bind(this, 'articles')}>
+            {articleListHtml}
           </div>
           <div className="section contact" data-anchor="contacts">
           </div>
@@ -105,6 +117,10 @@ function mapDispatchToProps(dispatch) {
     }
   };
 }
+
+Index.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 Index.propTypes = {
   changeLocale: React.PropTypes.func.isRequired,

@@ -96,8 +96,8 @@
 }
 
 .section.intros {
-  /*background: url('../img/home.jpg');*/
-  /*background-size: cover;*/
+  background: url('../img/home-1.jpg');
+  background-size: cover;
 }
 
 .modal-content {
@@ -236,6 +236,10 @@
 .user-nav__item .avatar-container {
   width: 30px;
   height: 30px;
+}
+
+.my-button.width-100pc {
+  padding: .5em 0;
 }
 
 

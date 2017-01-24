@@ -54,3 +54,52 @@ export function captcha(captcha = DEFAULT_STATE.captcha, action) {
       return captcha;
   }
 }
+
+export function articleList(articleList = DEFAULT_STATE.articleList, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE_LIST:
+      return action.articleList;
+    default:
+      return articleList;
+  }
+}
+
+
+export function article(article = DEFAULT_STATE.article, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE:
+      return action.article;
+    default:
+      return article;
+  }
+}
+
+
+export function articleCurrentPage(articleCurrentPage = DEFAULT_STATE.articleCurrentPage, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE_CURRENT_PAGE:
+      return action.articleCurrentPage;
+    default:
+      return articleCurrentPage;
+  }
+}
+
+
+export function articleTotalPage(articleTotalPage = DEFAULT_STATE.articleTotalPage, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE_TOTAL_PAGE:
+      return action.articleTotalPage;
+    default:
+      return articleTotalPage;
+  }
+}
+
+
+export function isNotFound(isNotFound = DEFAULT_STATE.isNotFound, action) {
+  switch (action.type) {
+    case ACTION.SET_IS_NOT_FOUND:
+      return action.isNotFound;
+    default:
+      return isNotFound;
+  }
+}
