@@ -8,4 +8,5 @@ module.exports = {
   'update': '更新',
   'edit': '修改',
   'change': '更改',
+  'are-you-sure': '阁下当真确定吗',
 };

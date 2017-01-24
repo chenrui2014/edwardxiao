@@ -7,6 +7,7 @@ const router = Router({
 router.post('/login', users.login);
 router.post('/signup', users.signup);
 router.post('/logout', users.logout);
+router.delete('/delete', users.remove);
 router.post('/send-verify-code', users.sendVerifyCode);
 router.post('/captcha', users.captcha);
 

@@ -24,4 +24,5 @@ module.exports = {
   'forgot': 'forgot ',
   'new': 'new ',
   'unset': 'did not set yet',
+  'delete-account': 'delete this account',
 };

@@ -7,6 +7,7 @@ module.exports = {
   'failed': '失败',
   'failure': '失败',
   'error': '故障',
+  'wrong': '错误',
   'success': '成功',
   'successful': '成功',
   'successfully': '成功',
@@ -18,4 +19,6 @@ module.exports = {
   'duplicate': '重复 ',
   'already-exist': '已存在',
   'welcome-back': '欢迎回来',
+  'enter': '输入',
+  'to-confirm': '进行确认',
 };

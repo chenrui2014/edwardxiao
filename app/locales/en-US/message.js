@@ -7,6 +7,7 @@ module.exports = {
   'failed': 'failed ',
   'failure': 'failure ',
   'error': 'error ',
+  'wrong': 'wrong ',
   'success': ' success ',
   'successful': ' successful ',
   'successfully': ' successfully ',
@@ -18,4 +19,6 @@ module.exports = {
   'duplicate': 'duplicate ',
   'already-exist': ' already exist',
   'welcome-back': 'welcome back',
+  'enter': 'enter ',
+  'to-confirm': ' to cofirm',
 };

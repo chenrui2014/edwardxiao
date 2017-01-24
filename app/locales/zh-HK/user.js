@@ -25,4 +25,5 @@ module.exports = {
   'new': '新',
   'info': '資料',
   'unset': '暂无设置',
+  'delete-account': '刪除該賬戶',
 };

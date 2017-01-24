@@ -220,6 +220,38 @@ function signupApi(id, nickname, phone, email, verifyCode, password, avatar, cap
   })
 }
 
+export const remove = (id) => (dispatch) => {
+  console.log(id);
+  removeApi(id).then((res) => {
+    console.log(res);
+    if (res.code === 0) {
+      window.location = '/';
+    } else {
+      if (res.msg) {
+        alert(res.msg);
+      }
+    }
+  }).catch((err) => {
+    console.log(err);
+  });
+}
+
+function removeApi(id) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/api/users/delete',
+      type: 'delete',
+      data: { id },
+      success: (data) => {
+        resolve(data);
+      },
+      error: (error) => {
+        reject(error);
+      }
+    });
+  })
+}
+
 export const logout = () => (dispatch) => {
   logoutApi().then((res) => {
     console.log(res);
