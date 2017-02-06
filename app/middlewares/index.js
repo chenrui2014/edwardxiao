@@ -9,14 +9,24 @@ async function catchError(ctx, next) {
   try {
     await next();
     if (ctx.status === 404) ctx.throw(404);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
+    let locale = 'zh-CN';
+    if (typeof ctx.session.locale !== 'undefined' && ctx.session.locale !== null && ctx.session.locale !== '') {
+      locale = ctx.session.locale;
+    } else {
+      ctx.session.locale = locale;
+    }
     let status = err.status || 500;
     ctx.status = status;
     ctx.state = {
+      csrf: '',
+      captchaData: '',
       status: status,
       helpers: helpers,
-      currentUser: null
+      currentUser: null,
+      locale: locale,
+      qiniuDomain: '',
     };
     await ctx.render('error/error', {});
   }
@@ -25,9 +35,9 @@ async function catchError(ctx, next) {
 async function addHelper(ctx, next) {
   var currentUser = null;
   // ctx.session.userId = null;
-  if(ctx.session.userId){
+  if (ctx.session.userId) {
     await models.User.findById(ctx.session.userId).exec((err, res) => {
-      if (_.isNull(err) && res.length){
+      if (_.isNull(err) && res.length) {
         let user = res[0];
         currentUser = {
           'id': user._id,
@@ -42,14 +52,13 @@ async function addHelper(ctx, next) {
     });
   }
   let locale = 'zh-CN';
-  if(typeof ctx.session.locale !== 'undefined' && ctx.session.locale !== null && ctx.session.locale !== ''){
+  if (typeof ctx.session.locale !== 'undefined' && ctx.session.locale !== null && ctx.session.locale !== '') {
     locale = ctx.session.locale;
-  }
-  else{
+  } else {
     ctx.session.locale = locale;
   }
   let captchaData = '';
-  if(typeof ctx.session.captchaData !== 'undefined' && ctx.session.captchaData !== null && ctx.session.captchaData !== ''){
+  if (typeof ctx.session.captchaData !== 'undefined' && ctx.session.captchaData !== null && ctx.session.captchaData !== '') {
     captchaData = ctx.session.captchaData
   }
   ctx.state = {

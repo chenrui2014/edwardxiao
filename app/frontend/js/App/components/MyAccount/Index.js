@@ -19,6 +19,7 @@ class MyAccount extends Component {
     this.state = {
       counter: 60,
       nickname: props.userInfo.nickname,
+      role: props.userInfo.role,
       phone: props.userInfo.phone,
       email: props.userInfo.email,
       verifyCode: '',
@@ -268,6 +269,7 @@ class MyAccount extends Component {
       } = this.props;
       let {
         nickname,
+        role,
         phone,
         email,
         verifyCode,
@@ -275,7 +277,7 @@ class MyAccount extends Component {
         avatar,
         captchaCode,
       } = this.state;
-      this.props.signup(userInfo.id, nickname, phone, email, verifyCode, password, avatar, captchaCode);
+      this.props.signup(userInfo.id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode);
     }
     e.preventDefault();
   }
@@ -693,8 +695,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    signup: (id, nickname, phone, email, verifyCode, password, avatar, captchaCode) => {
-      dispatch(signup(id, nickname, phone, email, verifyCode, password, avatar, captchaCode));
+    signup: (id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode) => {
+      dispatch(signup(id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode));
     },
     remove: (id) => {
       dispatch(remove(id));

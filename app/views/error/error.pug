@@ -1,7 +1,10 @@
 extends ../layout/layout.pug
 
 block content
-  .request-error
-    h1
-      | Something Wrong
-    h2= status
+  #root
+block dynamicCss
+  link(rel="stylesheet" href=helpers.assetUrl('index.css'))
+block dynamicJsIe
+  script(src=helpers.assetUrl('index.js'))
+block dynamicJs
+  script(src=helpers.assetUrl('index.js'))

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 import Utils from '../common/utils';
+import Modal from './components/Modal/index';
 import {
   authorize
 } from './actions/index';
@@ -16,7 +17,7 @@ class Main extends Component {
   render() {
     let { children, location } = this.props;
     return(
-      <div>
+      <div className="page-transition">
         <ReactCSSTransitionGroup
           component="div"
           // transitionName={ location.action == 'PUSH' ? 'forward' : 'backward' }
@@ -27,6 +28,7 @@ class Main extends Component {
           {React.cloneElement(children, {
             key: location.pathname
           })}
+          <Modal/>
         </ReactCSSTransitionGroup>
       </div>
     );

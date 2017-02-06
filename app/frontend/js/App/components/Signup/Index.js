@@ -19,6 +19,7 @@ class Signup extends Component {
     this.state = {
       counter: 60,
       nickname: '',
+      role: '',
       phone: '',
       email: '',
       verifyCode: '',
@@ -256,6 +257,7 @@ class Signup extends Component {
     if (validator.isValidForm($('#signup'))){
       let {
         nickname,
+        role,
         phone,
         email,
         verifyCode,
@@ -263,7 +265,7 @@ class Signup extends Component {
         avatar,
         captchaCode,
       } = this.state;
-      this.props.signup('', nickname, phone, email, verifyCode, password, avatar, captchaCode);
+      this.props.signup('', nickname, role, phone, email, verifyCode, password, avatar, captchaCode);
     }
     e.preventDefault();
   }
@@ -530,8 +532,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    signup: (id, nickname, phone, email, verifyCode, password, avatar, captchaCode) => {
-      dispatch(signup(id, nickname, phone, email, verifyCode, password, avatar, captchaCode));
+    signup: (id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode) => {
+      dispatch(signup(id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode));
     },
     setModalContentName: (val) => {
       dispatch(setModalContentName(val));

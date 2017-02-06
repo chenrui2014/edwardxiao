@@ -234,11 +234,11 @@ export const signup = (id, nickname, phone, email, verifyCode, password, avatar,
   });
 }
 
-function signupApi(id, nickname, phone, email, verifyCode, password, avatar, captchaCode) {
+function signupApi(id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/users/signup',
-      data: { id, nickname, phone, email, verifyCode, password, avatar, captchaCode },
+      data: { id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode },
       type: 'post',
       success: (data) => {
         resolve(data);

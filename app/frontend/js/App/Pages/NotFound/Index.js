@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import '../../../../css/not_found.css';
 
 class NotFound extends Component {
 

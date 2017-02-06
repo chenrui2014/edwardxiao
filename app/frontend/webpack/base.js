@@ -94,10 +94,10 @@ var config = module.exports = {
     }),
     new ManifestPlugin({
       fileName: 'rev-manifest.json'
-    })
-    // new CopyWebpackPlugin([
-    //   { from: PATH.ROOT_PATH + 'frontend/data/', to: PATH.ROOT_PATH + 'public/assets/data/' },
-    // ])
+    }),
+    new CopyWebpackPlugin([
+      { from: PATH.ROOT_PATH + 'app/frontend/static/', to: PATH.ROOT_PATH + 'public/assets/static/' },
+    ])
   ],
   eslint: {
     configFile: '.eslintrc.json',

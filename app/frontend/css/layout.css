@@ -13,6 +13,34 @@ body .ftf-yuan {
   font-family: STYuanti-SC-Light;
 }
 
+#root,
+.page-transition,
+.page-transition>div,
+.page{
+  height: 100%;
+}
+
+.page {
+  padding-top: 1px;
+}
+
+.fade-enter {
+  opacity: 0;
+  transition: opacity .5s ease-in;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+}
+
+.fade-leave {
+  opacity: 0;
+  transition: opacity .5s ease-in;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0;
+}
 
 /* dropdown module */
 

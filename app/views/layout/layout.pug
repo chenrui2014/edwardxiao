@@ -10,7 +10,7 @@ html
       = title || 'Edward Xiao'
     link(rel='stylesheet' href=helpers.assetUrl('base.css'))
     block dynamicCss
-    link(href="/favicon.png" rel="shortcut icon" type="image/png")
+    link(href="/assets/static/favicon.png" rel="shortcut icon" type="image/png")
     meta(name="csrf-param" content="_csrf")
     meta(name="csrf-token" content=csrf)
   body
@@ -31,7 +31,7 @@ html
       window.USER_INFO = !{ JSON.stringify(currentUser) };
       window.CAPTCHA_DATA = !{ JSON.stringify(captchaData) };
       window.QINIU_DOMAIN = !{ JSON.stringify(qiniuDomain) }
-    script(src='/static/js/plupload.full.min.js')
+    script(src='/assets/static/js/plupload.full.min.js')
     script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src=helpers.vendorAssetUrl('react_vendors.js'))
     script(src=helpers.assetUrl('common.js'))
@@ -45,7 +45,7 @@ html
       window.USER_INFO = !{ JSON.stringify(currentUser) };
       window.CAPTCHA_DATA = !{ JSON.stringify(captchaData) };
       window.QINIU_DOMAIN = !{ JSON.stringify(qiniuDomain) }
-    script(src='/static/js/plupload.full.min.js')
+    script(src='/assets/static/js/plupload.full.min.js')
     script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src=helpers.vendorAssetUrl('react_vendors.js'))
     script(src=helpers.assetUrl('common.js'))

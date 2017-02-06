@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 
 var articleList = [{
   title:'title',
+  authorId: "5892eeac50b2e30d8011e71c",
   preface: 'preface',
   desc: 'desc',
   content: 'content',
@@ -12,6 +13,7 @@ var articleList = [{
 }];
 var ArticleSchema = new Schema({
   title: { type: String, required: true },
+  authorId: { type: String, required: true },
   preface: { type: String },
   desc: { type: String },
   content: { type: String, required: true },

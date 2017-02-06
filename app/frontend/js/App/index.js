@@ -8,7 +8,7 @@ import {
 
 import Nav from './components/Nav/index';
 import MobileNav from './components/MobileNav/index';
-import Modal from './components/Modal/index';
+
 import Utils from '../common/utils';
 
 class Index extends Component {
@@ -30,6 +30,12 @@ class Index extends Component {
       $.fn.fullpage.destroy('all');
     }
     this.initFullpage();
+  }
+
+  componentWillUnmount(){
+    if (typeof $.fn.fullpage.destroy == 'function') {
+      $.fn.fullpage.destroy('all');
+    }
   }
 
   componentDidUpdate(){
@@ -88,7 +94,6 @@ class Index extends Component {
           <div className="section contact" data-anchor="contacts">
           </div>
         </div>
-        <Modal/>
       </div>
     );
     return(

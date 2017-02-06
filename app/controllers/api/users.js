@@ -156,6 +156,7 @@ const signup = async(ctx, _next) => {
   let {
     id,
     nickname,
+    role,
     password,
     phone,
     email,
@@ -271,7 +272,7 @@ const signup = async(ctx, _next) => {
     if (id == '') {
       var usersList = [{
         nickname: nickname,
-        role: 'user',
+        role: role !== '' ? role : 'user',
         phone: phone,
         email: email,
         avatar: avatar,
@@ -320,7 +321,7 @@ const signup = async(ctx, _next) => {
         let newData = {
           id: id,
           nickname: nickname,
-          role: 'user',
+          role: role !== '' ? role : 'user',
           phone: phone,
           email: email,
           avatar: avatar,
