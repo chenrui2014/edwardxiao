@@ -1,5 +1,28 @@
 .page {
-  background: #f8f8f8!important;
-  background-size: cover;
-  background-position: 50% 50%;
+  background: none!important;
+}
+
+.page-404 {
+  color: #fff;
+  background: #4a4a4a;
+  height: 100%;
+  width: 100%;
+}
+
+.icon {
+  font-size: 150px;
+}
+
+.text-404 {
+  font-size: 40px;
+}
+
+.page-404__button {
+  color: #fff!important;
+  margin-top: 10px;
+}
+
+.page-404__button:hover {
+  color: #e4e4e4!important;
+  border-color: #e4e4e4!important;
 }

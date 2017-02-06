@@ -1,7 +1,60 @@
 import models from '../../models/index';
+import _ from 'lodash';
 
 const show = async (ctx, _next) => {
-   ctx.body = {a: 1, b: 3};
+  let {
+    page,
+    perPage,
+  } = ctx.request.body;
+  if (_.isUndefined(page) || page === '') {
+    page = 1;
+  }
+  if (_.isUndefined(perPage) || perPage === '') {
+    perPage = 15;
+  }
+  let code = 0;
+  let data = [];
+  let articleList = [];
+  let pages = 0;
+
+  let query = {isShow: false};
+  let options = {
+      select: 'title author preface desc content cover type isShow createdAt updatedAt createdBy updatedBy',
+      sort: { updatedBy: -1 },
+      lean: true,
+      page: page,
+      limit: perPage
+  };
+
+  await models.Article.paginate(query, options).then((result) => {
+    console.log(result);
+    if (result.docs.length){
+      result.docs.map((item, key) => {
+        articleList.push({
+          id: item.id,
+          title: item.title,
+          author: item.author,
+          preface: item.preface,
+          desc: item.desc,
+          content: item.content,
+          cover: item.cover,
+          type: item.type,
+          isShow: item.isShow,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+          createdBy: item.createdBy,
+          updatedBy: item.updatedBy,
+        });
+      });
+      pages = result.pages;
+    }
+  });
+  console.log(articleList);
+  data = articleList;
+  // if (articleList.length) {
+
+  // }
+  ctx.body = { code, data, page, pages };
 };
 
 const newArticle = async (ctx, _next) => {

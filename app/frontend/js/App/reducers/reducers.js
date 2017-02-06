@@ -75,22 +75,22 @@ export function article(article = DEFAULT_STATE.article, action) {
 }
 
 
-export function articleCurrentPage(articleCurrentPage = DEFAULT_STATE.articleCurrentPage, action) {
+export function articleListCurrentPage(articleListCurrentPage = DEFAULT_STATE.articleListCurrentPage, action) {
   switch (action.type) {
-    case ACTION.SET_ARTICLE_CURRENT_PAGE:
-      return action.articleCurrentPage;
+    case ACTION.SET_ARTICLE_LIST_CURRENT_PAGE:
+      return action.articleListCurrentPage;
     default:
-      return articleCurrentPage;
+      return articleListCurrentPage;
   }
 }
 
 
-export function articleTotalPage(articleTotalPage = DEFAULT_STATE.articleTotalPage, action) {
+export function articleListTotalPage(articleListTotalPage = DEFAULT_STATE.articleListTotalPage, action) {
   switch (action.type) {
-    case ACTION.SET_ARTICLE_TOTAL_PAGE:
-      return action.articleTotalPage;
+    case ACTION.SET_ARTICLE_LIST_TOTAL_PAGE:
+      return action.articleListTotalPage;
     default:
-      return articleTotalPage;
+      return articleListTotalPage;
   }
 }
 

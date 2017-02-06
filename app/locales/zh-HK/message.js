@@ -21,4 +21,5 @@ module.exports = {
   'welcome-back': '歡迎回來',
   'enter': '輸入',
   'to-confirm': '進行確認',
+  'not-found-message': '抱歉！閣下訪問的頁面還不存在。',
 };

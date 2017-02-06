@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import MobileNav from '../../components/MobileNav/index';
+import Nav from '../../components/Nav/index';
 import '../../../../css/not_found.css';
 
 class NotFound extends Component {
@@ -10,36 +12,31 @@ class NotFound extends Component {
   }
 
   go() {
-    // this.context.router.push('/');
-    // this.context.router.goSmartBack();
-    // let {
-    //   userInfo
-    // } = this.props;
-    // let url;
-    // if (!_.isNull(userInfo) && userInfo.merchants.length){
-    //   url = '/my_merchant/' + userInfo.merchants[0].id;
-    // }
-    // else{
-    //   url = '/my_activity_list';
-    // }
     this.context.router.push('/');
   }
 
   render() {
+    let {
+      locale,
+    } = this.props;
+    let LANG_MESSAGE = require('../../../../../locales/' + locale + '/message');
+    let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
     return(
-      <div className='page al-center'>
-        <div className="page-404">
-          <div>
-            <img src={require('../../../../img/404.png')} srcSet={require('../../../../img/404@2x.png')} className="page-404__image" />
-          </div>
-          <div className="fts-16 al-left mgt-40 mgb-10">
-            出错啦！
-          </div>
-          <div className="grey-72 al-left mgb-40">
-            您访问的页面不存在
-          </div>
-          <div className="page-404__button yl-button yl-button--red" onClick={this.go.bind(this)}>
-            立即返回
+      <div className="page-content fullpage-grey-4a">
+        <MobileNav isIndex={false}/>
+        <Nav isIndex={false}/>
+        <div className="core-content no-padding no-margin height-100pc">
+          <div className="page al-center dp-tbl width-100pc">
+            <div className="page-404 dp-tbl-cel middle">
+              <span className="icon icon-sentiment-dissatisfied"></span>
+              <div className="text-404">404</div>
+              <div className="fts-16 mgt-40 mgb-10">
+                {LANG_MESSAGE['not-found-message']}
+              </div>
+              <div className="page-404__button my-button my-button--gray-border" onClick={this.go.bind(this)}>
+                {LANG_ACTION['go-back']}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -48,8 +45,11 @@ class NotFound extends Component {
 }
 
 function mapStateToProps(state) {
+  let {
+    locale,
+  } = state;
   return {
-    userInfo: state.userInfo
+    locale,
   };
 }
 
@@ -60,5 +60,9 @@ function mapDispatchToProps() {
 NotFound.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
+
+Nav.propTypes = {
+  locale: React.PropTypes.string.isRequired,
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotFound);

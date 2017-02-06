@@ -38,7 +38,11 @@ class Nav extends Component {
       isIndex,
       activeTab,
       userInfo,
+      className,
     } = this.props;
+    if (_.isUndefined(className)){
+      className = '';
+    }
     let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
     let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
     let LANG_USER = require('../../../../../locales/' + locale + '/user');
@@ -84,7 +88,7 @@ class Nav extends Component {
       );
     }
     return(
-      <div className="nav">
+      <div className={`nav ${className}`}>
         <div className="nav__left menu">
           <span className="mobile-menu-icon glyphicon glyphicon-menu-hamburger grey-4a" aria-hidden="true"></span>
           <a className="no-mobile-990" href="/">

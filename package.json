@@ -51,6 +51,7 @@
     "migrate": "^0.2.3",
     "moment": "^2.14.1",
     "mongoose": "^4.7.5",
+    "mongoose-paginate": "^5.0.3",
     "pm2": "^2.2.3",
     "pug": "^2.0.0-beta6",
     "purifycss-webpack-plugin": "^2.0.3",

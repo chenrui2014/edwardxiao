@@ -11,8 +11,8 @@ export const DEFAULT_STATE = {
   captcha: CAPTCHA_DATA,
   articleList: null,
   article: null,
-  articleCurrentPage: 0,
-  articleTotalPage: 0,
+  articleListCurrentPage: 0,
+  articleListTotalPage: 0,
   isNotFound: false,
 };
 
@@ -22,4 +22,4 @@ export const MODAL_CONTENT_COMPONENT_OBJECT = {
   MyAccount,
 };
 
-export const ARTICLE_PER_PAGE = 15;
+export const ARTICLE_LIST_PER_PAGE = 15;

@@ -9,6 +9,10 @@ import update from 'react-addons-update';
 import Validator from '../../common/my_validator';
 let validator = new Validator();
 
+import {
+  ARTICLE_LIST_PER_PAGE
+} from '../reducers/ConstValue';
+
 export const SET_LOCALE = 'SET_LOCALE';
 export const setLocale = (locale) => ({
   type: SET_LOCALE,
@@ -51,16 +55,16 @@ export const setArticle = (article) => ({
   article
 });
 
-export const SET_ARTICLE_CURRENT_PAGE = 'SET_ARTICLE_CURRENT_PAGE';
-export const setArticleCurrentPage = (articleCurrentPage) => ({
-  type: SET_ARTICLE_CURRENT_PAGE,
-  articleCurrentPage
+export const SET_ARTICLE_LIST_CURRENT_PAGE = 'SET_ARTICLE_LIST_CURRENT_PAGE';
+export const setArticleListTotalPage = (articleListCurrentPage) => ({
+  type: SET_ARTICLE_LIST_CURRENT_PAGE,
+  articleListCurrentPage
 });
 
-export const SET_ARTICLE_TOTAL_PAGE = 'SET_ARTICLE_TOTAL_PAGE';
-export const setArticleTotalPage = (articleTotalPage) => ({
-  type: SET_ARTICLE_TOTAL_PAGE,
-  articleTotalPage
+export const SET_ARTICLE_LIST_TOTAL_PAGE = 'SET_ARTICLE_LIST_TOTAL_PAGE';
+export const setArticleListCurrentPage = (articleListTotalPage) => ({
+  type: SET_ARTICLE_LIST_TOTAL_PAGE,
+  articleListTotalPage
 });
 
 export const SET_IS_NOT_FOUND = 'SET_IS_NOT_FOUND';
@@ -338,6 +342,45 @@ function fetchVerifyCodeApi(phone) {
       url: '/api/register/sms',
       data: { phone },
       type: 'post',
+      success: (data) => {
+        resolve(data);
+      },
+      error: (error) => {
+        reject(error);
+      }
+    });
+  })
+}
+
+export const fetchArticleList = (nextPage) => (dispatch) => {
+  Utils.initSpin('spin-loader');
+  fetchArticleListApi(nextPage).then((res) => {
+    console.log(res);
+    if (res.code === 0){
+      console.log(res.data);
+      dispatch(setArticleList(res.data));
+      dispatch(setArticleListTotalPage(parseInt(res.pages)));
+      dispatch(setArticleListCurrentPage(parseInt(res.page)));
+      Utils.stopSpin('spin-loader');
+    }
+    else{
+      if(res.msg){
+        alert(res.msg);
+      }
+    }
+  }).catch((err) => {
+    // debugger;
+    // alert('网络错误，请重试');
+    console.log(err);
+  });
+}
+
+function fetchArticleListApi(nextPage) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/api/articles/',
+      data: {page: nextPage, per_page: ARTICLE_LIST_PER_PAGE},
+      type: 'get',
       success: (data) => {
         resolve(data);
       },

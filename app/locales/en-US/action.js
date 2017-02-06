@@ -9,4 +9,5 @@ module.exports = {
   'edit': 'edit ',
   'change': 'change ',
   'are-you-sure': 'are you absolutely sure',
+  'go-back': 'Go Back',
 };

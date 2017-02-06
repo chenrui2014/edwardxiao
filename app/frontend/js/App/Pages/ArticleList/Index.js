@@ -12,6 +12,7 @@ import MobileNav from '../../components/MobileNav/index';
 import Nav from '../../components/Nav/index';
 import NotFound from '../NotFound';
 import '../../../../css/articles.css';
+import ArticleItem from './components/ArticleItem';
 
 class ArticleList extends Component {
 
@@ -28,11 +29,26 @@ class ArticleList extends Component {
   }
 
   componentDidMount() {
-    this.setIsLoading(false);
+    if (_.isNull(this.props.articleList)){
+      this.props.fetchArticleList(this.props.articleListCurrentPage + 1);
+    }
+    else{
+      this.setState({isLoading: false});
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (_.isNull(prevProps.articleList) && !_.isNull(this.props.articleList)){
+      this.setState({isLoading: false});
+    }
   }
 
   go(url) {
     this.context.router.push(url);
+  }
+
+  fetchArticleList(nextPage) {
+    this.props.fetchArticleList(nextPage);
   }
 
   render() {
@@ -61,11 +77,32 @@ class ArticleList extends Component {
             <div className="my-button my-button--red" onClick={this.go.bind(this, '/articles/new')}>{LANG_ACTION['add']}{LANG_NAV['article']}</div>
           );
         }
+        if (articleList.length){
+          articleListHtml = articleList.map((item, key) => {
+            return (
+              <ArticleItem
+                locale={locale}
+                id={item.id}
+                title={item.title}
+                author={item.author}
+                preface={item.preface}
+                desc={item.desc}
+                content={item.content}
+                cover={item.cover}
+                type={item.type}
+                isShow={item.isShow}
+                createdAt={item.createdAt}
+                updatedAt={item.updatedAt}
+                createdBy={item.createdBy}
+                updatedBy={item.updatedBy}
+              />
+            );
+          });
+        }
       }
       let backUrl = this.state.backUrl;
-      console.log(userInfo);
       content = (
-        <div className="page-content">
+        <div className="page-content background-grey-4a">
           <MobileNav isIndex={false} activeTab="articles"/>
           <Nav isIndex={false} activeTab="articles"/>
           <div className="core-content">
@@ -89,19 +126,23 @@ function mapStateToProps(state) {
     articleList,
     isNotFound,
     userInfo,
+    articleListCurrentPage,
+    articleListTotalPage,
   } = state;
   return {
     locale,
     articleList,
     isNotFound,
     userInfo,
+    articleListCurrentPage,
+    articleListTotalPage,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleList: () => {
-      dispatch(fetchArticleList());
+    fetchArticleList: (nextPage) => {
+      dispatch(fetchArticleList(nextPage));
     },
   };
 }
@@ -116,6 +157,8 @@ ArticleList.propTypes = {
   isLoading: React.PropTypes.bool.isRequired,
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,
+  articleListCurrentPage: React.PropTypes.number.isRequired,
+  articleListTotalPage: React.PropTypes.number.isRequired,
   articleList: React.PropTypes.array.isRequired,
   fetchArticleList: React.PropTypes.func.isRequired,
   setIsNotFound: React.PropTypes.func.isRequired,

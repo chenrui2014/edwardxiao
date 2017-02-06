@@ -13,10 +13,14 @@ body .ftf-yuan {
   font-family: STYuanti-SC-Light;
 }
 
+#root {
+  padding-top: 1px;
+}
+
 #root,
 .page-transition,
 .page-transition>div,
-.page{
+.page {
   height: 100%;
 }
 
@@ -41,6 +45,7 @@ body .ftf-yuan {
 .fade-leave.fade-leave-active {
   opacity: 0;
 }
+
 
 /* dropdown module */
 
@@ -1748,6 +1753,21 @@ body .ftf-yuan {
 .picker__select--month,
 .picker__select--year {
   padding: 0 .5em!important;
+}
+
+.box-overlap {
+  margin-top: -1px;
+  padding-top: 1px;
+}
+
+.background-grey-4a {
+  background: #4a4a4a;
+}
+
+.fullpage-grey-4a {
+  height: 100%;
+  padding-top: 1px;
+  background: #4a4a4a;
 }
 
 @media only screen and (max-width: 1300px) {

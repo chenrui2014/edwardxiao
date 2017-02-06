@@ -21,4 +21,5 @@ module.exports = {
   'welcome-back': 'welcome back',
   'enter': 'enter ',
   'to-confirm': ' to cofirm',
+  'not-found-message': 'Sorry! The page you are looking for is not exist yet.',
 };

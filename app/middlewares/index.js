@@ -20,7 +20,7 @@ async function catchError(ctx, next) {
     let status = err.status || 500;
     ctx.status = status;
     ctx.state = {
-      csrf: '',
+      csrf: ctx.csrf,
       captchaData: '',
       status: status,
       helpers: helpers,

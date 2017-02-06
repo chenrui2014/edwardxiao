@@ -21,4 +21,5 @@ module.exports = {
   'welcome-back': '欢迎回来',
   'enter': '输入',
   'to-confirm': '进行确认',
+  'not-found-message': '抱歉！阁下访问的页面还不存在。',
 };

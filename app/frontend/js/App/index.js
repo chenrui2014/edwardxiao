@@ -78,7 +78,7 @@ class Index extends Component {
     let content = (
       <div className="container-full">
         <MobileNav isIndex={true}/>
-        <Nav isIndex={true}/>
+        <Nav isIndex={true} className="gradient"/>
         <div id="fullpage">
           <div className="section intros" data-anchor="intros">
           </div>
