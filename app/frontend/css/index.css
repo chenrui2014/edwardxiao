@@ -6,12 +6,18 @@
 
 .nav {
   position: fixed;
-  z-index: 1;
+  z-index: 20;
   width: 100%;
   padding: 10px 20px;
   top: 0;
   display: table;
   background: #4a4a4a;
+  transition: all .4s;
+}
+
+.nav.nav--scroll {
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.46), 0 0 1px 0 rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid #404040;
 }
 
 .menu__item {
@@ -24,7 +30,7 @@
 }
 
 .menu__item.active {
-  border: 1px solid #fff;
+  border: 1px solid #f8f8f8;
 }
 
 .menu .icon.icon-edwardxiao {
@@ -54,17 +60,17 @@
 }
 
 .nav a {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .nav a:hover {
-  color: #fff;
+  color: #f8f8f8;
   text-decoration: underline;
 }
 
 .nav a:focus,
 .nav a:active {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .nav__center,
@@ -75,7 +81,7 @@
 }
 
 .nav__left .mobile-menu-icon {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .nav__center {
@@ -94,7 +100,7 @@
 .user-nav__item {
   display: inline-block;
   vertical-align: middle;
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .mo-nav-mobile .user-nav__item {
@@ -102,11 +108,11 @@
 }
 
 .user-nav__item .select-arrow {
-  border-color: #fff transparent;
+  border-color: #f8f8f8 transparent;
 }
 
 .user-nav__item.input-group select {
-  border-color: #fff;
+  border-color: #f8f8f8;
 }
 
 .mo-nav-column__item .mo-nav-column__item.user-nav {
@@ -168,7 +174,7 @@
   font-size: 12px;
   padding: 3px;
   border: 1px solid #2d2d2d;
-  color: #fff;
+  color: #f8f8f8;
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, .2);
 }
 
@@ -262,7 +268,7 @@
 
 .avatar-holder.preview .icon,
 .avatar-holder:hover .icon {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .avatar-holder .icon {
@@ -293,12 +299,21 @@
 
 /*end of login*/
 
-.page-content{
+.page-content {
   height: 100%;
 }
 
 .core-content {
-  padding: 79px 10px 0;
+  padding: 79px 0 0;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -100px;
+  display: block;
+}
+
+.core-content.height-100pc{
+  height: 100%!important;
 }
 
 .core-content.no-margin {
@@ -307,6 +322,10 @@
 
 .core-content.no-padding {
   padding: 0;
+}
+
+.core {
+  margin-top: 10px;
 }
 
 
@@ -413,13 +432,13 @@ html.fp-enabled,
   left: 15px;
   width: 0;
   border-width: 38.5px 34px 38.5px 0;
-  border-color: transparent #fff transparent transparent;
+  border-color: transparent #f8f8f8 transparent transparent;
 }
 
 .fp-controlArrow.fp-next {
   right: 15px;
   border-width: 38.5px 0 38.5px 34px;
-  border-color: transparent transparent transparent #fff;
+  border-color: transparent transparent transparent #f8f8f8;
 }
 
 .fp-scrollable {
@@ -543,7 +562,7 @@ html.fp-enabled,
 #fp-nav ul li .fp-tooltip {
   position: absolute;
   top: -2px;
-  color: #fff;
+  color: #f8f8f8;
   font-size: 14px;
   font-family: arial, helvetica, sans-serif;
   white-space: nowrap;

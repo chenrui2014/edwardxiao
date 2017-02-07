@@ -8,13 +8,19 @@ const password = '123456';
 
 var hash = bcrypt.hashSync(password, saltRounds);
 
+var ObjectId = Schema.Types.ObjectId;
+var id = mongoose.Types.ObjectId('56cb91bdc3464f14678934ca');
+
 var usersList = [{
+  _id: id,
   nickname: 'admin',
   role: 'admin',
   phone: '0123456789',
   email: 'admin@example.com',
   avatar: '',
   password: hash,
+  createdBy: id,
+  updatedBy: id,
 }];
 var UserSchema = new Schema({
   nickname: { type: String, required: true },
@@ -24,8 +30,10 @@ var UserSchema = new Schema({
   avatar: { type: String },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
+  createdBy: { type: ObjectId, ref: 'Users' },
+  updatedBy: { type: ObjectId, ref: 'Users' },
 });
-var User = mongoose.model('users', UserSchema);
+var User = mongoose.model('Users', UserSchema);
 
 exports.up = function(next) {
   User.insertMany(usersList, function(error, docs) {});

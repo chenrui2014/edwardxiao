@@ -69,3 +69,14 @@ $(window).on('resize', () => {
   }
 });
 Utils.setupAjaxHeader(window.CSRF);
+
+$(window).scroll(function() {
+  var currentScrollHight, targetScrollHight;
+  currentScrollHight = $(window).scrollTop();
+  targetScrollHight = 50;
+  if (currentScrollHight > targetScrollHight - 50) {
+    return $('.nav ').addClass('nav--scroll');
+  } else {
+    return $('.nav ').removeClass('nav--scroll');
+  }
+});

@@ -134,7 +134,7 @@ function changeCaptchaApi() {
   })
 }
 
-export const login = (username, password, captchaCode) => (dispatch) => {
+export const login = (username, password, captchaCode) => (dispatch, getState) => {
   loginApi(username, password, captchaCode).then((res) => {
     console.log(res);
     if (res.code === 0) {
@@ -142,8 +142,13 @@ export const login = (username, password, captchaCode) => (dispatch) => {
       $('#myModal').modal('toggle');
       dispatch(setCaptcha(''));
       window.CAPTCHA_DATA = '';
-      if (res.msg){
-        message.showMessage(res.msg);
+      if (getState().isNotFound){
+        window.location.reload();
+      }
+      else{
+        if (res.msg){
+          message.showMessage(res.msg);
+        }
       }
     } else {
       if (res.data.captcha) {

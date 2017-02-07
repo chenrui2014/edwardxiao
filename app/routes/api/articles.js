@@ -4,7 +4,7 @@ import articles from '../../controllers/api/articles';
 const router = Router({
   prefix: '/api/articles'
 });
-router.get('/', articles.show);
+router.get('/', articles.index);
 router.get('/new', articles.checkLogin, articles.newArticle);
 router.get('/:id', articles.show);
 router.put('/:id', articles.checkLogin, articles.checkArticleOwner, articles.checkParamsBody, articles.update);

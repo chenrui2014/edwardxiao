@@ -10,6 +10,7 @@ import Utils from '../../../common/utils';
 
 import MobileNav from '../../components/MobileNav/index';
 import Nav from '../../components/Nav/index';
+import Footer from '../../components/Footer/index';
 import NotFound from '../NotFound';
 import '../../../../css/articles.css';
 import ArticleItem from './components/ArticleItem';
@@ -108,7 +109,9 @@ class ArticleList extends Component {
           <div className="core-content">
             {newArticleButton}
             {articleListHtml}
+            <div className="push"></div>
           </div>
+          <Footer/>
         </div>
       );
     }

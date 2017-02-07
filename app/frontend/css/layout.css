@@ -94,7 +94,7 @@ body .ftf-yuan {
   padding: 1px 4px;
   line-height: 20px;
   transition: background .4s;
-  background: #fff;
+  background: #f8f8f8;
   cursor: pointer;
   display: block;
 }
@@ -164,7 +164,7 @@ body .ftf-yuan {
 }
 
 .mo-navbar .mo-navbar--nav.mo-nav .mo-nav--item:hover>a {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .mo-navbar .mo-navbar--nav.mo-nav .mo-nav--item:hover {
@@ -217,22 +217,22 @@ body .ftf-yuan {
 
 .white,
 .white a {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .white:focus,
 .white a:focus {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .white:active,
 .white a:active {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .white:hover,
 .white a:hover {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .grey-9b,
@@ -934,7 +934,7 @@ body .ftf-yuan {
 .my-button,
 .my-form-group input.my-button {
   border-radius: 2px !important;
-  color: #fff;
+  color: #f8f8f8;
   -webkit-transition: all 0.4s;
   -moz-transition: all 0.4s;
   -o-transition: all 0.4s;
@@ -986,23 +986,23 @@ body .ftf-yuan {
 }
 
 .my-button--backround-white {
-  background: #fff;
+  background: #f8f8f8;
 }
 
 .my-button:hover,
 .my-form-group input.my-button {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .my-button:focus,
 .my-form-group input.my-button {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .my-button--blue,
 .my-form-group input.my-button.my-button--blue {
   background: #019AFF;
-  color: #fff !important;
+  color: #f8f8f8 !important;
 }
 
 .my-button--blue:hover,
@@ -1036,7 +1036,7 @@ body .ftf-yuan {
 .my-button--red,
 .my-form-group input.my-button.my-button--red {
   background: #ff5a5e;
-  color: #fff !important;
+  color: #f8f8f8 !important;
 }
 
 .my-button--red:hover,
@@ -1070,7 +1070,7 @@ body .ftf-yuan {
 .my-button--rose-red,
 .my-form-group input.my-button.my-button--rose-red {
   background: #ec577c;
-  color: #fff !important;
+  color: #f8f8f8 !important;
 }
 
 .my-button--rose-red:hover,
@@ -1110,7 +1110,7 @@ body .ftf-yuan {
 .my-button--gray,
 .my-form-group input.my-button.my-button--gray {
   background: #c6c6c6;
-  color: #fff !important;
+  color: #f8f8f8 !important;
 }
 
 .my-button--gray:hover,
@@ -1192,36 +1192,36 @@ body .ftf-yuan {
 .my-button--opacity,
 .my-form-group input.my-button.my-button--opacity {
   background: rgba(0, 0, 0, 0.3);
-  color: #fff !important;
+  color: #f8f8f8 !important;
 }
 
 .my-button--opacity:hover,
 .my-form-group input.my-button.my-button--opacity:hover {
   background: rgba(0, 0, 0, 0.4);
-  color: #fff !important;
+  color: #f8f8f8 !important;
 }
 
 .my-button--opacity:active,
 .my-form-group input.my-button.my-button--opacity:active {
   background: rgba(0, 0, 0, 0.5);
-  color: #fff !important;
+  color: #f8f8f8 !important;
 }
 
 .my-button--opacity-border,
 .my-form-group input.my-button.my-button--opacity-border {
-  color: #fff !important;
+  color: #f8f8f8 !important;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .my-button--opacity-border:hover,
 .my-form-group input.my-button.smy-button--opacity-border:hover {
-  color: #fff !important;
+  color: #f8f8f8 !important;
   border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
 .my-button--opacity-border:active,
 .my-form-group input.my-button.my-button--opacity-border:active {
-  color: #fff !important;
+  color: #f8f8f8 !important;
   border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
@@ -1247,7 +1247,7 @@ body .ftf-yuan {
 }
 
 .my-button.disabled {
-  color: #fff !important;
+  color: #f8f8f8 !important;
   background: #929292 !important;
 }
 
@@ -1290,7 +1290,7 @@ body .ftf-yuan {
 
 .my-operation.my-operation--fixed {
   position: fixed;
-  background: #fff;
+  background: #f8f8f8;
 }
 
 
@@ -1324,7 +1324,7 @@ body .ftf-yuan {
 }
 
 .mo-bottom-modal {
-  background: #fff;
+  background: #f8f8f8;
   width: 100%;
   position: fixed;
   left: 0;
@@ -1381,7 +1381,7 @@ body .ftf-yuan {
   top: 0;
   right: 0;
   z-index: -1;
-  color: #fff;
+  color: #f8f8f8;
   width: 100%;
   text-align: right;
   /*transition: opacity .5s, z-index .5s;*/
@@ -1474,7 +1474,7 @@ body .ftf-yuan {
   width: 100%;
   height: 70px;
   text-align: center;
-  background: #fff;
+  background: #f8f8f8;
   font-size: 12px;
   color: #4a4a4a;
   cursor: pointer;
@@ -1486,19 +1486,19 @@ body .ftf-yuan {
 /*.mo-nav-column__item:hover a,
 .mo-nav-column__item:hover {
   background: #375682;
-  color: #fff;
+  color: #f8f8f8;
 }*/
 
 
 /*
 .mo-nav-column__item:active a,
 .mo-nav-column__item:active {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .mo-nav-column__item:focus a,
 .mo-nav-column__item:focus {
-  color: #fff;
+  color: #f8f8f8;
 }*/
 
 .mo-nav-column__item.mo-nav-column__item--logo {
@@ -1525,7 +1525,7 @@ body .ftf-yuan {
 
 .header-wrapper-row {
   height: 60px;
-  background: #fff;
+  background: #f8f8f8;
 }
 
 .header-wrapper {
@@ -1549,7 +1549,7 @@ body .ftf-yuan {
 }
 
 .content-wrapper {
-  background: #fff;
+  background: #f8f8f8;
   height: 100%;
 }
 
@@ -1565,7 +1565,7 @@ body .ftf-yuan {
   min-width: 200px;
   min-height: 20px;
   top: 0;
-  background: #fff;
+  background: #f8f8f8;
   position: absolute;
   /*  box-shadow: 0 -1px 3px 0 rgba(0, 0, 0, .2), inset 0 -1px 3px 0 rgba(0, 0, 0, .2);*/
   border: 1px solid #ccc;
@@ -1589,7 +1589,7 @@ body .ftf-yuan {
 
 .my-tooltip:after {
   left: -6px;
-  border-color: transparent #fff;
+  border-color: transparent #f8f8f8;
   z-index: 1;
 }
 
@@ -1615,7 +1615,7 @@ body .ftf-yuan {
   left: 0;
   right: 0;
   visibility: hidden;
-  z-index: 5;
+  z-index: 21;
   transition: visibility .2s;
 }
 
@@ -1638,7 +1638,7 @@ body .ftf-yuan {
   height: 100%;
   border: 0;
   z-index: 1;
-  background: #fff;
+  background: #f8f8f8;
   transition: transform .4s;
 }
 
@@ -1672,7 +1672,7 @@ body .ftf-yuan {
 }
 
 .mo-navbar__nav-mobile.mo-nav-mobile .mo-nav-mobile-menu__link {
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .mo-navbar__nav-mobile.mo-nav-mobile .mo-nav-mobile__menu-wrapper .icon {
@@ -1764,10 +1764,19 @@ body .ftf-yuan {
   background: #4a4a4a;
 }
 
+.background-white {
+  background: #f8f8f8;
+}
+
 .fullpage-grey-4a {
   height: 100%;
   padding-top: 1px;
   background: #4a4a4a;
+}
+
+.footer,
+.push {
+  min-height: 100px;
 }
 
 @media only screen and (max-width: 1300px) {

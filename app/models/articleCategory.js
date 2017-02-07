@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
 // define a schema
-const ArticleSchema = new Schema({
+const ArticleCategorySchema = new Schema({
   title: { type: String, required: true },
   author: { type: String, required: true },
   preface: { type: String },
@@ -22,12 +22,12 @@ const ArticleSchema = new Schema({
   updatedBy: { type: ObjectId, ref: 'Users' },
 });
 
-ArticleSchema.plugin(mongoosePaginate);
+ArticleCategorySchema.plugin(mongoosePaginate);
 
-const Article = mongoose.model('Articles', ArticleSchema);
+const ArticleCategory = mongoose.model('ArticleCategories', ArticleCategorySchema);
 
-// ArticleSchema.statics.findAll = function(val, cb) {
+// ArticleCategorySchema.statics.findAll = function(val, cb) {
 //   return this.find({ _id: val }, cb);
 // };
 
-export default Article;
+export default ArticleCategory;

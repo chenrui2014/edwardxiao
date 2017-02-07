@@ -1,6 +1,6 @@
 .my-message {
   position: fixed;
-  z-index: 9;
+  z-index: 23;
   opacity: 0;
   top: 0;
   width: 100%;
@@ -21,17 +21,17 @@
 
 .my-message.my-message--error {
   background: #ff7380;
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .my-message.my-message--warning {
   background: #ffc773;
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .my-message.my-message--success {
   background: #47e47f;
-  color: #fff;
+  color: #f8f8f8;
 }
 
 .my-message .my-message__content {

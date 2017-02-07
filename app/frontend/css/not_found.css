@@ -3,7 +3,7 @@
 }
 
 .page-404 {
-  color: #fff;
+  color: #f8f8f8;
   background: #4a4a4a;
   height: 100%;
   width: 100%;
@@ -18,7 +18,7 @@
 }
 
 .page-404__button {
-  color: #fff!important;
+  color: #f8f8f8!important;
   margin-top: 10px;
 }
 

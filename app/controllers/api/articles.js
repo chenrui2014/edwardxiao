@@ -1,7 +1,7 @@
 import models from '../../models/index';
 import _ from 'lodash';
 
-const show = async (ctx, _next) => {
+const index = async(ctx, _next) => {
   let {
     page,
     perPage,
@@ -17,62 +17,99 @@ const show = async (ctx, _next) => {
   let articleList = [];
   let pages = 0;
 
-  let query = {isShow: false};
-  let options = {
-      select: 'title author preface desc content cover type isShow createdAt updatedAt createdBy updatedBy',
-      sort: { updatedBy: -1 },
-      lean: true,
-      page: page,
-      limit: perPage
-  };
-
-  await models.Article.paginate(query, options).then((result) => {
-    console.log(result);
-    if (result.docs.length){
-      result.docs.map((item, key) => {
-        articleList.push({
-          id: item.id,
-          title: item.title,
-          author: item.author,
-          preface: item.preface,
-          desc: item.desc,
-          content: item.content,
-          cover: item.cover,
-          type: item.type,
-          isShow: item.isShow,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-          createdBy: item.createdBy,
-          updatedBy: item.updatedBy,
-        });
-      });
-      pages = result.pages;
-    }
-  });
-  console.log(articleList);
-  data = articleList;
-  // if (articleList.length) {
-
-  // }
+  let select = ['title', 'author', 'preface', 'desc', 'content', 'articleCategory', 'cover', 'type', 'isBanned', 'isPrivate', 'isPrivate', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
+  let populate = 'articleCategory createdBy';
+  let query = { isBanned: false, isPrivate: false };
+  let sort = { updatedBy: -1 };
+  let res = await getArticles(query, select, sort, true, populate, page, perPage);
+  console.log('======');
+  console.log(res);
+  data = res.data;
+  pages = res.pages;
   ctx.body = { code, data, page, pages };
 };
 
-const newArticle = async (ctx, _next) => {
+const show = async(ctx, _next) => {
+  let {
+    page,
+    perPage,
+  } = ctx.request.body;
+  if (_.isUndefined(page) || page === '') {
+    page = 1;
+  }
+  if (_.isUndefined(perPage) || perPage === '') {
+    perPage = 15;
+  }
+  let code = 0;
+  let data = [];
+  let articleList = [];
+  let pages = 0;
+
+  let select = ['title', 'author', 'preface', 'desc', 'content', 'articleCategory', 'cover', 'type', 'isBanned', 'isPrivate', 'isPrivate', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
+  let populate = 'articleCategory createdBy';
+  let query = { isBanned: false, isPrivate: false };
+  let sort = { updatedBy: -1 };
+  let res = await getArticles(query, select, sort, true, populate, page, perPage);
+  console.log('======');
+  console.log(res);
+  data = res.data;
+  pages = res.pages;
+  ctx.body = { code, data, page, pages };
+};
+
+const newArticle = async(ctx, _next) => {
   const locals = {
     nav: 'articleNew'
   };
   await ctx.render('articles/new', locals);
 };
 
-const create = async (ctx, _next) => {
+const create = async(ctx, _next) => {
   const currentUser = ctx.state.currentUser;
-  const article = await currentUser.createArticle(ctx.state.articleParams);
-  // await models.Article.create(articleParams)
-  ctx.redirect('/articles/' + article.id);
-  return;
+  let mongoose = require('mongoose');
+  let userId = mongoose.Types.ObjectId(currentUser.id);
+  let {
+    title,
+    author,
+    preface,
+    desc,
+    content,
+    cover,
+    type,
+    tag,
+    isBanned,
+    isPrivate,
+    articleCategory,
+  } = ctx.state.articleParams;
+  let data = {
+    title,
+    author,
+    preface,
+    desc,
+    content,
+    cover,
+    type,
+    tag,
+    isBanned,
+    isPrivate,
+    articleCategory,
+    createdBy: userId,
+  };
+  let code = 0;
+  let id = '';
+  await models.Article.create(data, (err, res) => {
+    if (err) {
+      code = 1;
+      return handleError(err);
+    }
+    console.log(res);
+    id = res.id;
+    // saved!
+  });
+  ctx.body = { code, id };
 };
 
-const edit = async (ctx, _next) => {
+const edit = async(ctx, _next) => {
   const locals = {
     title: '编辑',
     nav: 'article'
@@ -80,15 +117,16 @@ const edit = async (ctx, _next) => {
   await ctx.render('articles/edit', locals);
 };
 
-const update = async (ctx, _next) => {
+const update = async(ctx, _next) => {
   let article = ctx.state.article;
   article = await article.update(ctx.state.articleParams);
   ctx.redirect('/articles/' + article.id);
   return;
 };
 
-const checkLogin = async (ctx, next) => {
-  if(!ctx.state.isUserSignIn){
+const checkLogin = async(ctx, next) => {
+  console.log(ctx.state.isUserSignIn);
+  if (!ctx.state.isUserSignIn) {
     ctx.status = 302;
     ctx.redirect('/');
     return;
@@ -96,7 +134,7 @@ const checkLogin = async (ctx, next) => {
   await next();
 };
 
-const checkArticleOwner = async (ctx, next) => {
+const checkArticleOwner = async(ctx, next) => {
   const currentUser = ctx.state.currentUser;
   const article = await models.Article.findOne({
     where: {
@@ -104,7 +142,7 @@ const checkArticleOwner = async (ctx, next) => {
       userId: currentUser.id
     }
   });
-  if(article == null){
+  if (article == null) {
     ctx.redirect('/');
     return;
   }
@@ -112,29 +150,76 @@ const checkArticleOwner = async (ctx, next) => {
   await next();
 };
 
-const checkParamsBody = async (ctx, next) => {
+const checkParamsBody = async(ctx, next) => {
   const body = ctx.request.body;
-  if (!(body.title && body.content && body.description)) {
-    const locals = {
-      nav: 'articleNew',
-      message: 'params error'
-    };
-    if(ctx.params.id){
-      await ctx.render('articles/edit', locals);
-    } else {
-      await ctx.render('articles/new', locals);
-    }
-    return;
+  let {
+    id,
+    title,
+    author,
+    preface,
+    desc,
+    content,
+    cover,
+    type,
+    tag,
+    isBanned,
+    isPrivate,
+    articleCategory,
+  } = body;
+  if (title == '') {
+    return false;
   }
   ctx.state.articleParams = {
-    title: body.title,
-    description: body.description,
-    content: body.content
+    id: id,
+    title: title,
+    author: author,
+    preface: preface,
+    desc: desc,
+    content: content,
+    cover: cover,
+    type: type,
+    tag: tag,
+    isBanned: isBanned,
+    isPrivate: isPrivate,
+    articleCategory: articleCategory,
   };
   await next();
 };
 
+const getArticles = async(query = '', select, sort = '', lean = true, populate = '', page = 0, perPage = 0) => {
+
+  let data = [];
+  let pages;
+  let options = {
+    select,
+    sort,
+    lean,
+  };
+  if (populate != '') {
+    options['populate'] = populate;
+  }
+  if (page != 0) {
+    options['page'] = page;
+  }
+  if (perPage != 0) {
+    options['limit'] = perPage;
+  }
+  await models.Article.paginate(query, options).then((result) => {
+    console.log(result);
+    if (result.docs.length) {
+      data = result.docs;
+      pages = result.pages;
+    }
+  });
+  let result = {
+    data,
+    pages,
+  }
+  return result;
+}
+
 export default {
+  index,
   show,
   newArticle,
   create,

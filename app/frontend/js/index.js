@@ -11,7 +11,8 @@ import objectAssign from 'object-assign';
 import Main from './App/main';
 import Index from './App/index';
 import ArticleList from './App/Pages/ArticleList/Index';
-import ArticleNew from './App/Pages/ArticleNew/Index';
+import ArticleForm from './App/Pages/ArticleForm/Index';
+import Article from './App/Pages/Article/Index';
 import NotFound from './App/Pages/NotFound/Index';
 import '../css/index.css';
 
@@ -33,7 +34,9 @@ ReactDOM.render(
       <Route path='/' component={Main}>
         <IndexRoute component={Index}></IndexRoute>
         <Route path='/articles' component={ArticleList}></Route>
-        <Route path='/articles/new' component={ArticleNew}></Route>
+        <Route path='/articles/new' component={ArticleForm}></Route>
+        <Route path='/articles/:id' component={Article}></Route>
+        <Route path='/articles/:id/edit' component={ArticleForm}></Route>
         <Route path="404" component={NotFound}/>
       </Route>
       <Route path="*" component={NotFound}/>

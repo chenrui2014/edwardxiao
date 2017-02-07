@@ -1,6 +1,9 @@
 'use strict'
 var mongoose = require('../db/index');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
+var id = mongoose.Types.ObjectId('56cb91bdc3464f14678934ca');
+var articleCategoryId = mongoose.Types.ObjectId('ce3cc9334ae8c66be6db982d');
 
 var articleList = [{
   title:'title',
@@ -9,10 +12,13 @@ var articleList = [{
   desc: 'desc',
   content: 'content',
   cover: '',
-  type: '',
-  isShow: false,
-  createdBy: '5892eeac50b2e30d8011e71c',
-  updatedBy: '5892eeac50b2e30d8011e71c',
+  type: 0,
+  tag: '',
+  isBanned: false,
+  isPrivate: false,
+  articleCategory: articleCategoryId,
+  createdBy: id,
+  updatedBy: id,
 }];
 var ArticleSchema = new Schema({
   title: { type: String, required: true },
@@ -21,14 +27,17 @@ var ArticleSchema = new Schema({
   desc: { type: String },
   content: { type: String, required: true },
   cover: { type: String },
-  type: { type: String },
-  isShow: { type: Boolean },
+  type: { type: Number },
+  tag: { type: String },
+  isBanned: { type: Boolean },
+  isPrivate: { type: Boolean },
+  articleCategory: { type: ObjectId, ref: 'ArticleCategories' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-  createdBy: { type: String, required: true },
-  updatedBy: { type: String, required: true },
+  createdBy: { type: ObjectId, ref: 'Users' },
+  updatedBy: { type: ObjectId, ref: 'Users' },
 });
-var ArticleSchema = mongoose.model('article', ArticleSchema);
+var ArticleSchema = mongoose.model('Articles', ArticleSchema);
 
 exports.up = function(next) {
   ArticleSchema.insertMany(articleList, function(error, docs) {});
