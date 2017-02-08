@@ -6,4 +6,6 @@ module.exports = {
   'logo-design': 'logo設計',
   'web-design': '網頁設計',
   'photograph': '攝影',
+  'space': ' ',
+  'space-en': '',
 };

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
   fetchArticleList,
+  setArticleList,
   setIsNotFound,
 } from '../../actions/index';
 
@@ -30,10 +31,8 @@ class ArticleList extends Component {
   }
 
   componentDidMount() {
-    if (_.isNull(this.props.articleList)){
-      this.props.fetchArticleList(this.props.articleListCurrentPage + 1);
-    }
-    else{
+    this.props.fetchArticleList(this.props.articleListCurrentPage + 1);
+    if (!_.isNull(this.props.articleList)){
       this.setState({isLoading: false});
     }
   }
@@ -42,10 +41,56 @@ class ArticleList extends Component {
     if (_.isNull(prevProps.articleList) && !_.isNull(this.props.articleList)){
       this.setState({isLoading: false});
     }
+    // if (!_.isNull(prevProps.articleList)){
+    //   if (prevProps.articleList != this.props.articleList){
+    //     this.props.fetchArticleList(this.props.articleListCurrentPage + 1);
+    //   }
+    // }
   }
 
   go(url) {
     this.context.router.push(url);
+  }
+
+  remove(id) {
+    Utils.initSpin('spin-loader');
+    this.removeApi(id).then((res) => {
+      console.log(res);
+      if (res.code === 0){
+        let newArticleList = [];
+        this.props.articleList.map((item, key) => {
+          if (item.id != res.id){
+            newArticleList.push(item);
+          }
+        });
+        this.props.setArticleList(newArticleList);
+        Utils.stopSpin('spin-loader');
+      }
+      else{
+        if(res.msg){
+          alert(res.msg);
+        }
+      }
+    }).catch((err) => {
+      // debugger;
+      // alert('网络错误，请重试');
+      console.log(err);
+    });
+  }
+
+  removeApi(id) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: '/api/articles/' + id,
+        type: 'delete',
+        success: (data) => {
+          resolve(data);
+        },
+        error: (error) => {
+          reject(error);
+        }
+      });
+    })
   }
 
   fetchArticleList(nextPage) {
@@ -75,7 +120,7 @@ class ArticleList extends Component {
       if (!isLoading){
         if (!_.isNull(userInfo) && userInfo.role == 'admin'){
           newArticleButton = (
-            <div className="my-button my-button--red" onClick={this.go.bind(this, '/articles/new')}>{LANG_ACTION['add']}{LANG_NAV['article']}</div>
+            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/articles/new')}>{LANG_ACTION['add']}{LANG_NAV['article']}</div>
           );
         }
         if (articleList.length){
@@ -96,6 +141,9 @@ class ArticleList extends Component {
                 updatedAt={item.updatedAt}
                 createdBy={item.createdBy}
                 updatedBy={item.updatedBy}
+                go={this.go.bind(this)}
+                remove={this.remove.bind(this)}
+                userInfo={userInfo}
               />
             );
           });
@@ -103,13 +151,15 @@ class ArticleList extends Component {
       }
       let backUrl = this.state.backUrl;
       content = (
-        <div className="page-content background-grey-4a">
+        <div className="page-content background-white">
           <MobileNav isIndex={false} activeTab="articles"/>
           <Nav isIndex={false} activeTab="articles"/>
           <div className="core-content">
-            {newArticleButton}
-            {articleListHtml}
-            <div className="push"></div>
+            <div className="core">
+              {newArticleButton}
+              {articleListHtml}
+              <div className="push"></div>
+            </div>
           </div>
           <Footer/>
         </div>
@@ -147,6 +197,9 @@ function mapDispatchToProps(dispatch) {
     fetchArticleList: (nextPage) => {
       dispatch(fetchArticleList(nextPage));
     },
+    setArticleList: (articleList) => {
+      dispatch(setArticleList(articleList));
+    },
   };
 }
 
@@ -165,6 +218,7 @@ ArticleList.propTypes = {
   articleList: React.PropTypes.array.isRequired,
   fetchArticleList: React.PropTypes.func.isRequired,
   setIsNotFound: React.PropTypes.func.isRequired,
+  setArticleList: React.PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);

@@ -14,6 +14,7 @@ module.exports = {
   'updated-at': 'updated at ',
   'updated-by': 'updated by ',
   'article-category': 'article category',
+  'sequence': 'sequence',
   'visible': 'visible',
   'hidden': 'hidden',
   'private': 'private',

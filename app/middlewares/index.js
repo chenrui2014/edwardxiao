@@ -70,6 +70,7 @@ async function addHelper(ctx, next) {
     currentUser: currentUser,
     isUserSignIn: (currentUser != null)
   };
+  console.log(ctx.state.currentUser);
   await next();
 }
 

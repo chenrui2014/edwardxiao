@@ -8,16 +8,12 @@ const show = async(ctx, _next) => {
 const getCategorieOptions = async(ctx, _next) => {
   let code = 0;
   let data = [];
-  let articleCategoryList = [];
-
   let select = ['title'];
   let populate = 'articleCategory createdBy';
   let query = { isBanned: false, isPrivate: false };
   let sort = { updatedBy: -1 };
   let res = await getArticleCategories(query, select, sort, true, populate);
-
   data = res.data;
-
   ctx.body = { code, data };
 };
 
@@ -40,7 +36,7 @@ const getArticleCategories = async(query = '', select, sort = '' , lean = true, 
     options['limit'] = perPage;
   }
   await models.ArticleCategory.paginate(query, options).then((result) => {
-    console.log(result);
+    // console.log(result);
     if (result.docs.length) {
       data = result.docs;
       pages = result.pages;

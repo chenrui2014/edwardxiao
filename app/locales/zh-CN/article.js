@@ -14,6 +14,7 @@ module.exports = {
   'updated-at': '更新于',
   'updated-by': '更新由',
   'article-category': '文章分类',
+  'sequence': '顺序',
   'visible': '显示',
   'hidden': '隐藏',
   'private': '私密',

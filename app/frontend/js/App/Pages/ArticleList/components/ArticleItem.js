@@ -23,6 +23,19 @@ class ArticleItem extends Component {
     this.props.fetchArticleList(nextPage);
   }
 
+  createContent() {
+    return {__html: this.props.content};
+  }
+
+  go(id){
+    this.props.go('/articles/' + id);
+  }
+
+  remove(id, e){
+    this.props.remove(id);
+    e.stopPropagation();
+  }
+
   render() {
     let {
       locale,
@@ -31,7 +44,6 @@ class ArticleItem extends Component {
       author,
       preface,
       desc,
-      content,
       cover,
       type,
       isShow,
@@ -39,15 +51,23 @@ class ArticleItem extends Component {
       updatedAt,
       createdBy,
       updatedBy,
+      userInfo,
     } = this.props;
+    let trashHtml;
     let LANG_USER = require('../../../../../../locales/' + locale + '/user');
+    if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+      trashHtml = (
+        <div className="trash" onClick={this.remove.bind(this, id)}><span className="icon icon-trash"></span></div>
+      );
+    }
     return(
-      <div className="article-item">
+      <div className="article-item" onClick={this.go.bind(this, id)}>
         <div className="article-item__title">{title}</div>
         <div className="article-item__preface">{preface}</div>
         <div className="article-item__desc">{desc}</div>
-        <div className="article-item__image"><img className="article-item__img" src={cover} /></div>
-        <div className="article-item__content">{content}</div>
+        {cover != '' ? <div className="article-item__image"><img className="article-item__img" src={cover} /></div> : ''}
+        <div className="article-item__content" dangerouslySetInnerHTML={this.createContent()}></div>
+        {trashHtml}
       </div>
     );
   }

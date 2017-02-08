@@ -5,11 +5,10 @@ const router = Router({
   prefix: '/api/articles'
 });
 router.get('/', articles.index);
-router.get('/new', articles.checkLogin, articles.newArticle);
 router.get('/:id', articles.show);
 router.put('/:id', articles.checkLogin, articles.checkArticleOwner, articles.checkParamsBody, articles.update);
-router.get('/:id/edit', articles.checkLogin, articles.checkArticleOwner, articles.edit);
 router.post('/', articles.checkLogin, articles.checkParamsBody, articles.create);
+router.delete('/:id', articles.checkLogin, articles.checkParamsBody, articles.remove);
 
 // for require auto in index.js
 module.exports = router;

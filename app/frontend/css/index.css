@@ -312,7 +312,7 @@
   display: block;
 }
 
-.core-content.height-100pc{
+.core-content.height-100pc {
   height: 100%!important;
 }
 
@@ -325,7 +325,9 @@
 }
 
 .core {
-  margin-top: 10px;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 10px auto 0;
 }
 
 

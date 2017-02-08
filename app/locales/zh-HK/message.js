@@ -22,4 +22,5 @@ module.exports = {
   'enter': '輸入',
   'to-confirm': '進行確認',
   'not-found-message': '抱歉！閣下訪問的頁面還不存在。',
+  'error-on-unauthorized': '抱歉！閣下沒有權限對此進行操作。',
 };

@@ -17,6 +17,7 @@ var articleList = [{
   isBanned: false,
   isPrivate: false,
   articleCategory: articleCategoryId,
+  sequence: 1,
   createdBy: id,
   updatedBy: id,
 }];
@@ -32,6 +33,7 @@ var ArticleSchema = new Schema({
   isBanned: { type: Boolean },
   isPrivate: { type: Boolean },
   articleCategory: { type: ObjectId, ref: 'ArticleCategories' },
+  sequence: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   createdBy: { type: ObjectId, ref: 'Users' },

@@ -22,4 +22,5 @@ module.exports = {
   'enter': '输入',
   'to-confirm': '进行确认',
   'not-found-message': '抱歉！阁下访问的页面还不存在。',
+  'error-on-unauthorized': '抱歉！阁下没有权限对此进行操作。',
 };

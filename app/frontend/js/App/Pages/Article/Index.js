@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
-  fetchArticle,
   setIsNotFound,
 } from '../../actions/index';
 
@@ -46,28 +45,56 @@ class Article extends Component {
   }
 
   componentDidMount() {
-    this.fetchArticle();
+    this.fetchArticle(this.props.params.id);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.id == '' && this.state.id !== ''){
-      this.setIsLoading(false);
-    }
+    // if (prevState.id == '' && this.state.id !== ''){
+    //   this.setIsLoading(false);
+    // }
   }
 
   handleImageLoaded() {
     Utils.stopSpin('cover-spin-loader');
   }
 
-  fetchArticle() {
+  fetchArticle(id) {
     Utils.initSpin('spin-loader');
-    this.fetchArticleApi(this.props.params.id).then((res) => {
+    this.fetchArticleApi(id).then((res) => {
       console.log(res);
       if (res.code === 0){
         // console.log(res.data);
         this.setState({articleCategoryOptions: res.data});
         if (res.data.length){
-          this.setState({articleCategory: res.data[0].id});
+          let {
+            id,
+            title,
+            author,
+            preface,
+            desc,
+            cover,
+            articleCategory,
+            type,
+            tag,
+            isBanned,
+            isPrivate,
+            content,
+          } = res.data[0];
+          this.setState({
+            id: id,
+            title: title,
+            author: author,
+            preface: preface,
+            desc: desc,
+            cover: cover,
+            articleCategory: articleCategory.title,
+            type: type,
+            tag: tag,
+            isBanned: isBanned,
+            isPrivate: isPrivate,
+            content: content,
+          });
+          this.setIsLoading(false);
         }
         Utils.stopSpin('spin-loader');
       }
@@ -86,9 +113,8 @@ class Article extends Component {
   fetchArticleApi(id) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: '/api/article',
+        url: '/api/articles/' + id,
         type: 'get',
-        data: { id },
         success: (data) => {
           resolve(data);
         },
@@ -101,6 +127,10 @@ class Article extends Component {
 
   createContent() {
     return {__html: this.state.content};
+  }
+
+  go(url) {
+    this.context.router.push(url);
   }
 
   render() {
@@ -133,28 +163,38 @@ class Article extends Component {
     }
     else{
 
+      let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
+      let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
       let articleListHtml;
       let articleCategoryOptionsHtml;
-      let newArticleButton;
+      let editArticleButton;
+
+      let coverHtml;
+      if (cover != ''){
+        coverHtml = <img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
+      }
+      else{
+        coverHtml = <span className="icon icon-sentiment-satisfied"></span>;
+      }
       if (!isLoading){
+        if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+          editArticleButton = (
+            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/articles/' + id + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['article']}</div>
+          );
+        }
         let backUrl = this.state.backUrl;
         contentHtml = (
-          <div className="page-content article background-grey-4a">
+          <div className="page-content article background-white">
             <MobileNav isIndex={false} activeTab="articles"/>
             <Nav isIndex={false} activeTab="articles"/>
-            <div className="core-content background-grey-4a">
-              {newArticleButton}
-              {articleListHtml}
+            <div className="core-content background-white">
               <div className="core">
-                <div>
-                  <div id="container" className="cover-container">
-                    <div className="cover-picker">
-                      <div className="spin-loader" id="cover-spin-loader" style={{'zIndex':'999'}}></div>
-                      <img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>
-                    </div>
-                  </div>
+                <div className="my-button my-button--red mgr-10" onClick={this.go.bind(this, '/articles/')}>{LANG_NAV['back-to']}{LANG_GENERAL['space-en']}{LANG_NAV['article-list']}</div>
+                {editArticleButton}
+                <div className="mgt-10">
+                  <div className="cover-wrapper">{coverHtml}</div>
                   <div className="row-wrapper">
                     {title}
                   </div>

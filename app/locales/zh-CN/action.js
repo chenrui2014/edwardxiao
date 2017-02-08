@@ -10,4 +10,5 @@ module.exports = {
   'change': '更改',
   'are-you-sure': '阁下当真确定吗',
   'go-back': '立即返回',
+  'unauthorized': '没有权限',
 };
