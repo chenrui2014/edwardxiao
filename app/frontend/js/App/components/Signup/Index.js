@@ -425,11 +425,11 @@ class Signup extends Component {
         <div className="modal-body">
           <form className="signup" id="signup" onSubmit={this.signup.bind(this)} autoComplete="off">
             <div className="input-wapper">
-              <div id="container" className="avatar-container">
-                <div className="avatar-picker" id="pickfiles">
-                  {avatarHtml}
-                </div>
-              </div>
+              {/*<div id="container" className="avatar-container">
+                              <div className="avatar-picker" id="pickfiles">
+                                {avatarHtml}
+                              </div>
+                            </div>*/}
               <div className="row-wrapper">
                 <div className="input-group width-100pc">
                   <span className="input-title">{LANG_USER['nickname']}</span>
