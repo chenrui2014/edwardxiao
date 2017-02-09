@@ -37,6 +37,15 @@ export function modalContentName(modalContentName = DEFAULT_STATE.modalContentNa
   }
 }
 
+export function slideModalContentName(slideModalContentName = DEFAULT_STATE.slideModalContentName, action) {
+  switch (action.type) {
+    case ACTION.SET_SLIDE_MODAL_CONTENT_NAME:
+      return action.slideModalContentName;
+    default:
+      return slideModalContentName;
+  }
+}
+
 export function isSendVerifyCode(isSendVerifyCode = DEFAULT_STATE.isSendVerifyCode, action) {
   switch (action.type) {
     case ACTION.SET_IS_SEND_VERIFY_CODE:

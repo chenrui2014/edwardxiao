@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import {
-  MODAL_CONTENT_COMPONENT_OBJECT,
+  SLIDE_MODAL_CONTENT_COMPONENT_OBJECT,
 } from '../../reducers/ConstValue';
 
 class Modal extends Component {
@@ -14,19 +14,18 @@ class Modal extends Component {
 
   render() {
     let {
-      modalContentName,
+      slideModalContentName,
       className,
     } = this.props;
     let title;
-    let Component = MODAL_CONTENT_COMPONENT_OBJECT[modalContentName];
+    console.log(slideModalContentName);
+    let Component = SLIDE_MODAL_CONTENT_COMPONENT_OBJECT[slideModalContentName];
     if (!className){
       className = '';
     }
     return(
-      <div className={`modal fade ${className}`} id="myModal" tabIndex="-1" role="dialog" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <Component/>
-        </div>
+      <div className={`slide-modal ${className}`} id="mySlideModal" tabIndex="-1" role="dialog" aria-hidden="true">
+        <Component/>
       </div>
     );
   }
@@ -34,10 +33,10 @@ class Modal extends Component {
 
 function mapStateToProps(state) {
   let {
-    modalContentName,
+    slideModalContentName,
   } = state;
   return {
-    modalContentName,
+    slideModalContentName,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -51,7 +50,7 @@ Modal.contextTypes = {
 };
 
 Modal.propTypes = {
-  modalContentName: React.PropTypes.bool.isRequired,
+  slideModalContentName: React.PropTypes.bool.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modal);

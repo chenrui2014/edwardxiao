@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import 'fullpage.js/dist/jquery.fullpage.min.js';
 import {
-  changeLocale,
+  setSlideModalContentName,
 } from './actions/index';
 
 import Nav from './components/Nav/index';
@@ -54,8 +54,10 @@ class Index extends Component {
     $('#fullpage').fullpage({
       sectionsColor: ['#f8f8f8', '#ececec', '#f8f8f8', '#ececec'],
       menu: '.menu',
-      navigation: true,
+      navigation: false,
       navigationPosition: 'right',
+      slidesNavigation: true,
+      slidesNavPosition: 'bottom',
       onLeave: () => {
         $('.mo-nav-mobile__mask').click();
       },
@@ -67,6 +69,11 @@ class Index extends Component {
     });
   }
 
+  setSlideModalContentNameName(val){
+    $('.slide-modal').addClass('visible');
+    this.props.setSlideModalContentName(val);
+  }
+
   render() {
     let {
       locale,
@@ -75,6 +82,7 @@ class Index extends Component {
     articleListHtml = (
       <Link>文章</Link>
     );
+    let LANG_GENERAL = require('../../../locales/' + locale + '/general');
     let content = (
       <div className="container-full">
         <MobileNav isIndex={true}/>
@@ -83,10 +91,11 @@ class Index extends Component {
           <div className="section intros" data-anchor="intros">
           </div>
           <div className="section design" data-anchor="designs">
-            <div className="slide"> Slide 1 </div>
-            <div className="slide"> Slide 2 </div>
-            <div className="slide"> Slide 3 </div>
-            <div className="slide"> Slide 4 </div>
+            <div className="slide graphic-design"><div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'Portfolio')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div></div>
+            <div className="slide logo-design"><div className="title"><span className="text">{LANG_GENERAL['logo-design']}</span><span className="icon icon-more"></span></div></div>
+            <div className="slide industrial-design"><div className="title"><span className="text">{LANG_GENERAL['industrial-design']}</span><span className="icon icon-more"></span></div></div>
+            <div className="slide web-design"><div className="title"><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div></div>
+            <div className="slide photograph"><div className="title"><span className="text">{LANG_GENERAL['photograph']}</span><span className="icon icon-more"></span></div></div>
           </div>
           <div className="section article" data-anchor="articles" onClick={this.go.bind(this, 'articles')}>
             {articleListHtml}
@@ -117,9 +126,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeLocale: (val) => {
-      dispatch(changeLocale(val));
-    }
+    setSlideModalContentName: (val) => {
+      dispatch(setSlideModalContentName(val));
+    },
   };
 }
 
@@ -128,7 +137,7 @@ Index.contextTypes = {
 };
 
 Index.propTypes = {
-  changeLocale: React.PropTypes.func.isRequired,
+  setSlideModalContentName: React.PropTypes.func.isRequired,
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,
 }

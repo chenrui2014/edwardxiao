@@ -32,6 +32,12 @@ export const setModalContentName = (modalContentName) => ({
   modalContentName
 });
 
+export const SET_SLIDE_MODAL_CONTENT_NAME= 'SET_SLIDE_MODAL_CONTENT_NAME';
+export const setSlideModalContentName = (slideModalContentName) => ({
+  type: SET_SLIDE_MODAL_CONTENT_NAME,
+  slideModalContentName
+});
+
 export const SET_IS_SEND_VERIFY_CODE = 'SET_IS_SEND_VERIFY_CODE';
 export const setIsSendVerifyCode = (isSendVerifyCode) => ({
   type: SET_IS_SEND_VERIFY_CODE,
