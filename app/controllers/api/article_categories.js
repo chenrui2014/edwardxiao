@@ -15,13 +15,13 @@ const index = async(ctx, _next) => {
   let code = 0;
   let data = [];
   let pages = 0;
-  let select = ['title', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'tag', 'isBanned', 'isPrivate', 'isPrivate', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
+  let select = ['title', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isPrivate', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
   let populate = 'articleCategory createdBy';
   let query = { isBanned: false, isPrivate: false };
   let sort = { sequence: 1 };
-  let res = await getArticles(query, select, sort, true, populate, page, perPage);
-  // console.log('======');
-  // console.log(res);
+  let res = await getArticleCategories(query, select, sort, true, populate, page, perPage);
+  console.log('======');
+  console.log(res);
   data = res.data;
   pages = res.pages;
   ctx.body = { code, data, page, pages };
@@ -33,16 +33,19 @@ const show = async(ctx, _next) => {
   } = ctx.params;
   let code = 0;
   let data = [];
-  let select = ['title', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'tag', 'isBanned', 'isPrivate', 'isPrivate', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
+  let select = ['title', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isPrivate', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
   let populate = 'articleCategory createdBy';
   let query = { _id: id };
-  let res = await getArticles(query, select, '', true, populate);
+  let res = await getArticleCategories(query, select, '', true, populate);
   console.log(res);
   data = res.data;
   ctx.body = { code, data };
 };
 
 const create = async(ctx, _next) => {
+  let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
+  let LANG_ARTICLE = require('../../locales/' + ctx.session.locale + '/article');
+  let LANG_GENERAL = require('../../locales/' + ctx.session.locale + '/general');
   const currentUser = ctx.state.currentUser;
   let mongoose = require('mongoose');
   let userId = mongoose.Types.ObjectId(currentUser.id);
@@ -54,6 +57,7 @@ const create = async(ctx, _next) => {
     content,
     cover,
     type,
+    level,
     tag,
     isBanned,
     isPrivate,
@@ -68,6 +72,7 @@ const create = async(ctx, _next) => {
     content,
     cover,
     type,
+    level,
     tag,
     isBanned,
     isPrivate,
@@ -76,21 +81,41 @@ const create = async(ctx, _next) => {
     createdBy: userId,
   };
   let code = 0;
+  let msg = '';
   let id = '';
   console.log(data);
-  await models.Article.create(data, (err, res) => {
+  let isDuplicate = false;
+  await models.ArticleCategory.findOne({title: title}, (err, res) => {
     if (err) {
       code = 1;
       throw err;
     }
-    console.log(res);
-    id = res.id;
-    // saved!
+    if (!_.isNull(res)){
+      isDuplicate = true;
+    }
   });
-  ctx.body = { code, id };
+  if (isDuplicate){
+    code = 1;
+    msg = LANG_ARTICLE['title'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
+  }
+  else{
+    await models.ArticleCategory.create(data, (err, res) => {
+      if (err) {
+        code = 1;
+        throw err;
+      }
+      console.log(res);
+      id = res.id;
+      // saved!
+    });
+  }
+  ctx.body = { code, id, msg };
 };
 
 const update = async(ctx, _next) => {
+  let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
+  let LANG_ARTICLE = require('../../locales/' + ctx.session.locale + '/article');
+  let LANG_GENERAL = require('../../locales/' + ctx.session.locale + '/general');
   const currentUser = ctx.state.currentUser;
   let mongoose = require('mongoose');
   let userId = mongoose.Types.ObjectId(currentUser.id);
@@ -103,6 +128,7 @@ const update = async(ctx, _next) => {
     content,
     cover,
     type,
+    level,
     tag,
     isBanned,
     isPrivate,
@@ -118,6 +144,7 @@ const update = async(ctx, _next) => {
     content,
     cover,
     type,
+    level,
     tag,
     isBanned,
     isPrivate,
@@ -126,23 +153,40 @@ const update = async(ctx, _next) => {
     createdBy: userId,
   };
   let code = 0;
-  await models.Article.update({ _id: id }, data, { multi: false }, (err, res) => {
+  let msg = '';
+  let isDuplicate = false;
+  await models.ArticleCategory.findOne({title: title}, (err, res) => {
     if (err) {
-      console.log(err);
       code = 1;
       throw err;
     }
-    console.log(res);
-    // saved!
-  })
-  ctx.body = { code, id };
+    if (!_.isNull(res) && res._id != id){
+      isDuplicate = true;
+    }
+  });
+  if (isDuplicate){
+    code = 1;
+    msg = LANG_ARTICLE['title'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
+  }
+  else{
+    await models.ArticleCategory.update({ _id: id }, data, { multi: false }, (err, res) => {
+      if (err) {
+        console.log(err);
+        code = 1;
+        throw err;
+      }
+      console.log(res);
+      // saved!
+    })
+  }
+  ctx.body = { code, id, msg };
 };
 
 const remove = async(ctx, _next) => {
   let code = 0;
   let id = ctx.params.id;
   console.log(id);
-  await models.Article.findOneAndRemove({ _id: id }, (err, res) => {
+  await models.ArticleCategory.findOneAndRemove({ _id: id }, (err, res) => {
     if (err) {
       console.log(err);
       code = 1;
@@ -164,14 +208,14 @@ const checkLogin = async(ctx, next) => {
   await next();
 };
 
-const checkArticleOwner = async(ctx, next) => {
+const checkArticleCategoryOwner = async(ctx, next) => {
   let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
   const currentUser = ctx.state.currentUser;
   let id = ctx.params.id;
   let select = ['_id', 'createdBy'];
   let populate = 'createdBy';
   let query = { _id: id };
-  let res = await getArticles(query, select, '', true, populate);
+  let res = await getArticleCategories(query, select, '', true, populate);
   if (res.data.length) {
     console.log(res.data[0]);
     if (res.data[0].createdBy['_id'].equals(currentUser.id)) {
@@ -196,6 +240,7 @@ const checkParamsBody = async(ctx, next) => {
     content,
     cover,
     type,
+    level,
     tag,
     isBanned,
     isPrivate,
@@ -214,6 +259,7 @@ const checkParamsBody = async(ctx, next) => {
     content: content,
     cover: cover,
     type: type,
+    level: level,
     tag: tag,
     isBanned: isBanned,
     isPrivate: isPrivate,
@@ -223,7 +269,19 @@ const checkParamsBody = async(ctx, next) => {
   await next();
 };
 
-const getArticles = async(query = '', select, sort = '', lean = true, populate = '', page = 0, perPage = 0) => {
+const getCategorieOptions = async(ctx, _next) => {
+  let code = 0;
+  let data = [];
+  let select = ['title'];
+  let populate = 'articleCategory createdBy';
+  let query = { isBanned: false, isPrivate: false };
+  let sort = { updatedBy: -1 };
+  let res = await getArticleCategories(query, select, sort, true, populate);
+  data = res.data;
+  ctx.body = { code, data };
+};
+
+const getArticleCategories = async(query = '', select, sort = '' , lean = true, populate = '', page = 0, perPage = 0) => {
 
   let data = [];
   let pages;
@@ -232,7 +290,7 @@ const getArticles = async(query = '', select, sort = '', lean = true, populate =
     sort,
     lean,
   };
-  if (populate != '') {
+  if (populate != ''){
     options['populate'] = populate;
   }
   if (page != 0) {
@@ -241,7 +299,7 @@ const getArticles = async(query = '', select, sort = '', lean = true, populate =
   if (perPage != 0) {
     options['limit'] = perPage;
   }
-  await models.Article.paginate(query, options).then((result) => {
+  await models.ArticleCategory.paginate(query, options).then((result) => {
     // console.log(result);
     if (result.docs.length) {
       data = result.docs;
@@ -255,13 +313,15 @@ const getArticles = async(query = '', select, sort = '', lean = true, populate =
   return result;
 }
 
+
 export default {
+  getCategorieOptions,
   index,
   show,
   create,
   update,
   remove,
   checkLogin,
-  checkArticleOwner,
+  checkArticleCategoryOwner,
   checkParamsBody,
 };

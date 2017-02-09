@@ -10,7 +10,8 @@ import Validator from '../../common/my_validator';
 let validator = new Validator();
 
 import {
-  ARTICLE_LIST_PER_PAGE
+  ARTICLE_LIST_PER_PAGE,
+  ARTICLE_CATEGORY_LIST_PER_PAGE,
 } from '../reducers/ConstValue';
 
 export const SET_LOCALE = 'SET_LOCALE';
@@ -49,12 +50,6 @@ export const setArticleList = (articleList) => ({
   articleList
 });
 
-export const SET_ARTICLE = 'SET_ARTICLE';
-export const setArticle = (article) => ({
-  type: SET_ARTICLE,
-  article
-});
-
 export const SET_ARTICLE_LIST_CURRENT_PAGE = 'SET_ARTICLE_LIST_CURRENT_PAGE';
 export const setArticleListTotalPage = (articleListCurrentPage) => ({
   type: SET_ARTICLE_LIST_CURRENT_PAGE,
@@ -65,6 +60,24 @@ export const SET_ARTICLE_LIST_TOTAL_PAGE = 'SET_ARTICLE_LIST_TOTAL_PAGE';
 export const setArticleListCurrentPage = (articleListTotalPage) => ({
   type: SET_ARTICLE_LIST_TOTAL_PAGE,
   articleListTotalPage
+});
+
+export const SET_ARTICLE_CATEGORY_LIST = 'SET_ARTICLE_CATEGORY_LIST';
+export const setArticleCategoryList = (articleCategoryList) => ({
+  type: SET_ARTICLE_CATEGORY_LIST,
+  articleCategoryList
+});
+
+export const SET_ARTICLE_CATEGORYLIST_CURRENT_PAGE = 'SET_ARTICLE_CATEGORYLIST_CURRENT_PAGE';
+export const setArticleCategoryListTotalPage = (articleCategoryListCurrentPage) => ({
+  type: SET_ARTICLE_CATEGORYLIST_CURRENT_PAGE,
+  articleCategoryListCurrentPage
+});
+
+export const SET_ARTICLE_CATEGORYLIST_TOTAL_PAGE = 'SET_ARTICLE_CATEGORYLIST_TOTAL_PAGE';
+export const setArticleCategoryListCurrentPage = (articleCategoryListTotalPage) => ({
+  type: SET_ARTICLE_CATEGORYLIST_TOTAL_PAGE,
+  articleCategoryListTotalPage
 });
 
 export const SET_IS_NOT_FOUND = 'SET_IS_NOT_FOUND';
@@ -385,6 +398,45 @@ function fetchArticleListApi(nextPage) {
     $.ajax({
       url: '/api/articles/',
       data: {page: nextPage, per_page: ARTICLE_LIST_PER_PAGE},
+      type: 'get',
+      success: (data) => {
+        resolve(data);
+      },
+      error: (error) => {
+        reject(error);
+      }
+    });
+  })
+}
+
+export const fetchArticleCategoryList = (nextPage) => (dispatch) => {
+  Utils.initSpin('spin-loader');
+  fetchArticleCategoryListApi(nextPage).then((res) => {
+    console.log(res);
+    if (res.code === 0){
+      console.log(res.data);
+      dispatch(setArticleCategoryList(res.data));
+      dispatch(setArticleCategoryListTotalPage(parseInt(res.pages)));
+      dispatch(setArticleCategoryListCurrentPage(parseInt(res.page)));
+      Utils.stopSpin('spin-loader');
+    }
+    else{
+      if(res.msg){
+        alert(res.msg);
+      }
+    }
+  }).catch((err) => {
+    // debugger;
+    // alert('网络错误，请重试');
+    console.log(err);
+  });
+}
+
+function fetchArticleCategoryListApi(nextPage) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/api/article_categories/',
+      data: {page: nextPage, per_page: ARTICLE_CATEGORY_LIST_PER_PAGE},
       type: 'get',
       success: (data) => {
         resolve(data);

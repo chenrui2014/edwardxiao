@@ -17,7 +17,7 @@ import Footer from '../../components/Footer/index';
 import NotFound from '../NotFound';
 import '../../../../css/articles.css';
 
-class ArticleForm extends Component {
+class ArticleCategoryForm extends Component {
 
   constructor(props) {
     super(props);
@@ -33,6 +33,7 @@ class ArticleForm extends Component {
       articleCategory: '',
       sequence: '',
       type: '',
+      level: '',
       tag: '',
       isBanned: false,
       isPrivate: false,
@@ -50,7 +51,7 @@ class ArticleForm extends Component {
     if (!_.isNull(this.props.userInfo) && this.props.userInfo.role == 'admin'){
       this.fetchArticleCategoryOptions();
       if (this.props.params.id){
-        this.fetchArticle(this.props.params.id);
+        this.fetchArticleCategory(this.props.params.id);
       }
     }
     else{
@@ -67,9 +68,10 @@ class ArticleForm extends Component {
     }
   }
 
-  fetchArticle(id) {
+  fetchArticleCategory(id) {
+    this.setIsLoading(true);
     Utils.initSpin('spin-loader');
-    this.fetchArticleApi(id).then((res) => {
+    this.fetchArticleCategoryApi(id).then((res) => {
       console.log(res);
       if (res.code === 0){
         // console.log(res.data);
@@ -84,6 +86,7 @@ class ArticleForm extends Component {
             articleCategory,
             sequence,
             type,
+            level,
             tag,
             isBanned,
             isPrivate,
@@ -99,6 +102,7 @@ class ArticleForm extends Component {
             articleCategory: articleCategory._id,
             sequence: sequence,
             type: type,
+            level: level,
             tag: tag,
             isBanned: isBanned,
             isPrivate: isPrivate,
@@ -123,10 +127,10 @@ class ArticleForm extends Component {
     });
   }
 
-  fetchArticleApi(id) {
+  fetchArticleCategoryApi(id) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: '/api/articles/' + id,
+        url: '/api/article_categories/' + id,
         type: 'get',
         success: (data) => {
           resolve(data);
@@ -155,49 +159,49 @@ class ArticleForm extends Component {
         chunk_size: '4mb',                  // 分块上传时，每块的体积
         auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
         init: {
-          'FilesAdded': (up, files) => {
-            plupload.each(files, function(file) {
-                // 文件添加进队列后,处理相关的事情
-            });
-          },
-          'BeforeUpload': (up, file) => {
-            // 每个文件上传前,处理相关的事情
-          },
-          'UploadProgress': (up, file) => {
-            // 每个文件上传时,处理相关的事情
-            Utils.initSpin('cover-spin-loader', {
-              lines: 9,
-              length: 12,
-              width: 10,
-              radius: 14,
-              scale: 0.3,
-            });
-            this.setState({
-              isUploading: true,
-            });
-          },
-          'FileUploaded': (up, file, info) => {
-            // 每个文件上传成功后,处理相关的事情
-            // 其中 info 是文件上传成功后，服务端返回的json，形式如
-            // {
-            //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
-            //    "key": "gogopher.jpg"
-            //  }
-            // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
-            var domain = `http://${QINIU_DOMAIN}/`;
-            var res = JSON.parse(info);
-            var sourceLink = domain + res.key; //获取上传成功后的文件的Url
-            this.setState({
-              cover: `${sourceLink}`,
-              isUploading: false
-            });
-          },
-          'Error': (up, err, errTip) => {
-            //上传出错时,处理相关的事情
-          },
-          'UploadComplete': () => {
-            //队列文件处理完毕后,处理相关的事情
-          },
+            'FilesAdded': (up, files) => {
+                plupload.each(files, function(file) {
+                    // 文件添加进队列后,处理相关的事情
+                });
+            },
+            'BeforeUpload': (up, file) => {
+              // 每个文件上传前,处理相关的事情
+            },
+            'UploadProgress': (up, file) => {
+              // 每个文件上传时,处理相关的事情
+              Utils.initSpin('cover-spin-loader', {
+                lines: 9,
+                length: 12,
+                width: 10,
+                radius: 14,
+                scale: 0.3,
+              });
+              this.setState({
+                isUploading: true,
+              });
+            },
+            'FileUploaded': (up, file, info) => {
+              // 每个文件上传成功后,处理相关的事情
+              // 其中 info 是文件上传成功后，服务端返回的json，形式如
+              // {
+              //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+              //    "key": "gogopher.jpg"
+              //  }
+              // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
+              var domain = `http://${QINIU_DOMAIN}/`;
+              var res = JSON.parse(info);
+              var sourceLink = domain + res.key; //获取上传成功后的文件的Url
+              this.setState({
+                cover: `${sourceLink}`,
+                isUploading: false
+              });
+            },
+            'Error': (up, err, errTip) => {
+                   //上传出错时,处理相关的事情
+            },
+            'UploadComplete': () => {
+                   //队列文件处理完毕后,处理相关的事情
+            },
         }
     });
     var uploader2 = Qiniu.uploader({
@@ -247,6 +251,18 @@ class ArticleForm extends Component {
     Utils.stopSpin('cover-spin-loader');
   }
 
+  onChange(value) {
+    this.setState({content: value});
+    if (this.props.onChange) {
+      // Send the changes up to the parent component as an HTML string.
+      // This is here to demonstrate using `.toString()` but in a real app it
+      // would be better to avoid generating a string on each change.
+      this.props.onChange(
+        value.toString('html')
+      );
+    }
+  }
+
   removeErrorMessage(id){
     validator.removeValidate($('#' + id));
   }
@@ -283,6 +299,12 @@ class ArticleForm extends Component {
     this.removeErrorMessage(e.target.id);
     let type = this.refs.type.value;
     this.setState({type});
+  }
+
+  setLevel(e) {
+    this.removeErrorMessage(e.target.id);
+    let level = this.refs.level.value;
+    this.setState({level});
   }
 
   setSequence(e) {
@@ -359,27 +381,28 @@ class ArticleForm extends Component {
         articleCategory,
         sequence,
         type,
+        level,
         tag,
         isBanned,
         isPrivate,
         content,
       } = this.state;
-      this.submitForm(id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content.toString('html'));
+      this.submitForm(id, title, author, preface, desc, cover, articleCategory, sequence, type, level, tag, isBanned, isPrivate, content.toString('html'));
     }
     e.preventDefault();
   }
 
-  submitForm(id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content){
+  submitForm(id, title, author, preface, desc, cover, articleCategory, sequence, type, level, tag, isBanned, isPrivate, content){
     Utils.initSpin('spin-loader');
-    this.submitFormApi(id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content).then((res) => {
+    this.submitFormApi(id, title, author, preface, desc, cover, articleCategory, sequence, type, level, tag, isBanned, isPrivate, content).then((res) => {
       console.log(res);
       if (res.code === 0){
         // console.log(res.data);
-        this.context.router.push('/articles/' + res.id);
+        this.context.router.push('/article_categories/' + res.id);
       }
       else{
-        if(res.msg){
-          alert(res.msg);
+        if (!$('#title').parent().siblings('.my-validator-message').length) {
+          validator.createMessage($('#title').parent(), res.msg, 'error');
         }
       }
       Utils.stopSpin('spin-loader');
@@ -391,18 +414,18 @@ class ArticleForm extends Component {
     });
   }
 
-  submitFormApi(id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content){
-    let url = '/api/articles';
+  submitFormApi(id, title, author, preface, desc, cover, articleCategory, sequence, type, level, tag, isBanned, isPrivate, content){
+    let url = '/api/article_categories';
     let method = 'post';
     if (id != ''){
-      url = `/api/articles/${id}`;
+      url = `/api/article_categories/${id}`;
       method = 'put';
     }
     return new Promise((resolve, reject) => {
       $.ajax({
         url: url,
         type: method,
-        data: {id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content},
+        data: {id, title, author, preface, desc, cover, articleCategory, sequence, type, level, tag, isBanned, isPrivate, content},
         success: (data) => {
           resolve(data);
         },
@@ -434,7 +457,7 @@ class ArticleForm extends Component {
     let {
       locale,
       isNotFound,
-      articleList,
+      articleCategoryList,
       userInfo,
     } = this.props;
     let {
@@ -449,6 +472,7 @@ class ArticleForm extends Component {
       articleCategory,
       sequence,
       type,
+      level,
       tag,
       isBanned,
       isPrivate,
@@ -480,7 +504,7 @@ class ArticleForm extends Component {
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
       let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
-      let articleListHtml;
+      let articleCategoryListHtml;
       let articleCategoryOptionsHtml;
       if (!isLoading){
         if (articleCategoryOptions.length){
@@ -491,13 +515,33 @@ class ArticleForm extends Component {
           });
         }
         let backUrl = this.state.backUrl;
+        console.log(userInfo);
+        const toolbarConfig = {
+          // Optionally specify the groups to display (displayed in the order listed).
+          display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'IMAGE_BUTTON', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
+          INLINE_STYLE_BUTTONS: [
+            {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+            {label: 'Italic', style: 'ITALIC'},
+            {label: 'Underline', style: 'UNDERLINE'}
+          ],
+          BLOCK_TYPE_DROPDOWN: [
+            {label: 'Normal', style: 'unstyled'},
+            {label: 'Heading Large', style: 'header-one'},
+            {label: 'Heading Medium', style: 'header-two'},
+            {label: 'Heading Small', style: 'header-three'}
+          ],
+          BLOCK_TYPE_BUTTONS: [
+            {label: 'UL', style: 'unordered-list-item'},
+            {label: 'OL', style: 'ordered-list-item'}
+          ]
+        };
         contentHtml = (
           <div className="page-content article background-white">
-            <MobileNav isIndex={false} activeTab="articles"/>
-            <Nav isIndex={false} activeTab="articles"/>
+            <MobileNav isIndex={false} activeTab="article_categories"/>
+            <Nav isIndex={false} activeTab="article_categories"/>
             <div className="core-content background-white">
               <div className="core">
-                <div className="my-button my-button--red" onClick={id == '' ? this.go.bind(this, '/articles/') : this.go.bind(this, '/articles/' + id)}>{LANG_NAV['back']}</div>
+                <div className="my-button my-button--red" onClick={id == '' ? this.go.bind(this, '/article_categories/') : this.go.bind(this, '/article_categories/' + id)}>{LANG_NAV['back']}</div>
                 <form className="submit" id="submit" onSubmit={this.submit.bind(this)} autoComplete="off">
                   <div id="container" className="cover-container">
                     <div className="cover-picker" id="pickfiles">
@@ -605,6 +649,27 @@ class ArticleForm extends Component {
                         onBlur={this.onBlur.bind(this)}
                         style={{'float':'none','display':'inline-block'}}
                         onChange={this.setType.bind(this)}
+                        autoComplete="off"
+                      />
+                    </div>
+                  </div>
+                  <div className="row-wrapper">
+                    <div className="title">{LANG_ARTICLE['level']}</div>
+                    <div className="input-group width-100pc">
+                      <input
+                        type="text"
+                        id="level"
+                        ref="level"
+                        className="form-control input-sm"
+                        value={level}
+                        data-my-validator="true"
+                        data-my-validator-required="true"
+                        data-my-validator-name=""
+                        data-my-validator-type="text"
+                        placeholder={LANG_ARTICLE['level']}
+                        onBlur={this.onBlur.bind(this)}
+                        style={{'float':'none','display':'inline-block'}}
+                        onChange={this.setLevel.bind(this)}
                         autoComplete="off"
                       />
                     </div>
@@ -729,13 +794,13 @@ class ArticleForm extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    articleList,
+    articleCategoryList,
     isNotFound,
     userInfo,
   } = state;
   return {
     locale,
-    articleList,
+    articleCategoryList,
     isNotFound,
     userInfo,
   };
@@ -743,8 +808,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleList: () => {
-      dispatch(fetchArticleList());
+    fetchArticleCategoryList: () => {
+      dispatch(fetchArticleCategoryList());
     },
     setIsNotFound: (val) => {
       dispatch(setIsNotFound(val));
@@ -752,19 +817,19 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-ArticleForm.contextTypes = {
+ArticleCategoryForm.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 
-ArticleForm.propTypes = {
+ArticleCategoryForm.propTypes = {
   params: React.PropTypes.object.isRequired,
   location: React.PropTypes.object.isRequired,
   isLoading: React.PropTypes.bool.isRequired,
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,
-  articleList: React.PropTypes.array.isRequired,
-  fetchArticleList: React.PropTypes.func.isRequired,
+  articleCategoryList: React.PropTypes.array.isRequired,
+  fetchArticleCategoryList: React.PropTypes.func.isRequired,
   setIsNotFound: React.PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleCategoryForm);

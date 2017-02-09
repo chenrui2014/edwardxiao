@@ -64,17 +64,6 @@ export function articleList(articleList = DEFAULT_STATE.articleList, action) {
   }
 }
 
-
-export function article(article = DEFAULT_STATE.article, action) {
-  switch (action.type) {
-    case ACTION.SET_ARTICLE:
-      return action.article;
-    default:
-      return article;
-  }
-}
-
-
 export function articleListCurrentPage(articleListCurrentPage = DEFAULT_STATE.articleListCurrentPage, action) {
   switch (action.type) {
     case ACTION.SET_ARTICLE_LIST_CURRENT_PAGE:
@@ -94,6 +83,32 @@ export function articleListTotalPage(articleListTotalPage = DEFAULT_STATE.articl
   }
 }
 
+export function articleCategoryList(articleCategoryList = DEFAULT_STATE.articleCategoryList, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE_CATEGORY_LIST:
+      return action.articleCategoryList;
+    default:
+      return articleCategoryList;
+  }
+}
+
+export function articleCategoryListCurrentPage(articleCategoryListCurrentPage = DEFAULT_STATE.articleCategoryListCurrentPage, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE_CATEGORY_LIST_CURRENT_PAGE:
+      return action.articleCategoryListCurrentPage;
+    default:
+      return articleCategoryListCurrentPage;
+  }
+}
+
+export function articleCategoryListTotalPage(articleCategoryListTotalPage = DEFAULT_STATE.articleCategoryListTotalPage, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE_CATEGORY_LIST_TOTAL_PAGE:
+      return action.articleCategoryListTotalPage;
+    default:
+      return articleCategoryListTotalPage;
+  }
+}
 
 export function isNotFound(isNotFound = DEFAULT_STATE.isNotFound, action) {
   switch (action.type) {

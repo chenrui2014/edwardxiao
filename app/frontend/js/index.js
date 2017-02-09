@@ -13,6 +13,9 @@ import Index from './App/index';
 import ArticleList from './App/Pages/ArticleList/Index';
 import ArticleForm from './App/Pages/ArticleForm/Index';
 import Article from './App/Pages/Article/Index';
+import ArticleCategoryList from './App/Pages/ArticleCategoryList/Index';
+import ArticleCategoryForm from './App/Pages/ArticleCategoryForm/Index';
+import ArticleCategory from './App/Pages/ArticleCategory/Index';
 import NotFound from './App/Pages/NotFound/Index';
 import '../css/index.css';
 
@@ -37,6 +40,10 @@ ReactDOM.render(
         <Route path='/articles/new' component={ArticleForm}></Route>
         <Route path='/articles/:id' component={Article}></Route>
         <Route path='/articles/:id/edit' component={ArticleForm}></Route>
+        <Route path='/article_categories' component={ArticleCategoryList}></Route>
+        <Route path='/article_categories/new' component={ArticleCategoryForm}></Route>
+        <Route path='/article_categories/:id' component={ArticleCategory}></Route>
+        <Route path='/article_categories/:id/edit' component={ArticleCategoryForm}></Route>
         <Route path="404" component={NotFound}/>
       </Route>
       <Route path="*" component={NotFound}/>

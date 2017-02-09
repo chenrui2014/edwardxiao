@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
-  fetchArticleList,
-  setArticleList,
+  fetchArticleCategoryList,
+  setArticleCategoryList,
   setIsNotFound,
 } from '../../actions/index';
 
@@ -14,9 +14,9 @@ import Nav from '../../components/Nav/index';
 import Footer from '../../components/Footer/index';
 import NotFound from '../NotFound';
 import '../../../../css/articles.css';
-import ArticleItem from './components/ArticleItem';
+import ArticleCategoryItem from './components/ArticleCategoryItem';
 
-class ArticleList extends Component {
+class ArticleCategoryList extends Component {
 
   constructor(props) {
     super(props);
@@ -31,19 +31,19 @@ class ArticleList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchArticleList(this.props.articleListCurrentPage + 1);
-    if (!_.isNull(this.props.articleList)){
+    this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage + 1);
+    if (!_.isNull(this.props.articleCategoryList)){
       this.setState({isLoading: false});
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (_.isNull(prevProps.articleList) && !_.isNull(this.props.articleList)){
+    if (_.isNull(prevProps.articleCategoryList) && !_.isNull(this.props.articleCategoryList)){
       this.setState({isLoading: false});
     }
-    // if (!_.isNull(prevProps.articleList)){
-    //   if (prevProps.articleList != this.props.articleList){
-    //     this.props.fetchArticleList(this.props.articleListCurrentPage + 1);
+    // if (!_.isNull(prevProps.articleCategoryList)){
+    //   if (prevProps.articleCategoryList != this.props.articleCategoryList){
+    //     this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage + 1);
     //   }
     // }
   }
@@ -57,13 +57,13 @@ class ArticleList extends Component {
     this.removeApi(id).then((res) => {
       console.log(res);
       if (res.code === 0){
-        let newArticleList = [];
-        this.props.articleList.map((item, key) => {
+        let newArticleCategoryList = [];
+        this.props.articleCategoryList.map((item, key) => {
           if (item.id != res.id){
-            newArticleList.push(item);
+            newArticleCategoryList.push(item);
           }
         });
-        this.props.setArticleList(newArticleList);
+        this.props.setArticleCategoryList(newArticleCategoryList);
         Utils.stopSpin('spin-loader');
       }
       else{
@@ -81,7 +81,7 @@ class ArticleList extends Component {
   removeApi(id) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: '/api/articles/' + id,
+        url: '/api/article_categories/' + id,
         type: 'delete',
         success: (data) => {
           resolve(data);
@@ -93,8 +93,8 @@ class ArticleList extends Component {
     })
   }
 
-  fetchArticleList(nextPage) {
-    this.props.fetchArticleList(nextPage);
+  fetchArticleCategoryList(nextPage) {
+    this.props.fetchArticleCategoryList(nextPage);
   }
 
   render() {
@@ -102,7 +102,7 @@ class ArticleList extends Component {
     let {
       locale,
       isNotFound,
-      articleList,
+      articleCategoryList,
       userInfo,
     } = this.props;
     let {
@@ -115,22 +115,19 @@ class ArticleList extends Component {
       let LANG_USER = require('../../../../../locales/' + locale + '/user');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
-      let articleListHtml;
-      let newArticleButton;
-      let newArticleCategpryButton;
+      let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
+      let articleCategoryListHtml;
+      let newArticleCategoryButton;
       if (!isLoading){
         if (!_.isNull(userInfo) && userInfo.role == 'admin'){
-          newArticleButton = (
-            <div className="my-button my-button--blue mgr-10" onClick={this.go.bind(this, '/articles/new')}>{LANG_ACTION['add']}{LANG_NAV['article']}</div>
-          );
-          newArticleCategpryButton = (
-            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories')}>{LANG_NAV['article-category']}</div>
+          newArticleCategoryButton = (
+            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories/new')}>{LANG_ACTION['add']}{LANG_ARTICLE['article-category']}</div>
           );
         }
-        if (articleList.length){
-          articleListHtml = articleList.map((item, key) => {
+        if (articleCategoryList.length){
+          articleCategoryListHtml = articleCategoryList.map((item, key) => {
             return (
-              <ArticleItem
+              <ArticleCategoryItem
                 locale={locale}
                 id={item.id}
                 title={item.title}
@@ -140,6 +137,7 @@ class ArticleList extends Component {
                 content={item.content}
                 cover={item.cover}
                 type={item.type}
+                level={item.level}
                 isShow={item.isShow}
                 createdAt={item.createdAt}
                 updatedAt={item.updatedAt}
@@ -156,13 +154,13 @@ class ArticleList extends Component {
       let backUrl = this.state.backUrl;
       content = (
         <div className="page-content background-white">
-          <MobileNav isIndex={false} activeTab="articles"/>
-          <Nav isIndex={false} activeTab="articles"/>
-          <div className="core-content">
+          <MobileNav isIndex={false} activeTab=""/>
+          <Nav isIndex={false} activeTab=""/>
+          <div className="core-content background-white">
             <div className="core">
-              {newArticleButton}
-              {newArticleCategpryButton}
-              {articleListHtml}
+              <div className="my-button my-button--red mgr-10" onClick={this.go.bind(this, '/articles')}>{LANG_NAV['back']}</div>
+              {newArticleCategoryButton}
+              {articleCategoryListHtml}
               <div className="push"></div>
             </div>
           </div>
@@ -181,49 +179,49 @@ class ArticleList extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    articleList,
+    articleCategoryList,
     isNotFound,
     userInfo,
-    articleListCurrentPage,
-    articleListTotalPage,
+    articleCategoryListCurrentPage,
+    articleCategoryListTotalPage,
   } = state;
   return {
     locale,
-    articleList,
+    articleCategoryList,
     isNotFound,
     userInfo,
-    articleListCurrentPage,
-    articleListTotalPage,
+    articleCategoryListCurrentPage,
+    articleCategoryListTotalPage,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleList: (nextPage) => {
-      dispatch(fetchArticleList(nextPage));
+    fetchArticleCategoryList: (nextPage) => {
+      dispatch(fetchArticleCategoryList(nextPage));
     },
-    setArticleList: (articleList) => {
-      dispatch(setArticleList(articleList));
+    setArticleCategoryList: (articleCategoryList) => {
+      dispatch(setArticleCategoryList(articleCategoryList));
     },
   };
 }
 
-ArticleList.contextTypes = {
+ArticleCategoryList.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 
-ArticleList.propTypes = {
+ArticleCategoryList.propTypes = {
   params: React.PropTypes.object.isRequired,
   location: React.PropTypes.object.isRequired,
   isLoading: React.PropTypes.bool.isRequired,
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,
-  articleListCurrentPage: React.PropTypes.number.isRequired,
-  articleListTotalPage: React.PropTypes.number.isRequired,
-  articleList: React.PropTypes.array.isRequired,
-  fetchArticleList: React.PropTypes.func.isRequired,
+  articleCategoryListCurrentPage: React.PropTypes.number.isRequired,
+  articleCategoryListTotalPage: React.PropTypes.number.isRequired,
+  articleCategoryList: React.PropTypes.array.isRequired,
+  fetchArticleCategoryList: React.PropTypes.func.isRequired,
   setIsNotFound: React.PropTypes.func.isRequired,
-  setArticleList: React.PropTypes.func.isRequired,
+  setArticleCategoryList: React.PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleCategoryList);

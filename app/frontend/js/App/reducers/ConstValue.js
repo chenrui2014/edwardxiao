@@ -10,9 +10,11 @@ export const DEFAULT_STATE = {
   isSendVerifyCode: false,
   captcha: CAPTCHA_DATA,
   articleList: null,
-  article: null,
   articleListCurrentPage: 0,
   articleListTotalPage: 0,
+  articleCategoryList: null,
+  articleCategoryListCurrentPage: 0,
+  articleCategoryListTotalPage: 0,
   isNotFound: false,
 };
 
@@ -23,3 +25,4 @@ export const MODAL_CONTENT_COMPONENT_OBJECT = {
 };
 
 export const ARTICLE_LIST_PER_PAGE = 15;
+export const ARTICLE_CATEGORY_LIST_PER_PAGE = 15;

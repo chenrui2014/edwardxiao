@@ -16,7 +16,7 @@ import Footer from '../../components/Footer/index';
 import NotFound from '../NotFound';
 import '../../../../css/articles.css';
 
-class Article extends Component {
+class ArticleCategory extends Component {
 
   constructor(props) {
     super(props);
@@ -45,7 +45,7 @@ class Article extends Component {
   }
 
   componentDidMount() {
-    this.fetchArticle(this.props.params.id);
+    this.fetchArticleCategory(this.props.params.id);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -58,9 +58,9 @@ class Article extends Component {
     Utils.stopSpin('cover-spin-loader');
   }
 
-  fetchArticle(id) {
+  fetchArticleCategory(id) {
     Utils.initSpin('spin-loader');
-    this.fetchArticleApi(id).then((res) => {
+    this.fetchArticleCategoryApi(id).then((res) => {
       console.log(res);
       if (res.code === 0){
         // console.log(res.data);
@@ -113,10 +113,10 @@ class Article extends Component {
     });
   }
 
-  fetchArticleApi(id) {
+  fetchArticleCategoryApi(id) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: '/api/articles/' + id,
+        url: '/api/article_categories/' + id,
         type: 'get',
         success: (data) => {
           resolve(data);
@@ -141,7 +141,7 @@ class Article extends Component {
     let {
       locale,
       isNotFound,
-      articleList,
+      articleCategoryList,
       userInfo,
     } = this.props;
     let {
@@ -170,9 +170,9 @@ class Article extends Component {
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
       let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
-      let articleListHtml;
+      let articleCategoryListHtml;
       let articleCategoryOptionsHtml;
-      let editArticleButton;
+      let editArticleCategoryButton;
 
       let coverHtml;
       if (cover != ''){
@@ -183,19 +183,19 @@ class Article extends Component {
       }
       if (!isLoading){
         if (!_.isNull(userInfo) && userInfo.role == 'admin'){
-          editArticleButton = (
-            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/articles/' + id + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['article']}</div>
+          editArticleCategoryButton = (
+            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories/' + id + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['articleCategory']}</div>
           );
         }
         let backUrl = this.state.backUrl;
         contentHtml = (
           <div className="page-content article background-white">
-            <MobileNav isIndex={false} activeTab="articles"/>
-            <Nav isIndex={false} activeTab="articles"/>
+            <MobileNav isIndex={false} activeTab="article"/>
+            <Nav isIndex={false} activeTab="article"/>
             <div className="core-content background-white">
               <div className="core">
-                <div className="my-button my-button--red mgr-10" onClick={this.go.bind(this, '/articles/')}>{LANG_NAV['back']}</div>
-                {editArticleButton}
+                <div className="my-button my-button--red mgr-10" onClick={this.go.bind(this, '/article_categories/')}>{LANG_NAV['back']}</div>
+                {editArticleCategoryButton}
                 <div className="mgt-10">
                   <div className="cover-wrapper">{coverHtml}</div>
                   <div className="row-wrapper">
@@ -245,13 +245,13 @@ class Article extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    articleList,
+    articleCategoryList,
     isNotFound,
     userInfo,
   } = state;
   return {
     locale,
-    articleList,
+    articleCategoryList,
     isNotFound,
     userInfo,
   };
@@ -259,8 +259,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleList: () => {
-      dispatch(fetchArticleList());
+    fetchArticleCategoryList: () => {
+      dispatch(fetchArticleCategoryList());
     },
     setIsNotFound: (val) => {
       dispatch(setIsNotFound(val));
@@ -268,19 +268,19 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-Article.contextTypes = {
+ArticleCategory.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 
-Article.propTypes = {
+ArticleCategory.propTypes = {
   params: React.PropTypes.object.isRequired,
   location: React.PropTypes.object.isRequired,
   isLoading: React.PropTypes.bool.isRequired,
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,
-  articleList: React.PropTypes.array.isRequired,
-  fetchArticleList: React.PropTypes.func.isRequired,
+  articleCategoryList: React.PropTypes.array.isRequired,
+  fetchArticleCategoryList: React.PropTypes.func.isRequired,
   setIsNotFound: React.PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Article);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleCategory);
