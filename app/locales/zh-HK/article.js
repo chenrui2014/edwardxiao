@@ -1,5 +1,6 @@
 module.exports = {
   'title': '標題',
+  'unique-key': '唯一標識',
   'author': '作者',
   'preface': '序言',
   'desc': '介紹',
@@ -19,4 +20,6 @@ module.exports = {
   'hidden': '隱藏',
   'private': '私密',
   'banned': '禁止',
+  'admin-only': '僅管理員可見',
+  'use-image-url': '使用圖片url',
 };

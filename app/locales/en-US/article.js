@@ -1,5 +1,6 @@
 module.exports = {
   'title': 'title',
+  'unique-key': 'unique key',
   'author': 'author',
   'preface': 'preface',
   'desc': 'desc',
@@ -19,4 +20,6 @@ module.exports = {
   'hidden': 'hidden',
   'private': 'private',
   'banned': 'banned',
+  'admin-only': 'admin only',
+  'use-image-url': 'use image url',
 };

@@ -57,13 +57,13 @@ export const setArticleList = (articleList) => ({
 });
 
 export const SET_ARTICLE_LIST_CURRENT_PAGE = 'SET_ARTICLE_LIST_CURRENT_PAGE';
-export const setArticleListTotalPage = (articleListCurrentPage) => ({
+export const setArticleListCurrentPage = (articleListCurrentPage) => ({
   type: SET_ARTICLE_LIST_CURRENT_PAGE,
   articleListCurrentPage
 });
 
 export const SET_ARTICLE_LIST_TOTAL_PAGE = 'SET_ARTICLE_LIST_TOTAL_PAGE';
-export const setArticleListCurrentPage = (articleListTotalPage) => ({
+export const setArticleListTotalPage = (articleListTotalPage) => ({
   type: SET_ARTICLE_LIST_TOTAL_PAGE,
   articleListTotalPage
 });
@@ -74,15 +74,21 @@ export const setArticleCategoryList = (articleCategoryList) => ({
   articleCategoryList
 });
 
-export const SET_ARTICLE_CATEGORYLIST_CURRENT_PAGE = 'SET_ARTICLE_CATEGORYLIST_CURRENT_PAGE';
-export const setArticleCategoryListTotalPage = (articleCategoryListCurrentPage) => ({
-  type: SET_ARTICLE_CATEGORYLIST_CURRENT_PAGE,
+export const SET_ARTICLE_CATEGORY = 'SET_ARTICLE_CATEGORY';
+export const setArticleCategory = (articleCategory) => ({
+  type: SET_ARTICLE_CATEGORY,
+  articleCategory
+});
+
+export const SET_ARTICLE_CATEGORY_LIST_CURRENT_PAGE = 'SET_ARTICLE_CATEGORY_LIST_CURRENT_PAGE';
+export const setArticleCategoryListCurrentPage = (articleCategoryListCurrentPage) => ({
+  type: SET_ARTICLE_CATEGORY_LIST_CURRENT_PAGE,
   articleCategoryListCurrentPage
 });
 
-export const SET_ARTICLE_CATEGORYLIST_TOTAL_PAGE = 'SET_ARTICLE_CATEGORYLIST_TOTAL_PAGE';
-export const setArticleCategoryListCurrentPage = (articleCategoryListTotalPage) => ({
-  type: SET_ARTICLE_CATEGORYLIST_TOTAL_PAGE,
+export const SET_ARTICLE_CATEGORY_LIST_TOTAL_PAGE = 'SET_ARTICLE_CATEGORY_LIST_TOTAL_PAGE';
+export const setArticleCategoryListTotalPage = (articleCategoryListTotalPage) => ({
+  type: SET_ARTICLE_CATEGORY_LIST_TOTAL_PAGE,
   articleCategoryListTotalPage
 });
 
@@ -376,9 +382,9 @@ function fetchVerifyCodeApi(phone) {
   })
 }
 
-export const fetchArticleList = (nextPage) => (dispatch) => {
+export const fetchArticleList = (page, category) => (dispatch) => {
   Utils.initSpin('spin-loader');
-  fetchArticleListApi(nextPage).then((res) => {
+  fetchArticleListApi(page, category).then((res) => {
     console.log(res);
     if (res.code === 0){
       console.log(res.data);
@@ -399,11 +405,11 @@ export const fetchArticleList = (nextPage) => (dispatch) => {
   });
 }
 
-function fetchArticleListApi(nextPage) {
+function fetchArticleListApi(page, category) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/articles/',
-      data: {page: nextPage, per_page: ARTICLE_LIST_PER_PAGE},
+      data: {page: page, perPage: ARTICLE_LIST_PER_PAGE, category: category},
       type: 'get',
       success: (data) => {
         resolve(data);
@@ -442,7 +448,7 @@ function fetchArticleCategoryListApi(nextPage) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/article_categories/',
-      data: {page: nextPage, per_page: ARTICLE_CATEGORY_LIST_PER_PAGE},
+      data: {page: nextPage, perPage: ARTICLE_CATEGORY_LIST_PER_PAGE},
       type: 'get',
       success: (data) => {
         resolve(data);

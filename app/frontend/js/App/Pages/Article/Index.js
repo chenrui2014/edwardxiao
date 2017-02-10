@@ -25,6 +25,7 @@ class Article extends Component {
       backUrl: null,
       id: '',
       title: '',
+      uniqueKey: '',
       author: '',
       preface: '',
       desc: '',
@@ -69,6 +70,7 @@ class Article extends Component {
           let {
             id,
             title,
+            uniqueKey,
             author,
             preface,
             desc,
@@ -83,6 +85,7 @@ class Article extends Component {
           this.setState({
             id: id,
             title: title,
+            uniqueKey: uniqueKey,
             author: author,
             preface: preface,
             desc: desc,
@@ -149,6 +152,7 @@ class Article extends Component {
       isUploading,
       id,
       title,
+      uniqueKey,
       author,
       preface,
       desc,
@@ -184,7 +188,7 @@ class Article extends Component {
       if (!isLoading){
         if (!_.isNull(userInfo) && userInfo.role == 'admin'){
           editArticleButton = (
-            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/articles/' + id + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['article']}</div>
+            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/articles/' + uniqueKey + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['article']}</div>
           );
         }
         let backUrl = this.state.backUrl;

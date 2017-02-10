@@ -5,19 +5,28 @@ const index = async(ctx, _next) => {
   let {
     page,
     perPage,
-  } = ctx.request.body;
+  } = ctx.request.query;
   if (_.isUndefined(page) || page === '') {
     page = 1;
   }
   if (_.isUndefined(perPage) || perPage === '') {
     perPage = 15;
   }
+  page = _.toNumber(page);
+  perPage = _.toNumber(perPage);
+  let query;
+  const currentUser = ctx.state.currentUser;
+  if (!_.isNull(currentUser) && currentUser.role == 'admin'){
+    query = {uniqueKey: {'$ne': 'root'}};
+  }
+  else{
+    query = { isBanned: false, isPrivate: false, $and:[{isAdminOnly: false}] };
+  }
   let code = 0;
   let data = [];
   let pages = 0;
-  let select = ['title', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isPrivate', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
-  let populate = 'articleCategory createdBy';
-  let query = { isBanned: false, isPrivate: false };
+  let select = ['title', 'uniqueKey', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isAdminOnly', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
+  let populate = 'createdBy';
   let sort = { sequence: 1 };
   let res = await getArticleCategories(query, select, sort, true, populate, page, perPage);
   console.log('======');
@@ -31,13 +40,17 @@ const show = async(ctx, _next) => {
   let {
     id,
   } = ctx.params;
+  let query = {uniqueKey: id};
   let code = 0;
   let data = [];
-  let select = ['title', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isPrivate', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
-  let populate = 'articleCategory createdBy';
-  let query = { _id: id };
+  let select = ['title', 'uniqueKey', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isAdminOnly', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
+  let populate = 'createdBy';
   let res = await getArticleCategories(query, select, '', true, populate);
-  console.log(res);
+  let ObjectId = require('mongoose').Types.ObjectId;
+  if (!res.data.length && ObjectId.isValid(id)){
+    query = { _id: id};
+    res = await getArticleCategories(query, select, '', true, populate);
+  }
   data = res.data;
   ctx.body = { code, data };
 };
@@ -51,6 +64,7 @@ const create = async(ctx, _next) => {
   let userId = mongoose.Types.ObjectId(currentUser.id);
   let {
     title,
+    uniqueKey,
     author,
     preface,
     desc,
@@ -61,11 +75,13 @@ const create = async(ctx, _next) => {
     tag,
     isBanned,
     isPrivate,
+    isAdminOnly,
     articleCategory,
     sequence,
   } = ctx.state.articleParams;
   let data = {
     title,
+    uniqueKey,
     author,
     preface,
     desc,
@@ -76,13 +92,14 @@ const create = async(ctx, _next) => {
     tag,
     isBanned,
     isPrivate,
+    isAdminOnly,
     articleCategory,
     sequence: _.toNumber(sequence),
     createdBy: userId,
   };
   let code = 0;
   let msg = '';
-  let id = '';
+  let newUniqueKey = '';
   console.log(data);
   let isDuplicate = false;
   await models.ArticleCategory.findOne({title: title}, (err, res) => {
@@ -95,8 +112,23 @@ const create = async(ctx, _next) => {
     }
   });
   if (isDuplicate){
-    code = 1;
+    code = 2;
     msg = LANG_ARTICLE['title'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
+  }
+  else{
+    await models.ArticleCategory.findOne({uniqueKey: uniqueKey}, (err, res) => {
+      if (err) {
+        code = 1;
+        throw err;
+      }
+      if (!_.isNull(res)){
+        isDuplicate = true;
+      }
+    });
+  }
+  if (isDuplicate){
+    code = 3;
+    msg = LANG_ARTICLE['unique-key'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
   }
   else{
     await models.ArticleCategory.create(data, (err, res) => {
@@ -105,11 +137,11 @@ const create = async(ctx, _next) => {
         throw err;
       }
       console.log(res);
-      id = res.id;
+      newUniqueKey = res.uniqueKey;
       // saved!
     });
   }
-  ctx.body = { code, id, msg };
+  ctx.body = { code, uniqueKey: newUniqueKey, msg };
 };
 
 const update = async(ctx, _next) => {
@@ -122,6 +154,7 @@ const update = async(ctx, _next) => {
   let {
     id,
     title,
+    uniqueKey,
     author,
     preface,
     desc,
@@ -132,12 +165,14 @@ const update = async(ctx, _next) => {
     tag,
     isBanned,
     isPrivate,
+    isAdminOnly,
     articleCategory,
     sequence,
   } = ctx.state.articleParams;
   let data = {
     id,
     title,
+    uniqueKey,
     author,
     preface,
     desc,
@@ -148,6 +183,7 @@ const update = async(ctx, _next) => {
     tag,
     isBanned,
     isPrivate,
+    isAdminOnly,
     articleCategory,
     sequence,
     createdBy: userId,
@@ -165,11 +201,26 @@ const update = async(ctx, _next) => {
     }
   });
   if (isDuplicate){
-    code = 1;
+    code = 2;
     msg = LANG_ARTICLE['title'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
   }
   else{
-    await models.ArticleCategory.update({ _id: id }, data, { multi: false }, (err, res) => {
+    await models.ArticleCategory.findOne({uniqueKey: uniqueKey}, (err, res) => {
+      if (err) {
+        code = 1;
+        throw err;
+      }
+      if (!_.isNull(res) && res._id != id){
+        isDuplicate = true;
+      }
+    });
+  }
+  if (isDuplicate){
+    code = 3;
+    msg = LANG_ARTICLE['unique-key'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
+  }
+  else{
+    await models.ArticleCategory.update({ uniqueKey: uniqueKey }, data, { multi: false }, (err, res) => {
       if (err) {
         console.log(err);
         code = 1;
@@ -179,7 +230,7 @@ const update = async(ctx, _next) => {
       // saved!
     })
   }
-  ctx.body = { code, id, msg };
+  ctx.body = { code, uniqueKey, msg };
 };
 
 const remove = async(ctx, _next) => {
@@ -234,6 +285,7 @@ const checkParamsBody = async(ctx, next) => {
   let {
     id,
     title,
+    uniqueKey,
     author,
     preface,
     desc,
@@ -244,6 +296,7 @@ const checkParamsBody = async(ctx, next) => {
     tag,
     isBanned,
     isPrivate,
+    isAdminOnly,
     articleCategory,
     sequence,
   } = body;
@@ -253,6 +306,7 @@ const checkParamsBody = async(ctx, next) => {
   ctx.state.articleParams = {
     id: id,
     title: title,
+    uniqueKey: uniqueKey,
     author: author,
     preface: preface,
     desc: desc,
@@ -263,6 +317,7 @@ const checkParamsBody = async(ctx, next) => {
     tag: tag,
     isBanned: isBanned,
     isPrivate: isPrivate,
+    isAdminOnly: isAdminOnly,
     articleCategory: articleCategory,
     sequence: sequence,
   };
@@ -272,8 +327,8 @@ const checkParamsBody = async(ctx, next) => {
 const getCategorieOptions = async(ctx, _next) => {
   let code = 0;
   let data = [];
-  let select = ['title'];
-  let populate = 'articleCategory createdBy';
+  let select = ['title', 'uniqueKey'];
+  let populate = 'createdBy';
   let query = { isBanned: false, isPrivate: false };
   let sort = { updatedBy: -1 };
   let res = await getArticleCategories(query, select, sort, true, populate);
@@ -312,7 +367,6 @@ const getArticleCategories = async(query = '', select, sort = '' , lean = true, 
   }
   return result;
 }
-
 
 export default {
   getCategorieOptions,

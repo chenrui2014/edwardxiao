@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ReactPaginate from 'react-paginate';
 import _ from 'lodash';
 import {
+  fetchArticleCategoryList,
+  setArticleCategory,
   fetchArticleList,
   setArticleList,
   setIsNotFound,
@@ -31,7 +34,8 @@ class ArticleList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchArticleList(this.props.articleListCurrentPage + 1);
+    this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage);
+    this.props.fetchArticleList(this.props.articleListCurrentPage, 'all');
     if (!_.isNull(this.props.articleList)){
       this.setState({isLoading: false});
     }
@@ -93,8 +97,13 @@ class ArticleList extends Component {
     })
   }
 
-  fetchArticleList(nextPage) {
-    this.props.fetchArticleList(nextPage);
+  fetchArticleListByArticleCategory(articleCategory){
+    this.props.setArticleCategory(articleCategory);
+    this.props.fetchArticleList(1, articleCategory);
+  }
+
+  handlePageClick(data){
+    this.props.fetchArticleList(data.selected + 1, this.props.articleCategory);
   }
 
   render() {
@@ -102,7 +111,11 @@ class ArticleList extends Component {
     let {
       locale,
       isNotFound,
+      articleCategoryList,
+      articleCategory,
       articleList,
+      articleListTotalPage,
+      articleListCurrentPage,
       userInfo,
     } = this.props;
     let {
@@ -115,6 +128,11 @@ class ArticleList extends Component {
       let LANG_USER = require('../../../../../locales/' + locale + '/user');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
+      let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
+      let LANG_MESSAGE = require('../../../../../locales/' + locale + '/message');
+      let paginationHtml;
+      let articleCategoryNavHtml;
+      let articleCategoryNavListHtml;
       let articleListHtml;
       let newArticleButton;
       let newArticleCategpryButton;
@@ -127,6 +145,29 @@ class ArticleList extends Component {
             <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories')}>{LANG_NAV['article-category']}</div>
           );
         }
+        if (articleCategoryList.length){
+          articleCategoryNavListHtml = articleCategoryList.map((item, key) => {
+            let active = false;
+            if (articleCategory == item.uniqueKey){
+              active = true;
+            }
+            return (
+              <div className={active ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, item.uniqueKey)}>
+                <span className="article-category__text">{item.title}</span>&nbsp;{active ? <span className="icon icon-check"></span> : ``}
+              </div>
+            );
+          });
+        }
+        articleCategoryNavHtml = (
+          <div className="box mgb-10">
+            <div className={articleCategory == 'all' ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, 'all')}>
+              <span className="article-category__text">{LANG_GENERAL['all']}</span>&nbsp;{articleCategory == 'all' ? <span className="icon icon-check"></span> : ``}
+            </div>
+           {articleCategoryNavListHtml}
+          </div>
+        );
+        console.log('articleList');
+        console.log(articleList);
         if (articleList.length){
           articleListHtml = articleList.map((item, key) => {
             return (
@@ -134,6 +175,7 @@ class ArticleList extends Component {
                 locale={locale}
                 id={item.id}
                 title={item.title}
+                uniqueKey={item.uniqueKey}
                 author={item.author}
                 preface={item.preface}
                 desc={item.desc}
@@ -151,6 +193,33 @@ class ArticleList extends Component {
               />
             );
           });
+          console.log('articleListTotalPage: ' + articleListTotalPage);
+          console.log('articleListCurrentPage: ' + articleListCurrentPage);
+          paginationHtml = (
+            <ReactPaginate
+              previousLabel={<span className="icon icon-chevron-left"></span>}
+              nextLabel={<span className="icon icon-chevron-right"></span>}
+              pageCount={articleListTotalPage}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick.bind(this)}
+              containerClassName={'pagination'}
+              pageClassName={'page'}
+              activeClassName={'cur'}
+              previousClassName={'prev'}
+              nextClassName={'next'}
+              forcePage={articleListCurrentPage - 1}
+            />
+          );
+        }
+        else{
+          articleListHtml = (
+            <div className="dp-tbl al-center fts-20 box" style={{'height':'200px'}}>
+              <div className="dp-tbl-cel middle">
+                {LANG_MESSAGE['not-found-content']}
+              </div>
+            </div>
+          );
         }
       }
       let backUrl = this.state.backUrl;
@@ -160,9 +229,22 @@ class ArticleList extends Component {
           <Nav isIndex={false} activeTab="articles"/>
           <div className="core-content">
             <div className="core">
-              {newArticleButton}
-              {newArticleCategpryButton}
-              {articleListHtml}
+              {!_.isNull(userInfo) && userInfo.role == 'admin' ? <div className="mobile-table article-list">
+                <div className="mobile-table__cel category-nav">&nbsp;</div>
+                <div className="mobile-table__cel">
+                {newArticleButton}
+                {newArticleCategpryButton}
+                </div>
+              </div> : ''}
+              <div className="mobile-table article-list">
+                <div className="mobile-table__cel category-nav top">
+                {articleCategoryNavHtml}
+                </div>
+                <div className="mobile-table__cel top">
+                  {articleListHtml}
+                  {paginationHtml}
+                </div>
+              </div>
               <div className="push"></div>
             </div>
           </div>
@@ -181,17 +263,23 @@ class ArticleList extends Component {
 function mapStateToProps(state) {
   let {
     locale,
+    articleCategoryList,
+    articleCategory,
     articleList,
     isNotFound,
     userInfo,
+    articleCategoryListCurrentPage,
     articleListCurrentPage,
     articleListTotalPage,
   } = state;
   return {
     locale,
+    articleCategoryList,
+    articleCategory,
     articleList,
     isNotFound,
     userInfo,
+    articleCategoryListCurrentPage,
     articleListCurrentPage,
     articleListTotalPage,
   };
@@ -199,8 +287,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleList: (nextPage) => {
-      dispatch(fetchArticleList(nextPage));
+    fetchArticleCategoryList: (page) => {
+      dispatch(fetchArticleCategoryList(page));
+    },
+    setArticleCategory: (val) => {
+      dispatch(setArticleCategory(val));
+    },
+    fetchArticleList: (page, category) => {
+      dispatch(fetchArticleList(page, category));
     },
     setArticleList: (articleList) => {
       dispatch(setArticleList(articleList));
@@ -218,9 +312,13 @@ ArticleList.propTypes = {
   isLoading: React.PropTypes.bool.isRequired,
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,
+  articleCategoryListCurrentPage: React.PropTypes.number.isRequired,
   articleListCurrentPage: React.PropTypes.number.isRequired,
   articleListTotalPage: React.PropTypes.number.isRequired,
+  articleCategoryList: React.PropTypes.array.isRequired,
+  articleCategory: React.PropTypes.array.isRequired,
   articleList: React.PropTypes.array.isRequired,
+  fetchArticleCategoryList: React.PropTypes.func.isRequired,
   fetchArticleList: React.PropTypes.func.isRequired,
   setIsNotFound: React.PropTypes.func.isRequired,
   setArticleList: React.PropTypes.func.isRequired,

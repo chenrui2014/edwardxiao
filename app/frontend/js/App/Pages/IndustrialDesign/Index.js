@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import Utils from '../../../common/Utils';
+import Validator from '../../../common/my_validator';
+let validator = new Validator();
+
+import {
+  signup,
+  remove,
+  fetchVerifyCode,
+  changeCaptcha,
+} from '../../actions/index';
 
 class Portfolio extends Component {
 
@@ -17,28 +27,32 @@ class Portfolio extends Component {
   render() {
     let {
       locale,
-      list,
     } = this.props;
     let LANG_USER = require('../../../../../locales/' + locale + '/user');
     let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
     let LANG_MESSAGE = require('../../../../../locales/' + locale + '/message');
-    let listHtml;
-    if (list.length){
-      listHtml = list.map((item, key) => {
-        return (
-          <div title={item.title}>
-            <img src={item.cover} />
-          </div>
-        );
-      });
-    }
     return(
-      <div className="slide-modal-content">
+      <div className="modal-content">
         <div className="close" onClick={this.closeSlideModal.bind(this)}><span className="icon icon-highlight-off"></span></div>
-        {listHtml}
       </div>
     );
   }
+}
+
+function mapStateToProps(state) {
+  let {
+    locale,
+  } = state;
+  return {
+    locale,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    signup: (id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode) => {
+      dispatch(signup(id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode));
+    },
+  };
 }
 
 Portfolio.contextTypes = {
@@ -50,4 +64,4 @@ Portfolio.propTypes = {
   changeCaptcha: React.PropTypes.func.isRequired,
 }
 
-export default Portfolio;
+export default connect(mapStateToProps, mapDispatchToProps)(Portfolio);

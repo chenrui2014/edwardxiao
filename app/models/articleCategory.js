@@ -6,6 +6,7 @@ var ObjectId = Schema.Types.ObjectId;
 // define a schema
 const ArticleCategorySchema = new Schema({
   title: { type: String, required: true },
+  uniqueKey: { type: String, required: true },
   author: { type: String, required: true },
   preface: { type: String },
   desc: { type: String },
@@ -15,7 +16,8 @@ const ArticleCategorySchema = new Schema({
   tag: { type: String },
   isBanned: { type: Boolean },
   isPrivate: { type: Boolean },
-  articleCategory: { type: ObjectId, ref: 'ArticleCategories' },
+  isAdminOnly: { type: Boolean },
+  articleCategory: { type: String, required: true },
   sequence: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

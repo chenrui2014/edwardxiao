@@ -30,12 +30,15 @@ html body input:focus {
   z-index: 0!important;
 }
 
+*:active,
 *:focus {
-  outline: 0;
+  outline: none!important;
 }
 
 * {
   -webkit-overflow-scrolling: touch;
+  padding: 0;
+  margin: 0;
 }
 
 .has-error .form-control {

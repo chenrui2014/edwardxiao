@@ -25,6 +25,7 @@ class ArticleCategory extends Component {
       backUrl: null,
       id: '',
       title: '',
+      uniqueKey: '',
       author: '',
       preface: '',
       desc: '',
@@ -69,6 +70,7 @@ class ArticleCategory extends Component {
           let {
             id,
             title,
+            uniqueKey,
             author,
             preface,
             desc,
@@ -83,6 +85,7 @@ class ArticleCategory extends Component {
           this.setState({
             id: id,
             title: title,
+            uniqueKey: uniqueKey,
             author: author,
             preface: preface,
             desc: desc,
@@ -149,6 +152,7 @@ class ArticleCategory extends Component {
       isUploading,
       id,
       title,
+      uniqueKey,
       author,
       preface,
       desc,
@@ -184,7 +188,7 @@ class ArticleCategory extends Component {
       if (!isLoading){
         if (!_.isNull(userInfo) && userInfo.role == 'admin'){
           editArticleCategoryButton = (
-            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories/' + id + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['articleCategory']}</div>
+            <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories/' + uniqueKey + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['articleCategory']}</div>
           );
         }
         let backUrl = this.state.backUrl;

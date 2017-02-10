@@ -101,6 +101,15 @@ export function articleCategoryList(articleCategoryList = DEFAULT_STATE.articleC
   }
 }
 
+export function articleCategory(articleCategory = DEFAULT_STATE.articleCategory, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE_CATEGORY:
+      return action.articleCategory;
+    default:
+      return articleCategory;
+  }
+}
+
 export function articleCategoryListCurrentPage(articleCategoryListCurrentPage = DEFAULT_STATE.articleCategoryListCurrentPage, action) {
   switch (action.type) {
     case ACTION.SET_ARTICLE_CATEGORY_LIST_CURRENT_PAGE:

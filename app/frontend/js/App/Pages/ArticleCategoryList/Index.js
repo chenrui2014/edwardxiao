@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ReactPaginate from 'react-paginate';
 import _ from 'lodash';
 import {
   fetchArticleCategoryList,
@@ -31,7 +32,7 @@ class ArticleCategoryList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage + 1);
+    this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage);
     if (!_.isNull(this.props.articleCategoryList)){
       this.setState({isLoading: false});
     }
@@ -93,8 +94,8 @@ class ArticleCategoryList extends Component {
     })
   }
 
-  fetchArticleCategoryList(nextPage) {
-    this.props.fetchArticleCategoryList(nextPage);
+  handlePageClick(data){
+    this.props.fetchArticleCategoryList(data.selected + 1);
   }
 
   render() {
@@ -103,6 +104,8 @@ class ArticleCategoryList extends Component {
       locale,
       isNotFound,
       articleCategoryList,
+      articleCategoryListTotalPage,
+      articleCategoryListCurrentPage,
       userInfo,
     } = this.props;
     let {
@@ -118,6 +121,7 @@ class ArticleCategoryList extends Component {
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
       let articleCategoryListHtml;
       let newArticleCategoryButton;
+      let paginationHtml;
       if (!isLoading){
         if (!_.isNull(userInfo) && userInfo.role == 'admin'){
           newArticleCategoryButton = (
@@ -131,6 +135,7 @@ class ArticleCategoryList extends Component {
                 locale={locale}
                 id={item.id}
                 title={item.title}
+                uniqueKey={item.uniqueKey}
                 author={item.author}
                 preface={item.preface}
                 desc={item.desc}
@@ -149,6 +154,24 @@ class ArticleCategoryList extends Component {
               />
             );
           });
+          console.log('articleCategoryListTotalPage: ' + articleCategoryListTotalPage);
+          console.log('articleCategoryListCurrentPage: ' + articleCategoryListCurrentPage);
+          paginationHtml = (
+            <ReactPaginate
+              previousLabel={<span className="icon icon-chevron-left"></span>}
+              nextLabel={<span className="icon icon-chevron-right"></span>}
+              pageCount={articleCategoryListTotalPage}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick.bind(this)}
+              containerClassName={'pagination'}
+              pageClassName={'page'}
+              activeClassName={'cur'}
+              previousClassName={'prev'}
+              nextClassName={'next'}
+              forcePage={articleCategoryListCurrentPage - 1}
+            />
+          );
         }
       }
       let backUrl = this.state.backUrl;
@@ -158,9 +181,12 @@ class ArticleCategoryList extends Component {
           <Nav isIndex={false} activeTab=""/>
           <div className="core-content background-white">
             <div className="core">
-              <div className="my-button my-button--red mgr-10" onClick={this.go.bind(this, '/articles')}>{LANG_NAV['back']}</div>
-              {newArticleCategoryButton}
+              <div className="mgb-10">
+                <div className="my-button my-button--red mgr-10" onClick={this.go.bind(this, '/articles')}>{LANG_NAV['back']}</div>
+                {newArticleCategoryButton}
+              </div>
               {articleCategoryListHtml}
+              {paginationHtml}
               <div className="push"></div>
             </div>
           </div>
@@ -197,8 +223,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleCategoryList: (nextPage) => {
-      dispatch(fetchArticleCategoryList(nextPage));
+    fetchArticleCategoryList: (page) => {
+      dispatch(fetchArticleCategoryList(page));
     },
     setArticleCategoryList: (articleCategoryList) => {
       dispatch(setArticleCategoryList(articleCategoryList));

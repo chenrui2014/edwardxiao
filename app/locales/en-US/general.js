@@ -8,4 +8,5 @@ module.exports = {
   'photograph': 'photograph',
   'space': ' ',
   'space-en': ' ',
+  'all': 'all',
 };

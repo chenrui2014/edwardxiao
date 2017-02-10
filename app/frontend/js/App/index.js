@@ -91,7 +91,7 @@ class Index extends Component {
           <div className="section intros" data-anchor="intros">
           </div>
           <div className="section design" data-anchor="designs">
-            <div className="slide graphic-design"><div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'Portfolio')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div></div>
+            <div className="slide graphic-design"><div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'GraphicDesign')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div></div>
             <div className="slide logo-design"><div className="title"><span className="text">{LANG_GENERAL['logo-design']}</span><span className="icon icon-more"></span></div></div>
             <div className="slide industrial-design"><div className="title"><span className="text">{LANG_GENERAL['industrial-design']}</span><span className="icon icon-more"></span></div></div>
             <div className="slide web-design"><div className="title"><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div></div>

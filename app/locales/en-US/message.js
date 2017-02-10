@@ -22,5 +22,6 @@ module.exports = {
   'enter': 'enter ',
   'to-confirm': ' to cofirm',
   'not-found-message': 'Sorry! The page you are looking for is not exist yet.',
+  'not-found-content': 'We do not have any content yet.',
   'error-on-unauthorized': 'Sorry! You are unauthorized.',
 };

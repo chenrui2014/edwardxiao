@@ -26,6 +26,7 @@ class ArticleForm extends Component {
       backUrl: null,
       id: '',
       title: '',
+      uniqueKey: '',
       author: '',
       preface: '',
       desc: '',
@@ -36,9 +37,11 @@ class ArticleForm extends Component {
       tag: '',
       isBanned: false,
       isPrivate: false,
+      isAdminOnly: false,
       content: '',
       articleCategoryOptions: [],
       isUploading: false,
+      isUseUrl: false,
     }
   }
 
@@ -62,7 +65,7 @@ class ArticleForm extends Component {
     if (prevState.isLoading && !this.state.isLoading){
       this.initQiniu();
     }
-    if (prevState.id == '' && this.state.id != ''){
+    if (this.props.params.id && (prevState.content == '' && this.state.content != '')){
       this.setIsLoading(false);
     }
   }
@@ -77,6 +80,7 @@ class ArticleForm extends Component {
           let {
             id,
             title,
+            uniqueKey,
             author,
             preface,
             desc,
@@ -87,21 +91,24 @@ class ArticleForm extends Component {
             tag,
             isBanned,
             isPrivate,
+            isAdminOnly,
             content,
           } = res.data[0];
           this.setState({
             id: id,
             title: title,
+            uniqueKey: uniqueKey,
             author: author,
             preface: preface,
             desc: desc,
             cover: cover,
-            articleCategory: articleCategory._id,
+            articleCategory: articleCategory,
             sequence: sequence,
             type: type,
             tag: tag,
             isBanned: isBanned,
             isPrivate: isPrivate,
+            isAdminOnly: isAdminOnly,
             content: content,
           });
         }
@@ -261,6 +268,18 @@ class ArticleForm extends Component {
     this.setState({title});
   }
 
+  setCover(e){
+    this.removeErrorMessage(e.target.id);
+    let cover = this.refs.cover.value;
+    this.setState({cover});
+  }
+
+  setUniqueKey(e){
+    this.removeErrorMessage(e.target.id);
+    let uniqueKey = this.refs.uniqueKey.value;
+    this.setState({uniqueKey});
+  }
+
   setAuthor(e){
     this.removeErrorMessage(e.target.id);
     let author = this.refs.author.value;
@@ -311,7 +330,7 @@ class ArticleForm extends Component {
         this.setState({articleCategoryOptions: res.data});
         if (res.data.length){
           if (_.isUndefined(this.props.params.id)){
-            this.setState({articleCategory: res.data[0].id});
+            this.setState({articleCategory: res.data[0].uniqueKey});
           }
         }
       }
@@ -352,6 +371,7 @@ class ArticleForm extends Component {
       let {
         id,
         title,
+        uniqueKey,
         author,
         preface,
         desc,
@@ -362,24 +382,25 @@ class ArticleForm extends Component {
         tag,
         isBanned,
         isPrivate,
+        isAdminOnly,
         content,
       } = this.state;
-      this.submitForm(id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content.toString('html'));
+      this.submitForm(id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isAdminOnly, isPrivate, content.toString('html'));
     }
     e.preventDefault();
   }
 
-  submitForm(id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content){
+  submitForm(id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, isAdminOnly, content){
     Utils.initSpin('spin-loader');
-    this.submitFormApi(id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content).then((res) => {
+    this.submitFormApi(id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, isAdminOnly, content).then((res) => {
       console.log(res);
       if (res.code === 0){
         // console.log(res.data);
-        this.context.router.push('/articles/' + res.id);
+        this.context.router.push('/articles/' + res.uniqueKey);
       }
-      else{
-        if(res.msg){
-          alert(res.msg);
+      else if (res.code === 3){
+        if (!$('#uniqueKey').parent().siblings('.my-validator-message').length) {
+          validator.createMessage($('#uniqueKey').parent(), res.msg, 'error');
         }
       }
       Utils.stopSpin('spin-loader');
@@ -391,7 +412,7 @@ class ArticleForm extends Component {
     });
   }
 
-  submitFormApi(id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content){
+  submitFormApi(id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, isAdminOnly, content){
     let url = '/api/articles';
     let method = 'post';
     if (id != ''){
@@ -402,7 +423,7 @@ class ArticleForm extends Component {
       $.ajax({
         url: url,
         type: method,
-        data: {id, title, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, content},
+        data: {id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, isAdminOnly, content},
         success: (data) => {
           resolve(data);
         },
@@ -419,6 +440,14 @@ class ArticleForm extends Component {
 
   setIsPrivate(val){
     this.setState({isPrivate:val});
+  }
+
+  setIsAdminOnly(val){
+    this.setState({isAdminOnly:val});
+  }
+
+  setIsUseUrl(val){
+    this.setState({isUseUrl:val});
   }
 
   go(url) {
@@ -442,6 +471,7 @@ class ArticleForm extends Component {
       isUploading,
       id,
       title,
+      uniqueKey,
       author,
       preface,
       desc,
@@ -452,14 +482,20 @@ class ArticleForm extends Component {
       tag,
       isBanned,
       isPrivate,
+      isAdminOnly,
       content,
       articleCategoryOptions,
+      isUseUrl,
     } = this.state;
     if (isNotFound){
       contentHtml = (<NotFound />);
     }
     else{
-
+      let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
+      let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
+      let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
+      let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
+      let coverUrlHtml;
       let coverHtml;
       let coverImageHtml;
       let previewClass;
@@ -468,25 +504,49 @@ class ArticleForm extends Component {
         coverImageHtml = (<img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
         previewClass = 'preview';
       }
-      coverHtml = (
-        <div className={`cover-holder ${previewClass}`}>
-          <div className="spin-loader" id="cover-spin-loader" style={{'zIndex':'999'}}></div>
-          {coverImageHtml}
-          {cameraHtml}
-        </div>
-      );
-
-      let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
-      let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
-      let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
-      let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
+      if (isUseUrl){
+        coverUrlHtml = (
+          <div className="row-wrapper">
+            <div className="title">{LANG_ARTICLE['cover']}</div>
+            <div className="input-group width-100pc">
+              <input
+                type="text"
+                id="cover"
+                ref="cover"
+                className="form-control input-sm"
+                value={cover}
+                data-my-validator="true"
+                data-my-validator-required="false"
+                data-my-validator-name=""
+                data-my-validator-type="text"
+                placeholder={LANG_ARTICLE['cover']}
+                onBlur={this.onBlur.bind(this)}
+                style={{'float':'none','display':'inline-block'}}
+                onChange={this.setCover.bind(this)}
+                autoComplete="off"
+              />
+            </div>
+          </div>
+        );
+      }
+      else{
+        coverHtml = (
+          <div className="cover-picker" id="pickfiles">
+            <div className={`cover-holder ${previewClass}`}>
+              <div className="spin-loader" id="cover-spin-loader" style={{'zIndex':'999'}}></div>
+              {coverImageHtml}
+              {cameraHtml}
+            </div>
+          </div>
+        );
+      }
       let articleListHtml;
       let articleCategoryOptionsHtml;
       if (!isLoading){
         if (articleCategoryOptions.length){
           articleCategoryOptionsHtml = articleCategoryOptions.map((item, key) => {
             return (
-              <option value={item.id}>{item.title}</option>
+              <option value={item.uniqueKey}>{item.title}</option>
             );
           });
         }
@@ -497,12 +557,22 @@ class ArticleForm extends Component {
             <Nav isIndex={false} activeTab="articles"/>
             <div className="core-content background-white">
               <div className="core">
-                <div className="my-button my-button--red" onClick={id == '' ? this.go.bind(this, '/articles/') : this.go.bind(this, '/articles/' + id)}>{LANG_NAV['back']}</div>
+                <div className="my-button my-button--red" onClick={uniqueKey == '' ? this.go.bind(this, '/articles/') : this.go.bind(this, '/articles/' + uniqueKey)}>{LANG_NAV['back']}</div>
                 <form className="submit" id="submit" onSubmit={this.submit.bind(this)} autoComplete="off">
+                  <div className="form-check step-content__text mgt-15 mgb-20">
+                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        onClick={this.setIsUseUrl.bind(this, !isUseUrl)}
+                        checked={isUseUrl}
+                      />
+                      &nbsp;<span className="">{`${LANG_ARTICLE['use-image-url']}`}</span>
+                    </label>
+                  </div>
                   <div id="container" className="cover-container">
-                    <div className="cover-picker" id="pickfiles">
-                      {coverHtml}
-                    </div>
+                    {coverUrlHtml}
+                    {coverHtml}
                   </div>
                   <div className="row-wrapper">
                     <div className="title">{LANG_ARTICLE['title']}</div>
@@ -521,6 +591,27 @@ class ArticleForm extends Component {
                         onBlur={this.onBlur.bind(this)}
                         style={{'float':'none','display':'inline-block'}}
                         onChange={this.setTitle.bind(this)}
+                        autoComplete="off"
+                      />
+                    </div>
+                  </div>
+                  <div className="row-wrapper">
+                    <div className="title">{LANG_ARTICLE['unique-key']}</div>
+                    <div className="input-group width-100pc">
+                      <input
+                        type="text"
+                        id="uniqueKey"
+                        ref="uniqueKey"
+                        className="form-control input-sm"
+                        value={uniqueKey}
+                        data-my-validator="true"
+                        data-my-validator-required="true"
+                        data-my-validator-name=""
+                        data-my-validator-type="text"
+                        placeholder={LANG_ARTICLE['unique-key']}
+                        onBlur={this.onBlur.bind(this)}
+                        style={{'float':'none','display':'inline-block'}}
+                        onChange={this.setUniqueKey.bind(this)}
                         autoComplete="off"
                       />
                     </div>
@@ -598,7 +689,7 @@ class ArticleForm extends Component {
                         className="form-control input-sm"
                         value={type}
                         data-my-validator="true"
-                        data-my-validator-required="true"
+                        data-my-validator-required="false"
                         data-my-validator-name=""
                         data-my-validator-type="text"
                         placeholder={LANG_ARTICLE['type']}
@@ -633,9 +724,9 @@ class ArticleForm extends Component {
                         className="form-control input-sm"
                         value={sequence}
                         data-my-validator="true"
-                        data-my-validator-required="true"
+                        data-my-validator-required="false"
                         data-my-validator-name=""
-                        data-my-validator-type="text"
+                        data-my-validator-type="number"
                         placeholder={LANG_ARTICLE['sequence']}
                         onBlur={this.onBlur.bind(this)}
                         style={{'float':'none','display':'inline-block'}}
@@ -654,7 +745,7 @@ class ArticleForm extends Component {
                         className="form-control input-sm"
                         value={tag}
                         data-my-validator="true"
-                        data-my-validator-required="true"
+                        data-my-validator-required="false"
                         data-my-validator-name=""
                         data-my-validator-type="text"
                         placeholder={LANG_ARTICLE['tag']}
@@ -691,6 +782,7 @@ class ArticleForm extends Component {
                         type="checkbox"
                         className="form-check-input"
                         onClick={this.setIsBanned.bind(this, !isBanned)}
+                        checked={isBanned}
                       />
                       &nbsp;<span className="">{`${LANG_ARTICLE['banned']}`}</span>
                     </label>
@@ -701,8 +793,20 @@ class ArticleForm extends Component {
                         type="checkbox"
                         className="form-check-input"
                         onClick={this.setIsPrivate.bind(this, !isPrivate)}
+                        checked={isPrivate}
                       />
                       &nbsp;<span className="">{`${LANG_ARTICLE['private']}`}</span>
+                    </label>
+                  </div>
+                  <div className="form-check step-content__text mgt-15 mgb-20">
+                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        onClick={this.setIsAdminOnly.bind(this, !isAdminOnly)}
+                        checked={isAdminOnly}
+                      />
+                      &nbsp;<span className="">{`${LANG_ARTICLE['admin-only']}`}</span>
                     </label>
                   </div>
                   <div className="submit-button my-button my-button--blue" onClick={this.submit.bind(this)}>{LANG_ACTION.confirm}</div>

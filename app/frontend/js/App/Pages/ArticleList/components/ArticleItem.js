@@ -41,6 +41,7 @@ class ArticleItem extends Component {
       locale,
       id,
       title,
+      uniqueKey,
       author,
       preface,
       desc,
@@ -61,7 +62,7 @@ class ArticleItem extends Component {
       );
     }
     return(
-      <div className="article-item" onClick={this.go.bind(this, id)}>
+      <div className="article-item box mgb-10" onClick={this.go.bind(this, uniqueKey)}>
         <div className="article-item__title">{title}</div>
         <div className="article-item__preface">{preface}</div>
         <div className="article-item__desc">{desc}</div>
@@ -77,6 +78,7 @@ ArticleItem.propTypes = {
   locale: React.PropTypes.string.isRequired,
   id: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired,
+  uniqueKey: React.PropTypes.string.isRequired,
   author: React.PropTypes.string.isRequired,
   preface: React.PropTypes.string.isRequired,
   desc: React.PropTypes.string.isRequired,

@@ -3,10 +3,10 @@ var mongoose = require('../db/index');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 var id = mongoose.Types.ObjectId('56cb91bdc3464f14678934ca');
-var articleCategoryId = mongoose.Types.ObjectId('ce3cc9334ae8c66be6db982d');
 
 var articleList = [{
-  title:'title',
+  title:' title',
+  uniqueKey: 'title',
   author: 'admin',
   preface: 'preface',
   desc: 'desc',
@@ -16,23 +16,26 @@ var articleList = [{
   tag: '',
   isBanned: false,
   isPrivate: false,
-  articleCategory: articleCategoryId,
+  isAdminOnly: true,
+  articleCategory: 'jottings',
   sequence: 1,
   createdBy: id,
   updatedBy: id,
 }];
 var ArticleSchema = new Schema({
   title: { type: String, required: true },
+  uniqueKey: { type: String, required: true },
   author: { type: String, required: true },
   preface: { type: String },
   desc: { type: String },
   content: { type: String, required: true },
   cover: { type: String },
-  type: { type: Number },
+  type: { type: String },
   tag: { type: String },
   isBanned: { type: Boolean },
   isPrivate: { type: Boolean },
-  articleCategory: { type: ObjectId, ref: 'ArticleCategories' },
+  isAdminOnly: { type: Boolean },
+  articleCategory: { type: String, required: true },
   sequence: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
