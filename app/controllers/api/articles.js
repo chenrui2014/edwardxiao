@@ -6,6 +6,7 @@ const index = async(ctx, _next) => {
     page,
     perPage,
     category,
+    type,
   } = ctx.request.query;
   if (_.isUndefined(page) || page === '') {
     page = 1;
@@ -29,6 +30,12 @@ const index = async(ctx, _next) => {
   }
   if (category && category != ''){
     query =  _.merge(query, {articleCategory: category});
+  }
+  if (type == ''){
+    type = '';
+  }
+  if (type && type != ''){
+    query =  _.merge(query, {type: type});
   }
   console.log('======');
   console.log(query);

@@ -385,7 +385,7 @@ class ArticleForm extends Component {
         isAdminOnly,
         content,
       } = this.state;
-      this.submitForm(id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isAdminOnly, isPrivate, content.toString('html'));
+      this.submitForm(id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, isAdminOnly, content.toString('html'));
     }
     e.preventDefault();
   }
@@ -501,7 +501,8 @@ class ArticleForm extends Component {
       let previewClass;
       let cameraHtml = (<div className="camera-mask"><span className="icon icon-camera-alt"></span></div>);
       if (!isUploading && cover != ''){
-        coverImageHtml = (<img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
+        // coverImageHtml = (<img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
+        coverImageHtml = (<img className="" src={`${cover}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
         previewClass = 'preview';
       }
       if (isUseUrl){

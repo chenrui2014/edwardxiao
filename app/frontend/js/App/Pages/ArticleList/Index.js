@@ -26,6 +26,7 @@ class ArticleList extends Component {
     this.state = {
       isLoading: true,
       backUrl: null,
+      articleType: !_.isNull(props.userInfo) && props.userInfo.role == 'admin' ? '' : 'article',
     }
   }
 
@@ -35,7 +36,7 @@ class ArticleList extends Component {
 
   componentDidMount() {
     this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage);
-    this.props.fetchArticleList(this.props.articleListCurrentPage, 'all');
+    this.props.fetchArticleList(this.props.articleListCurrentPage, 'all', this.state.articleType);
     if (!_.isNull(this.props.articleList)){
       this.setState({isLoading: false});
     }
@@ -44,6 +45,12 @@ class ArticleList extends Component {
   componentDidUpdate(prevProps) {
     if (_.isNull(prevProps.articleList) && !_.isNull(this.props.articleList)){
       this.setState({isLoading: false});
+    }
+    if (_.isNull(prevProps.userInfo) && !_.isNull(this.props.userInfo)){
+      if (this.props.userInfo.role == 'admin'){
+        this.setState({articleType: ''});
+        this.props.fetchArticleList(this.props.articleListCurrentPage, 'all', '');
+      }
     }
     // if (!_.isNull(prevProps.articleList)){
     //   if (prevProps.articleList != this.props.articleList){
@@ -97,13 +104,13 @@ class ArticleList extends Component {
     })
   }
 
-  fetchArticleListByArticleCategory(articleCategory){
+  fetchArticleListByArticleCategory(articleCategory, articleType){
     this.props.setArticleCategory(articleCategory);
-    this.props.fetchArticleList(1, articleCategory);
+    this.props.fetchArticleList(1, articleCategory, articleType);
   }
 
   handlePageClick(data){
-    this.props.fetchArticleList(data.selected + 1, this.props.articleCategory);
+    this.props.fetchArticleList(data.selected + 1, this.props.articleCategory, this.state.articleType);
   }
 
   render() {
@@ -152,7 +159,7 @@ class ArticleList extends Component {
               active = true;
             }
             return (
-              <div className={active ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, item.uniqueKey)}>
+              <div className={active ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, item.uniqueKey, this.state.articleType)}>
                 <span className="article-category__text">{item.title}</span>&nbsp;{active ? <span className="icon icon-check"></span> : ``}
               </div>
             );
@@ -160,7 +167,7 @@ class ArticleList extends Component {
         }
         articleCategoryNavHtml = (
           <div className="box mgb-10">
-            <div className={articleCategory == 'all' ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, 'all')}>
+            <div className={articleCategory == 'all' ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, 'all', this.state.articleType)}>
               <span className="article-category__text">{LANG_GENERAL['all']}</span>&nbsp;{articleCategory == 'all' ? <span className="icon icon-check"></span> : ``}
             </div>
            {articleCategoryNavListHtml}
@@ -227,7 +234,7 @@ class ArticleList extends Component {
         <div className="page-content background-white">
           <MobileNav isIndex={false} activeTab="articles"/>
           <Nav isIndex={false} activeTab="articles"/>
-          <div className="core-content">
+          <div className="core-content background-white">
             <div className="core">
               {!_.isNull(userInfo) && userInfo.role == 'admin' ? <div className="mobile-table article-list">
                 <div className="mobile-table__cel category-nav">&nbsp;</div>
@@ -293,8 +300,8 @@ function mapDispatchToProps(dispatch) {
     setArticleCategory: (val) => {
       dispatch(setArticleCategory(val));
     },
-    fetchArticleList: (page, category) => {
-      dispatch(fetchArticleList(page, category));
+    fetchArticleList: (page, category, type) => {
+      dispatch(fetchArticleList(page, category, type));
     },
     setArticleList: (articleList) => {
       dispatch(setArticleList(articleList));

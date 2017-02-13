@@ -96,9 +96,9 @@ class Nav extends Component {
             <div className="site-name"><span>{LANG_GENERAL.name}</span></div>
           </a>
           <a href={isIndex ? `#intros` : `/`} className={!isIndex && activeTab == 'intros' ? `menu__item no-mobile-990 active` : `menu__item no-mobile-990`} data-menuanchor="intros"><div>{LANG_NAV.home}</div></a>
-          <a href={isIndex ? `#designs` : `/designs`} className={!isIndex && activeTab == 'designs' ? `menu__item no-mobile-990 active` : `menu__item no-mobile-990`} data-menuanchor="designs"><div>{LANG_NAV.portfolio}</div></a>
+          <a href={isIndex ? `#designs` : `/#designs`} className={!isIndex && activeTab == 'designs' ? `menu__item no-mobile-990 active` : `menu__item no-mobile-990`} data-menuanchor="designs"><div>{LANG_NAV.portfolio}</div></a>
           <a href={isIndex ? `#articles` : `/articles`} className={!isIndex && activeTab == 'articles' ? `menu__item no-mobile-990 active` : `menu__item no-mobile-990`} data-menuanchor="articles"><div>{LANG_NAV.article}</div></a>
-          <a href={isIndex ? `#contacts` : `/contacts`} className={!isIndex && activeTab == 'contacts' ? `menu__item no-mobile-990 active` : `menu__item no-mobile-990`} data-menuanchor="contacts"><div>{LANG_NAV.contact}</div></a>
+          <a href={isIndex ? `#contacts` : `/#contacts`} className={!isIndex && activeTab == 'contacts' ? `menu__item no-mobile-990 active` : `menu__item no-mobile-990`} data-menuanchor="contacts"><div>{LANG_NAV.contact}</div></a>
         </div>
         <div className="nav__center show-mobile-tbl-cel-990">
           <a href="/">

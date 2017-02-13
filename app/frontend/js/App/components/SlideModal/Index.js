@@ -12,6 +12,10 @@ class Modal extends Component {
     super(props);
   }
 
+  closeSlideModal() {
+    $('.slide-modal').removeClass('visible');
+  }
+
   render() {
     let {
       slideModalContentName,
@@ -25,7 +29,12 @@ class Modal extends Component {
     }
     return(
       <div className={`slide-modal ${className}`} id="mySlideModal" tabIndex="-1" role="dialog" aria-hidden="true">
-        <Component/>
+        <div className="wrapper">
+          <div className="close-wrapper">
+            <div className="close" onClick={this.closeSlideModal.bind(this)}><span className="icon icon-highlight-off"></span></div>
+          </div>
+          <Component/>
+        </div>
       </div>
     );
   }

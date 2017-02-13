@@ -382,9 +382,9 @@ function fetchVerifyCodeApi(phone) {
   })
 }
 
-export const fetchArticleList = (page, category) => (dispatch) => {
+export const fetchArticleList = (page, category, type) => (dispatch) => {
   Utils.initSpin('spin-loader');
-  fetchArticleListApi(page, category).then((res) => {
+  fetchArticleListApi(page, category, type).then((res) => {
     console.log(res);
     if (res.code === 0){
       console.log(res.data);
@@ -405,11 +405,11 @@ export const fetchArticleList = (page, category) => (dispatch) => {
   });
 }
 
-function fetchArticleListApi(page, category) {
+function fetchArticleListApi(page, category, type) {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/api/articles/',
-      data: {page: page, perPage: ARTICLE_LIST_PER_PAGE, category: category},
+      data: {page: page, perPage: ARTICLE_LIST_PER_PAGE, category: category, type: type},
       type: 'get',
       success: (data) => {
         resolve(data);

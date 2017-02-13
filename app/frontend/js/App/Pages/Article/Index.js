@@ -180,7 +180,8 @@ class Article extends Component {
 
       let coverHtml;
       if (cover != ''){
-        coverHtml = <img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
+        // coverHtml = <img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
+        coverHtml = <img className="" src={`${cover}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
       }
       else{
         coverHtml = <span className="icon icon-sentiment-satisfied"></span>;

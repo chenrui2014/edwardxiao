@@ -15,23 +15,31 @@ class Main extends Component {
     super(props);
   }
 
+  transitionHtml (){
+  {/*<div className="page-transition">
+          <ReactCSSTransitionGroup
+            component="div"
+            // transitionName={ location.action == 'PUSH' ? 'forward' : 'backward' }
+            transitionName="fade"
+            transitionEnterTimeout={200}
+            transitionLeaveTimeout={200}
+          >
+            {React.cloneElement(children, {
+              key: location.pathname
+            })}
+            <Modal/>
+            <SlideModal/>
+          </ReactCSSTransitionGroup>
+        </div>*/}
+  }
+
   render() {
     let { children, location } = this.props;
     return(
       <div className="page-transition">
-        <ReactCSSTransitionGroup
-          component="div"
-          // transitionName={ location.action == 'PUSH' ? 'forward' : 'backward' }
-          transitionName="fade"
-          transitionEnterTimeout={200}
-          transitionLeaveTimeout={200}
-        >
-          {React.cloneElement(children, {
-            key: location.pathname
-          })}
-          <Modal/>
-          <SlideModal/>
-        </ReactCSSTransitionGroup>
+        {children}
+        <Modal/>
+        <SlideModal/>
       </div>
     );
   }

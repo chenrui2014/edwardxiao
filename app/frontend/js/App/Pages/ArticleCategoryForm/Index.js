@@ -530,7 +530,8 @@ class ArticleCategoryForm extends Component {
       let previewClass;
       let cameraHtml = (<div className="camera-mask"><span className="icon icon-camera-alt"></span></div>);
       if (!isUploading && cover != ''){
-        coverImageHtml = (<img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
+        // coverImageHtml = (<img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
+        coverImageHtml = (<img className="" src={`${cover}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
         previewClass = 'preview';
       }
       if (isUseUrl){

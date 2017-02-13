@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import 'fullpage.js/dist/jquery.fullpage.min.js';
+import 'fullpage.js/vendors/scrolloverflow.min.js';
 import {
   setSlideModalContentName,
 } from './actions/index';
@@ -58,6 +59,8 @@ class Index extends Component {
       navigationPosition: 'right',
       slidesNavigation: true,
       slidesNavPosition: 'bottom',
+      scrollOverflow: false,
+      normalScrollElements: '.slide-modal',
       onLeave: () => {
         $('.mo-nav-mobile__mask').click();
       },
@@ -97,8 +100,8 @@ class Index extends Component {
             <div className="slide web-design"><div className="title"><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div></div>
             <div className="slide photograph"><div className="title"><span className="text">{LANG_GENERAL['photograph']}</span><span className="icon icon-more"></span></div></div>
           </div>
-          <div className="section article" data-anchor="articles" onClick={this.go.bind(this, 'articles')}>
-            {articleListHtml}
+          <div className="section article" data-anchor="articles">
+            <div className="title"><span className="text" onClick={this.go.bind(this, 'articles')}>{LANG_GENERAL['read-article']}</span><span className="icon icon-more"></span></div>
           </div>
           <div className="section contact" data-anchor="contacts">
           </div>

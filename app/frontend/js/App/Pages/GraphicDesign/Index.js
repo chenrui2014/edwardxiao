@@ -17,7 +17,7 @@ class GraphicDesign extends Component {
   }
 
   componentDidMount(){
-    this.props.fetchArticleList(1, 'graphic_design');
+    this.props.fetchArticleList(1, 'graphic_design', 'portfolio');
   }
 
   componentDidUpdate(prevProps){
@@ -68,8 +68,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleList: (page, category) => {
-      dispatch(fetchArticleList(page, category));
+    fetchArticleList: (page, category, articleType) => {
+      dispatch(fetchArticleList(page, category, articleType));
     },
   };
 }

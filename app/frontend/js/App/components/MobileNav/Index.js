@@ -74,7 +74,7 @@ class Nav extends Component {
                     </div>
                   </div>
                 </a>
-                <a className={!isIndex && activeTab == 'designs' ? `mo-nav-column__item active` : `mo-nav-column__item`} href={isIndex ? `#designs` : `/designs`} data-menuanchor="designs">
+                <a className={!isIndex && activeTab == 'designs' ? `mo-nav-column__item active` : `mo-nav-column__item`} href={isIndex ? `#designs` : `/#designs`} data-menuanchor="designs">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
                       {LANG_NAV.portfolio}
@@ -88,7 +88,7 @@ class Nav extends Component {
                     </div>
                   </div>
                 </a>
-                <a className={!isIndex && activeTab == 'contacts' ? `mo-nav-column__item active` : `mo-nav-column__item`} href={isIndex ? `#contacts` : `/contacts`} data-menuanchor="contacts">
+                <a className={!isIndex && activeTab == 'contacts' ? `mo-nav-column__item active` : `mo-nav-column__item`} href={isIndex ? `#contacts` : `/#contacts`} data-menuanchor="contacts">
                   <div className="nav-item-wrapper">
                     <div className="mgt-10">
                       {LANG_NAV.contact}

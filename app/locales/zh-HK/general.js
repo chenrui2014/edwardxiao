@@ -6,6 +6,7 @@ module.exports = {
   'logo-design': 'logo設計',
   'web-design': '網頁設計',
   'photograph': '攝影',
+  'read-article': '查看文章',
   'space': ' ',
   'space-en': '',
   'all': '全部',
