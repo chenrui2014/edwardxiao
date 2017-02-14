@@ -145,9 +145,26 @@
   /*padding: 0;*/
 }
 
+.article-item__title,
+.article-item__author,
+.article-item__preface,
+.article-item__desc,
+.article-item__image{
+  margin-bottom: 5px;
+}
+
+.article-item__title{
+  font-size: 18px;
+  font-weight: 800;
+}
+
 @media only screen and (max-width: 990px) {
   .page-content.article .submit-button {
     width: 100%;
     float: none;
+  }
+  .mobile-table.article-list .category-nav .article-category__item{
+    float: left;
+    margin-left: 10px;
   }
 }

@@ -46,7 +46,13 @@ class ArticleCategory extends Component {
   }
 
   componentDidMount() {
-    this.fetchArticleCategory(this.props.params.id);
+    let userInfo = this.props.userInfo;
+    if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+      this.fetchArticleCategory(this.props.params.id);
+    }
+    else{
+      this.props.setIsNotFound(true);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {

@@ -220,7 +220,7 @@ const update = async(ctx, _next) => {
     msg = LANG_ARTICLE['unique-key'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
   }
   else{
-    await models.ArticleCategory.update({ uniqueKey: uniqueKey }, data, { multi: false }, (err, res) => {
+    await models.ArticleCategory.update({ _id: id }, data, { multi: false }, (err, res) => {
       if (err) {
         console.log(err);
         code = 1;

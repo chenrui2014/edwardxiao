@@ -44,8 +44,8 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 @import "~bootstrap-sass/assets/stylesheets/bootstrap/_popovers";
 
 
-// $fa-font-path:  "~font-awesome/fonts" !default;
-// @import "~font-awesome/scss/font-awesome";
+$fa-font-path:  "~font-awesome/fonts" !default;
+@import "~font-awesome/scss/font-awesome";
 
 // Utility classes
 @import "~bootstrap-sass/assets/stylesheets/bootstrap/_utilities"; // Has to be last to override when necessary

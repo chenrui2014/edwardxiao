@@ -163,11 +163,11 @@
   transition: transform .4s;
   transform: translate3d(-100%, 0, 0);
   transform: translate(-100%, 0)\9;
-  overflow-y: scroll;
+  /*overflow-y: scroll;*/
 }
 
 .slide-modal .close-wrapper {
-  position: fixed;
+  position: absolute;
   padding: 10px;
   width: 100%;
   background: #f8f8f8;
@@ -184,73 +184,178 @@
   color: #4a4a4a;
 }
 
-.section.intros {
-  /*background: url('../img/home-0.jpg');*/
-  /*background: url('../img/home-1.jpg');*/
-  /*background: url('../img/home-2.jpg');*/
-  background: url('../img/home-3.jpg');
-  background-size: cover;
-  background-position: 50% 50%;
+.fullpage-wrapper {
+  opacity: 0;
+  transition: opacity .4s;
 }
 
-.section.design .slide,
-.section.article {
+.fullpage-wrapper.visible {
+  opacity: 1;
+}
+
+.section.intros,
+.section.article,
+.section.contact,
+.section.design .slide {
   text-align: center;
   color: #fff;
   font-size: 2.5em;
-  text-shadow: 0px 0px 19px #969696;
 }
 
-.section.design .slide .title .icon,
-.section.article .icon {
+.section.intros,
+.section.article,
+.section.contact .title,
+.section.design .slide {
+  text-shadow: 0px 0px 19px #000;
+}
+
+.section.design .slide {
+  text-shadow: 0px 0px 19px #5f5f5f;
+}
+
+.section.intros .arrow-down-wrapper {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: table;
+  border: 3px solid #fff;
+  background: transparent;
+  color: #fff;
+  transition: all .4s;
+}
+
+.section.intros .arrow-down-wrapper .icon {
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.section.intros .arrow-down-wrapper:hover {
+  color: #4a4a4a;
+  background: #fff;
+}
+
+.section.intros .icon,
+.section.article .icon,
+.section.contact .icon,
+.section.design .slide .title .icon {
   font-size: 40px;
   margin-left: 20px;
   vertical-align: middle;
 }
 
-.section.design .slide .title,
-.section.article .title {
+.section.intros .title,
+.section.article .title,
+.section.contact .title,
+.section.design .slide .title {
   cursor: pointer;
 }
 
+.section.intros .title .text:hover,
+.section.intros .title .text:hover,
+.section.article .title .text:hover,
+.section.contact .title .text:hover,
 .section.design .slide .title .text:hover {
   text-decoration: underline;
 }
 
-.section.design .logo-design {
-  background: url('../img/stile.jpg');
-  background-size: cover;
-  background-position: 50% 50%;
+.section.intros.visible {
+  opacity: 1;
 }
 
-.section.design .industrial-design {
-  background: url('../img/industrial-design.jpg');
+.section.intros {
+  opacity: 0;
+  /*background: url('../img/home-0.jpg');*/
+  /*background: url('../img/home-1.jpg');*/
+  /*background: url('../img/home-2.jpg');*/
+  background: url('../img/intro.jpg');
   background-size: cover;
   background-position: 50% 50%;
+  transition: opacity .4s;
+}
+
+.section.design .graphic-design.visible {
+  opacity: 1;
 }
 
 .section.design .graphic-design {
+  opacity: 0;
   background: url('../img/graphic-design.jpg');
   background-size: cover;
   background-position: 50% 50%;
+  transition: opacity .4s;
+}
+
+.section.design .logo-design.visible {
+  opacity: 1;
+}
+
+.section.design .logo-design {
+  opacity: 0;
+  background: url('../img/logo-design-sm.jpg');
+  background-size: cover;
+  background-position: 50% 50%;
+  transition: opacity .4s;
+}
+
+.section.design .industrial-design.visible {
+  opacity: 1;
+}
+
+.section.design .industrial-design {
+  opacity: 0;
+  background: url('../img/industrial-design.jpg');
+  background-size: cover;
+  background-position: 50% 50%;
+  transition: opacity .4s;
+}
+
+.section.design .web-design.visible {
+  opacity: 1;
 }
 
 .section.design .web-design {
+  opacity: 0;
   background: url('../img/web-design.jpg');
   background-size: cover;
   background-position: 50% 50%;
+  transition: opacity .4s;
+}
+
+.section.design .photograph.visible {
+  opacity: 1;
 }
 
 .section.design .photograph {
-  background: url('../img/home-0.jpg');
+  opacity: 0;
+  background: url('../img/photograph.jpg');
   background-size: cover;
   background-position: 50% 50%;
+  transition: opacity .4s;
+}
+
+.section.article.visible {
+  opacity: 1;
 }
 
 .section.article {
+  opacity: 0;
   background: url('../img/article.jpg');
   background-size: cover;
   background-position: 50% 50%;
+  transition: opacity .4s;
+}
+
+.section.contact.visible {
+  opacity: 1;
+}
+
+.section.contact {
+  opacity: 0;
+  background: url('../img/contact.jpg');
+  background-size: cover;
+  background-position: 50% 50%;
+  transition: opacity .4s;
 }
 
 .modal-content {
@@ -264,9 +369,10 @@
 }
 
 .portfolio-item {
-  /*position: relative;*/
+  position: relative;
   margin: 10px;
-  box-shadow: 0 0 2px 0 rgba(181, 181, 181, .6)!important;
+  background: #fff;
+  box-shadow: 0 0 12px 0 rgba(181, 181, 181, .9) !important;
 }
 
 .portfolio-item img {
@@ -275,11 +381,46 @@
 
 .slide-modal-content {
   margin-top: 55px;
-  padding: 0 15px;
+  padding: 0 15px 55px;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  overflow-y: scroll;
 }
 
 .portfolio-item-wrapper {
   padding: 0!important;
+}
+
+.contact-icon-wrapper {
+  border-radius: 50%;
+  border: 2px solid #fff;
+  width: 100px;
+  height: 100px;
+  display: table;
+  margin: 0 auto;
+  color: #4a4a4a;
+  background: #fff;
+  transition: all .4s;
+}
+
+.contact-content {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.contact-icon-wrapper:hover {
+  background: transparent;
+  color: #fff;
+}
+
+.contact-icon-wrapper .icon {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.copyright {
+  font-size: 12px;
 }
 
 
@@ -564,7 +705,7 @@ html.fp-enabled,
 }
 
 .fp-controlArrow.fp-prev {
-  left: 15px;
+  left: 40px;
   width: 0;
   border-width: 38.5px 34px 38.5px 0;
   border-color: transparent #f8f8f8 transparent transparent;
@@ -602,7 +743,7 @@ html.fp-enabled,
 }
 
 .fp-controlArrow.fp-next {
-  right: 15px;
+  right: 40px;
   /*  border-width: 38.5px 0 38.5px 34px;
   border-color: transparent transparent transparent #f8f8f8;*/
 }
@@ -789,5 +930,36 @@ html.fp-enabled,
   }
   .modal-backdrop.in {
     opacity: 0;
+  }
+  .section.intros,
+  .section.article,
+  .section.contact,
+  .section.design .slide {
+    font-size: 1.8em
+  }
+  .section.intros {
+    background-position: 70% 50%;
+  }
+  .section.article {
+    background-position: 18% 50%;
+  }
+  .section.contact {
+    background-position: 75% 50%;
+  }
+  .section.design .photograph {
+    background-position: 85% 50%;
+  }
+  .contact-icon-wrapper {
+    width: 70px;
+    height: 70px;
+  }
+  .contact .title .text {
+    font-size: 18px;
+  }
+  .core {
+    padding: 10px;
+  }
+  .core-content {
+    padding: 40px 0 0;
   }
 }

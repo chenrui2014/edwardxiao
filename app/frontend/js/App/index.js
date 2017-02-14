@@ -18,12 +18,7 @@ class Index extends Component {
     super(props);
   }
 
-  setIsLoading(bool) {
-    this.setState({isLoading: bool});
-  }
-
   componentWillMount() {
-    Utils.initSpin('spin-loader');
   }
 
   componentDidMount() {
@@ -53,7 +48,7 @@ class Index extends Component {
 
   initFullpage(){
     $('#fullpage').fullpage({
-      sectionsColor: ['#f8f8f8', '#ececec', '#f8f8f8', '#ececec'],
+      sectionsColor: ['#f8f8f8', '#ececec', '#f8f8f8', '#ececec', '#f8f8f8'],
       menu: '.menu',
       navigation: false,
       navigationPosition: 'right',
@@ -61,13 +56,67 @@ class Index extends Component {
       slidesNavPosition: 'bottom',
       scrollOverflow: false,
       normalScrollElements: '.slide-modal',
-      onLeave: () => {
+      onLeave: (index, nextIndex) => {
         $('.mo-nav-mobile__mask').click();
       },
+      onSlideLeave: (anchorLink, index, slideIndex, direction, nextSlideIndex) => {
+        if(nextSlideIndex == 1){
+          $('.logo-design').addClass('visible');
+        }
+        if(nextSlideIndex == 2){
+          $('.industrial-design').addClass('visible');
+        }
+        if(nextSlideIndex == 3){
+          $('.web-design').addClass('visible');
+        }
+        if(nextSlideIndex == 4){
+          $('.photograph').addClass('visible');
+        }
+      },
       afterLoad: (anchorLink, index) => {
-        $('#fullpage').addClass('visible');
+        $('.fullpage-wrapper').addClass('visible');
         $('.fade').removeClass('visible');
         $('.section-' + index + ' .fade').addClass('visible');
+        if (index == 1){
+          if (!$('.intros').hasClass('visible')){
+            Utils.initSpin('spin-loader');
+              setTimeout(() => {
+              $('.intros').addClass('visible');
+              Utils.stopSpin('spin-loader');
+              return;
+            }, 800);
+          }
+        }
+        if (index == 2){
+          if (!$('.graphic-design').hasClass('visible')){
+            Utils.initSpin('spin-loader');
+              setTimeout(() => {
+              $('.graphic-design').addClass('visible');
+              Utils.stopSpin('spin-loader');
+              return;
+            }, 800);
+          }
+        }
+        if (index == 3){
+          if (!$('.article').hasClass('visible')){
+            Utils.initSpin('spin-loader');
+              setTimeout(() => {
+              $('.article').addClass('visible');
+              Utils.stopSpin('spin-loader');
+              return;
+            }, 800);
+          }
+        }
+        if (index == 4){
+          if (!$('.contact').hasClass('visible')){
+            Utils.initSpin('spin-loader');
+              setTimeout(() => {
+              $('.contact').addClass('visible');
+              Utils.stopSpin('spin-loader');
+              return;
+            }, 800);
+          }
+        }
       },
     });
   }
@@ -75,6 +124,10 @@ class Index extends Component {
   setSlideModalContentNameName(val){
     $('.slide-modal').addClass('visible');
     this.props.setSlideModalContentName(val);
+  }
+
+  readMore(){
+    $.fn.fullpage.moveSectionDown();
   }
 
   render() {
@@ -92,18 +145,51 @@ class Index extends Component {
         <Nav isIndex={true} className="gradient"/>
         <div id="fullpage">
           <div className="section intros" data-anchor="intros">
+            <div className="title" onClick={this.readMore.bind(this)}><div className="dp-inline-block middle"><span className="text">{LANG_GENERAL['read-more']}</span></div>&nbsp;<div className="dp-inline-block middle"><div className="arrow-down-wrapper"><span className="icon icon-expand-more"></span></div></div></div>
           </div>
           <div className="section design" data-anchor="designs">
-            <div className="slide graphic-design"><div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'GraphicDesign')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div></div>
-            <div className="slide logo-design"><div className="title"><span className="text">{LANG_GENERAL['logo-design']}</span><span className="icon icon-more"></span></div></div>
-            <div className="slide industrial-design"><div className="title"><span className="text">{LANG_GENERAL['industrial-design']}</span><span className="icon icon-more"></span></div></div>
-            <div className="slide web-design"><div className="title"><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div></div>
-            <div className="slide photograph"><div className="title"><span className="text">{LANG_GENERAL['photograph']}</span><span className="icon icon-more"></span></div></div>
+            <div className="slide graphic-design">
+              <div className="spin-loader" id="graphic-design-loader"></div>
+              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'GraphicDesign')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div>
+            </div>
+            <div className="slide logo-design">
+              <div className="spin-loader" id="logo-design-loader"></div>
+              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'LogoDesign')}><span className="text">{LANG_GENERAL['logo-design']}</span><span className="icon icon-more"></span></div>
+            </div>
+            <div className="slide industrial-design">
+              <div className="spin-loader" id="industrial-design-loader"></div>
+              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'IndustrialDesign')}><span className="text">{LANG_GENERAL['industrial-design']}</span><span className="icon icon-more"></span></div>
+            </div>
+            <div className="slide web-design">
+              <div className="spin-loader" id="web-design-loader"></div>
+              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'WebDesign')}><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div>
+            </div>
+            <div className="slide photograph">
+              <div className="spin-loader" id="photograph-loader"></div>
+              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'Photograph')}><span className="text">{LANG_GENERAL['photograph']}</span><span className="icon icon-more"></span></div>
+            </div>
           </div>
           <div className="section article" data-anchor="articles">
             <div className="title"><span className="text" onClick={this.go.bind(this, 'articles')}>{LANG_GENERAL['read-article']}</span><span className="icon icon-more"></span></div>
           </div>
           <div className="section contact" data-anchor="contacts">
+            <div className="contact-content">
+              <div className="row">
+                <div className="col-md-4 col-xs-4">
+                  <a href="https://github.com/edwardfhsiao"><div className="contact-icon-wrapper"><span className="icon fa fa-github-alt" aria-hidden="true"></span></div></a>
+                </div>
+                <div className="col-md-4 col-xs-4">
+                  <a href="https://www.facebook.com/edward.hsiao.98"><div className="contact-icon-wrapper"><span className="icon fa fa-facebook" aria-hidden="true"></span></div></a>
+                </div>
+                <div className="col-md-4 col-xs-4">
+                  <a href="http://weibo.com/fourit"><div className="contact-icon-wrapper"><span className="icon fa fa-weibo" aria-hidden="true"></span></div></a>
+                </div>
+              </div>
+              <div className="title mgt-20"><span className="fa fa-envelope"></span>&nbsp;<span className="text"><a className="white" href="mailto:edwardfhsiao@gmail.com">edwardfhsiao@gmail.com</a></span></div>
+            </div>
+          </div>
+          <div className="section fp-auto-height" data-anchor="footer">
+            <div className="copyright al-center">Copyright © Edward Xiao</div>
           </div>
         </div>
       </div>

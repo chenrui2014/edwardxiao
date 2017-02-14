@@ -9,11 +9,11 @@ class MyLoader {
     let Blazy = require('blazy');
     this.revalidate(bLazyId);
     this.initSpin(spinLoaderId, spinnerOpt);
-    this.initLazyImage(Blazy);
+    return this.initLazyImage(Blazy);
   }
 
   initLazyImage(Blazy) {
-    new Blazy({
+    return new Blazy({
       success: (element) => {
         setTimeout(() => {
           let $parent;

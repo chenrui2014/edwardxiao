@@ -65,7 +65,7 @@ class ArticleForm extends Component {
     if (prevState.isLoading && !this.state.isLoading){
       this.initQiniu();
     }
-    if (this.props.params.id && (prevState.content == '' && this.state.content != '')){
+    if (this.props.params.id && (prevState.uniqueKey == '' && this.state.uniqueKey != '')){
       this.setIsLoading(false);
     }
   }
@@ -648,7 +648,7 @@ class ArticleForm extends Component {
                         className="form-control input-sm"
                         value={preface}
                         data-my-validator="true"
-                        data-my-validator-required="true"
+                        data-my-validator-required="false"
                         data-my-validator-name=""
                         data-my-validator-type="text"
                         placeholder={LANG_ARTICLE['preface']}
@@ -669,7 +669,7 @@ class ArticleForm extends Component {
                         className="form-control input-sm"
                         value={desc}
                         data-my-validator="true"
-                        data-my-validator-required="true"
+                        data-my-validator-required="false"
                         data-my-validator-name=""
                         data-my-validator-type="text"
                         placeholder={LANG_ARTICLE['desc']}

@@ -82,21 +82,27 @@ class Article extends Component {
             isPrivate,
             content,
           } = res.data[0];
-          this.setState({
-            id: id,
-            title: title,
-            uniqueKey: uniqueKey,
-            author: author,
-            preface: preface,
-            desc: desc,
-            cover: cover,
-            articleCategory: articleCategory.title,
-            type: type,
-            tag: tag,
-            isBanned: isBanned,
-            isPrivate: isPrivate,
-            content: content,
-          });
+          let userInfo = this.props.userInfo;
+          if ((type != 'portfolio' && (_.isNull(userInfo) && userInfo.role != 'admin')) || (!_.isNull(userInfo) && userInfo.role == 'admin')){
+            this.setState({
+              id: id,
+              title: title,
+              uniqueKey: uniqueKey,
+              author: author,
+              preface: preface,
+              desc: desc,
+              cover: cover,
+              articleCategory: articleCategory.title,
+              type: type,
+              tag: tag,
+              isBanned: isBanned,
+              isPrivate: isPrivate,
+              content: content,
+            });
+          }
+          else{
+            this.props.setIsNotFound(true);
+          }
           this.setIsLoading(false);
         }
         else{
@@ -202,25 +208,13 @@ class Article extends Component {
                 <div className="my-button my-button--red mgr-10" onClick={this.go.bind(this, '/articles/')}>{LANG_NAV['back']}</div>
                 {editArticleButton}
                 <div className="mgt-10">
-                  <div className="cover-wrapper">{coverHtml}</div>
-                  <div className="row-wrapper">
-                    {title}
-                  </div>
-                  <div className="row-wrapper">
-                    {author}
-                  </div>
-                  <div className="row-wrapper">
-                    {preface}
-                  </div>
-                  <div className="row-wrapper">
-                    {desc}
-                  </div>
-                  <div className="row-wrapper">
-                    {articleCategory}
-                  </div>
-                  <div className="row-wrapper">
-                    {tag}
-                  </div>
+                  <div className="article-item__title">{title}</div>
+                  <div className="article-item__author">{author}</div>
+                  {coverHtml != '' ? <div className="article-item__image">{coverHtml}</div> : ''}
+                  {preface != '' ? <div className="article-item__preface">{preface}</div> : ''}
+                  {desc != '' ? <div className="article-item__desc">{desc}</div> : ''}
+                  {articleCategory != '' ? <div className="row-wrapper">{articleCategory}</div> : ''}
+                  {tag != '' ? <div className="row-wrapper">{tag}</div> : ''}
                   <div dangerouslySetInnerHTML={this.createContent()}></div>
                   <div className="height-20"></div>
                   <div className="">

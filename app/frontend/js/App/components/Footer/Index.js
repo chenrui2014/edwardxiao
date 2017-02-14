@@ -46,7 +46,9 @@ class Footer extends Component {
     let LANG_USER = require('../../../../../locales/' + locale + '/user');
     return(
       <div className={`footer ${className}`}>
-        footer
+        <div className='footer-content'>
+          <div className="copyright al-center">Copyright © Edward Xiao</div>
+        </div>
       </div>
     );
   }

@@ -2,21 +2,30 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import Utils from '../../../common/Utils';
-import Validator from '../../../common/my_validator';
-let validator = new Validator();
-
+import Portfolio from '../../components/Portfolio';
 import {
-  signup,
-  remove,
-  fetchVerifyCode,
-  changeCaptcha,
+  fetchArticleList,
 } from '../../actions/index';
 
-class Portfolio extends Component {
+class Photograph extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
+    }
+  }
+
+  componentDidMount(){
+    this.props.fetchArticleList(1, 'photograph', 'portfolio');
+    if (!_.isNull(this.props.articleList)){
+      this.setState({isLoading: false});
+    }
+  }
+
+  componentDidUpdate(prevProps){
+    if (_.isNull(prevProps.articleList) && !_.isNull(this.props.articleList)){
+      this.setState({isLoading: false});
     }
   }
 
@@ -27,14 +36,25 @@ class Portfolio extends Component {
   render() {
     let {
       locale,
+      articleList,
     } = this.props;
     let LANG_USER = require('../../../../../locales/' + locale + '/user');
     let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
     let LANG_MESSAGE = require('../../../../../locales/' + locale + '/message');
+
+    let {
+      isLoading
+    } = this.state;
+    let contentHtml;
+    if (!isLoading){
+      contentHtml = (
+        <Portfolio
+          locale={locale}
+          list={articleList}
+        />);
+    }
     return(
-      <div className="modal-content">
-        <div className="close" onClick={this.closeSlideModal.bind(this)}><span className="icon icon-highlight-off"></span></div>
-      </div>
+      <div>{contentHtml}</div>
     );
   }
 }
@@ -42,26 +62,29 @@ class Portfolio extends Component {
 function mapStateToProps(state) {
   let {
     locale,
+    articleList,
   } = state;
   return {
     locale,
+    articleList,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
-    signup: (id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode) => {
-      dispatch(signup(id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode));
+    fetchArticleList: (page, category, articleType) => {
+      dispatch(fetchArticleList(page, category, articleType));
     },
   };
 }
 
-Portfolio.contextTypes = {
+Photograph.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 
-Portfolio.propTypes = {
+Photograph.propTypes = {
   locale: React.PropTypes.string.isRequired,
-  changeCaptcha: React.PropTypes.func.isRequired,
+  articleList: React.PropTypes.array.isRequired,
+  fetchArticleList: React.PropTypes.func.isRequired,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Portfolio);
+export default connect(mapStateToProps, mapDispatchToProps)(Photograph);

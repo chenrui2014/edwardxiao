@@ -18,6 +18,9 @@ class GraphicDesign extends Component {
 
   componentDidMount(){
     this.props.fetchArticleList(1, 'graphic_design', 'portfolio');
+    if (!_.isNull(this.props.articleList)){
+      this.setState({isLoading: false});
+    }
   }
 
   componentDidUpdate(prevProps){

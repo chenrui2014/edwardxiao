@@ -166,7 +166,7 @@ class ArticleList extends Component {
           });
         }
         articleCategoryNavHtml = (
-          <div className="box mgb-10">
+          <div className="box mgb-10 clearfix">
             <div className={articleCategory == 'all' ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, 'all', this.state.articleType)}>
               <span className="article-category__text">{LANG_GENERAL['all']}</span>&nbsp;{articleCategory == 'all' ? <span className="icon icon-check"></span> : ``}
             </div>
@@ -237,7 +237,7 @@ class ArticleList extends Component {
           <div className="core-content background-white">
             <div className="core">
               {!_.isNull(userInfo) && userInfo.role == 'admin' ? <div className="mobile-table article-list">
-                <div className="mobile-table__cel category-nav">&nbsp;</div>
+                <div className="mobile-table__cel category-nav no-mobile-990">&nbsp;</div>
                 <div className="mobile-table__cel">
                 {newArticleButton}
                 {newArticleCategpryButton}

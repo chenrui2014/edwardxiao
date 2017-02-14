@@ -18,24 +18,23 @@ const index = async(ctx, _next) => {
   perPage = _.toNumber(perPage);
   const currentUser = ctx.state.currentUser;
   let query;
-  if (!_.isNull(currentUser) && currentUser.role == 'admin'){
-    query = _.merge(query, {uniqueKey: {'$ne': 'root'}});
-  }
-  else{
-    query = _.merge(query, { isBanned: false, isPrivate: false, $and:[{isAdminOnly: false}] });
+  if (!_.isNull(currentUser) && currentUser.role == 'admin') {
+    query = _.merge(query, { uniqueKey: { '$ne': 'root' } });
+  } else {
+    query = _.merge(query, { isBanned: false, isPrivate: false, $and: [{ isAdminOnly: false }] });
   }
   console.log(category);
-  if (category == 'all'){
+  if (category == 'all') {
     category = '';
   }
-  if (category && category != ''){
-    query =  _.merge(query, {articleCategory: category});
+  if (category && category != '') {
+    query = _.merge(query, { articleCategory: category });
   }
-  if (type == ''){
+  if (type == '') {
     type = '';
   }
-  if (type && type != ''){
-    query =  _.merge(query, {type: type});
+  if (type && type != '') {
+    query = _.merge(query, { type: type });
   }
   console.log('======');
   console.log(query);
@@ -57,15 +56,15 @@ const show = async(ctx, _next) => {
   let {
     id,
   } = ctx.params;
-  let query = {uniqueKey: id};
+  let query = { uniqueKey: id };
   let code = 0;
   let data = [];
   let select = ['title', 'uniqueKey', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isAdminOnly', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
   let populate = 'createdBy';
   let res = await getArticles(query, select, '', true, populate);
   let ObjectId = require('mongoose').Types.ObjectId;
-  if (!res.data.length && ObjectId.isValid(id)){
-    query = { _id: id};
+  if (!res.data.length && ObjectId.isValid(id)) {
+    query = { _id: id };
     res = await getArticles(query, select, '', true, populate);
   }
   data = res.data;
@@ -95,6 +94,9 @@ const create = async(ctx, _next) => {
     articleCategory,
     sequence,
   } = ctx.state.articleParams;
+  if (content == '') {
+    content = ' ';
+  }
   let data = {
     title,
     uniqueKey,
@@ -120,20 +122,19 @@ const create = async(ctx, _next) => {
   console.log(data);
   let msg = '';
   let isDuplicate = false;
-  await models.Article.findOne({uniqueKey: uniqueKey}, (err, res) => {
+  await models.Article.findOne({ uniqueKey: uniqueKey }, (err, res) => {
     if (err) {
       code = 1;
       throw err;
     }
-    if (!_.isNull(res)){
+    if (!_.isNull(res)) {
       isDuplicate = true;
     }
   });
-  if (isDuplicate){
+  if (isDuplicate) {
     code = 3;
     msg = LANG_ARTICLE['unique-key'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
-  }
-  else{
+  } else {
     await models.Article.create(data, (err, res) => {
       if (err) {
         code = 1;
@@ -171,6 +172,9 @@ const update = async(ctx, _next) => {
     articleCategory,
     sequence,
   } = ctx.state.articleParams;
+  if (content == '') {
+    content = ' ';
+  }
   let data = {
     id,
     title,
@@ -192,24 +196,23 @@ const update = async(ctx, _next) => {
   let code = 0;
   let msg = '';
   let isDuplicate = false;
-  await models.Article.findOne({uniqueKey: uniqueKey}, (err, res) => {
+  await models.Article.findOne({ uniqueKey: uniqueKey }, (err, res) => {
     if (err) {
       code = 1;
       throw err;
     }
-    if (!_.isNull(res) && res._id != id){
+    if (!_.isNull(res) && res._id != id) {
       isDuplicate = true;
     }
   });
-  if (isDuplicate){
+  if (isDuplicate) {
     code = 3;
     msg = LANG_ARTICLE['unique-key'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
-  }
-  else{
-  console.log(1111);
-  console.log(data);
-  console.log(1111);
-    await models.Article.update({ uniqueKey: uniqueKey }, data, { multi: false }, (err, res) => {
+  } else {
+    console.log(1111);
+    console.log(data);
+    console.log(1111);
+    await models.Article.update({ _id: id }, data, { multi: false }, (err, res) => {
       if (err) {
         console.log('errerrerrerrerr');
         console.log(err);

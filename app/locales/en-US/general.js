@@ -7,6 +7,7 @@ module.exports = {
   'web-design': 'web design',
   'photograph': 'photograph',
   'read-article': 'read articles',
+  'read-more': 'read more',
   'space': ' ',
   'space-en': ' ',
   'all': 'all',

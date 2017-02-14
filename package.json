@@ -31,7 +31,9 @@
   "dependencies": {
     "arale-qrcode": "^3.0.5",
     "bcrypt": "^1.0.2",
+    "blazy": "^1.8.2",
     "bowser": "^1.6.0",
+    "font-awesome": "^4.7.0",
     "fs": "0.0.2",
     "fullpage.js": "^2.9.2",
     "jquery": "^3.1.1",

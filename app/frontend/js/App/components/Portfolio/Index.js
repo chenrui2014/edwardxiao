@@ -12,13 +12,16 @@ class Portfolio extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
     }
   }
 
   componentDidMount(){
+    Utils.initSpin('slide-modal-loader');
     if (this.props.list.length){
       this.props.list.map((item, key) => {Utils.initSpin(`spin-loader-${key}`);});
     }
+    this.setState({isLoading: false});
   }
 
   // componentDidUpdate(prevProps){
@@ -27,8 +30,15 @@ class Portfolio extends Component {
   //   }
   // }
 
-  handleImageLoaded(id){
+  componentDidUpdate(prevProps, prevState){
+    if (prevState.isLoading && !this.state.isLoading){
+      Utils.stopSpin('slide-modal-loader');
+    }
+  }
+
+  handleImageLoaded(id, imageElementId){
     Utils.stopSpin(id);
+    $('#' + imageElementId).addClass('visible');
   }
 
   render() {
@@ -36,24 +46,28 @@ class Portfolio extends Component {
       locale,
       list,
     } = this.props;
+    let {
+      isLoading
+    } = this.state;
     let LANG_USER = require('../../../../../locales/' + locale + '/user');
     let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
     let LANG_MESSAGE = require('../../../../../locales/' + locale + '/message');
+    let content;
     let listHtml;
-    if (list.length){
-      listHtml = list.map((item, key) => {
-        return (
-          <div title={item.title} className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <div title={item.title} className="portfolio-item">
-              <div className="spin-loader" id={`spin-loader-${key}`}></div>
-              <img src={item.cover} onLoad={this.handleImageLoaded.bind(this, `spin-loader-${key}`)}/>
+    if (!isLoading){
+      if (list.length){
+        listHtml = list.map((item, key) => {
+          return (
+            <div className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12" title={item.title}>
+              <div className="portfolio-item">
+                <div className="spin-loader" id={`spin-loader-${key}`}></div>
+                <img src={`${item.cover}`} className="fade" id={`gallery-image-${key}`} onLoad={this.handleImageLoaded.bind(this, `spin-loader-${key}`, `gallery-image-${key}`)}/>
+              </div>
             </div>
-          </div>
-        );
-      });
-    }
-    return(
-      <div className="slide-modal-content">
+          );
+        });
+      }
+      content = (
         <div className="row">
           <Masonry
             className={'portfolio-items'} // default ''
@@ -64,7 +78,13 @@ class Portfolio extends Component {
           >
             {listHtml}
           </Masonry>
-      </div>
+        </div>
+      );
+    }
+    return(
+      <div className="slide-modal-content">
+        <div className="spin-loader" id="slide-modal-loader"></div>
+        {content}
       </div>
     );
   }

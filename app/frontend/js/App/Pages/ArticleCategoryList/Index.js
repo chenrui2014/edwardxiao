@@ -32,9 +32,15 @@ class ArticleCategoryList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage);
-    if (!_.isNull(this.props.articleCategoryList)){
-      this.setState({isLoading: false});
+    let userInfo = this.props.userInfo;
+    if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+      this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage);
+      if (!_.isNull(this.props.articleCategoryList)){
+        this.setState({isLoading: false});
+      }
+    }
+    else{
+      this.props.setIsNotFound(true);
     }
   }
 
@@ -228,6 +234,9 @@ function mapDispatchToProps(dispatch) {
     },
     setArticleCategoryList: (articleCategoryList) => {
       dispatch(setArticleCategoryList(articleCategoryList));
+    },
+    setIsNotFound: (val) => {
+      dispatch(setIsNotFound(val));
     },
   };
 }

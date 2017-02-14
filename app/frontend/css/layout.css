@@ -6,7 +6,7 @@ html {
 }
 
 html body {
-  color: #212121;
+  color: #4a4a4a;
 }
 
 body .ftf-yuan {
@@ -27,6 +27,10 @@ body .ftf-yuan {
 .page {
   padding-top: 1px;
   margin-top: -1px;
+}
+
+.fade.visible {
+  opacity: 1;
 }
 
 .fade-enter {
@@ -876,6 +880,7 @@ body .ftf-yuan {
   left: 50%;
   transform: translate3d(-50%, -50%, 0);
   transform: translate(-50%, -50%)\9;
+  z-index: 1;
 }
 
 .position-center-v {
@@ -1804,6 +1809,15 @@ body .ftf-yuan {
 .footer,
 .push {
   min-height: 100px;
+}
+
+.footer{
+  width: 100%;
+  display: table;
+}
+.footer-content{
+  display: table-cell;
+  vertical-align: middle;
 }
 
 @media only screen and (max-width: 1300px) {
