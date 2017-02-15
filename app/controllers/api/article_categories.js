@@ -346,6 +346,7 @@ const getArticleCategories = async(query = '', select, sort = '' , lean = true, 
     options['limit'] = perPage;
   }
   await models.ArticleCategory.paginate(query, options).then((result) => {
+
     if (result.docs.length) {
       data = result.docs;
       pages = result.pages;

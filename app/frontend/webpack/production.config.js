@@ -6,13 +6,13 @@ const postcssImport = require('postcss-import');
 const cssnext = require('postcss-cssnext');
 const postcssReporter = require("postcss-reporter");
 const PATH = require('./build_path');
+const ENV = require('../../../.env');
 
 const config = _.merge({}, base);
 
 config['debug'] = false;
 config.output = _.merge(config.output, {
-  // publicPath: '/assets/',
-  publicPath: PATH.SERVER_PATH,
+  publicPath: '/' + ENV.APP_NAME + '/assets/',
   filename: '[name]-[chunkhash].js'
 });
 config['devtool'] = 'cheap-source-map';
