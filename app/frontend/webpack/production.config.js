@@ -5,12 +5,14 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const postcssImport = require('postcss-import');
 const cssnext = require('postcss-cssnext');
 const postcssReporter = require("postcss-reporter");
+const PATH = require('./build_path');
 
 const config = _.merge({}, base);
 
 config['debug'] = false;
 config.output = _.merge(config.output, {
-  publicPath: '/assets/',
+  // publicPath: '/assets/',
+  publicPath: PATH.SERVER_PATH,
   filename: '[name]-[chunkhash].js'
 });
 config['devtool'] = 'cheap-source-map';

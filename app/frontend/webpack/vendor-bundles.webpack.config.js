@@ -24,6 +24,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: PATH.ASSET_PATH,
+    publicPath: PATH.SERVER_PATH,
 
     // The name of the global variable which the library's
     // require() function will be assigned to

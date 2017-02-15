@@ -10,7 +10,8 @@ const config = _.merge(base, {
   displayErrorDetails: true,
   devtool: 'cheap-module-eval-source-map',
   output: {
-    publicPath: '/assets/'
+    // publicPath: '/assets/'
+    publicPath: PATH.SERVER_PATH
   },
   devServer: {
     historyApiFallback: true

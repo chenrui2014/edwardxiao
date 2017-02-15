@@ -2,6 +2,7 @@ const port = Number.parseInt(process.env.PORT) || 3000;
 
 module.exports = {
   port: port,
+  appName: 'edwardxiao',
   hostName: 'http://localhost:' + port,
   serveStatic: true,
   assetHost: '',

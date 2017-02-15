@@ -2,6 +2,7 @@ import config from '../../config/config.js';
 import fs from 'fs';
 import path from 'path';
 import moment from 'moment';
+import CDN from './cdn';
 
 let manifest = {};
 let vendorManifest = {};
@@ -12,29 +13,47 @@ if (fs.existsSync(manifestPath)) {
   vendorManifest = require('../../public/assets/manifest_vendor.json');
 }
 
-exports.assetUrl = function (asset) {
-  const publicAsset = manifest[asset];
-  let url = null;
-  if(publicAsset === undefined) {
-    url = config.assetHost + '/' + asset;
+function getAssetName(asset) {
+  return manifest[asset];
+}
+
+exports.assetUrl = (assetsName) => {
+  console.log(assetsName);
+  const publicAsset = getAssetName(assetsName);
+  console.log(publicAsset);
+  if (!publicAsset) {
+    assetsName = vendorManifest[assetsName];
+    return `http://${CDN.URL}/assets/${assetsName}`;
   }
-  else {
-    url = config.assetHost + '/assets/' + publicAsset;
+  else{
+    return `http://${CDN.URL}/assets/${publicAsset}`;
   }
-  return url;
+  return publicAsset;
 };
 
-exports.vendorAssetUrl = function (asset) {
-  const publicAsset = vendorManifest[asset];
-  let url = null;
-  if(publicAsset === undefined) {
-    url = config.assetHost + '/' + asset;
-  }
-  else {
-    url = config.assetHost + '/assets/' + publicAsset;
-  }
-  return url;
-};
+// exports.assetUrl = function (asset) {
+//   const publicAsset = manifest[asset];
+//   let url = null;
+//   if(publicAsset === undefined) {
+//     url = config.assetHost + '/' + asset;
+//   }
+//   else {
+//     url = config.assetHost + '/assets/' + publicAsset;
+//   }
+//   return url;
+// };
+
+// exports.vendorAssetUrl = function (asset) {
+//   const publicAsset = vendorManifest[asset];
+//   let url = null;
+//   if(publicAsset === undefined) {
+//     url = config.assetHost + '/' + asset;
+//   }
+//   else {
+//     url = config.assetHost + '/assets/' + publicAsset;
+//   }
+//   return url;
+// };
 
 exports.isActive = function (action, param) {
   let active = '';
