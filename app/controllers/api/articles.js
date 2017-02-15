@@ -23,7 +23,6 @@ const index = async(ctx, _next) => {
   } else {
     query = _.merge(query, { isBanned: false, isPrivate: false, $and: [{ isAdminOnly: false }] });
   }
-  console.log(category);
   if (category == 'all') {
     category = '';
   }
@@ -36,8 +35,6 @@ const index = async(ctx, _next) => {
   if (type && type != '') {
     query = _.merge(query, { type: type });
   }
-  console.log('======');
-  console.log(query);
   let code = 0;
   let data = [];
   let pages = 0;
@@ -45,8 +42,6 @@ const index = async(ctx, _next) => {
   let populate = 'createdBy';
   let sort = { sequence: 1 };
   let res = await getArticles(query, select, sort, true, populate, page, perPage);
-  // console.log('======');
-  // console.log(res);
   data = res.data;
   pages = res.pages;
   ctx.body = { code, data, page, pages };
@@ -114,12 +109,8 @@ const create = async(ctx, _next) => {
     sequence: _.toNumber(sequence),
     createdBy: userId,
   };
-  console.log(1111);
-  console.log(data);
-  console.log(1111);
   let code = 0;
   let newUniqueKey = '';
-  console.log(data);
   let msg = '';
   let isDuplicate = false;
   await models.Article.findOne({ uniqueKey: uniqueKey }, (err, res) => {
@@ -140,7 +131,6 @@ const create = async(ctx, _next) => {
         code = 1;
         throw err;
       }
-      console.log(res);
       newUniqueKey = res.uniqueKey;
       // saved!
     });
@@ -209,20 +199,11 @@ const update = async(ctx, _next) => {
     code = 3;
     msg = LANG_ARTICLE['unique-key'] + LANG_GENERAL['space-en'] + LANG_MESSAGE['already-exist'];
   } else {
-    console.log(1111);
-    console.log(data);
-    console.log(1111);
     await models.Article.update({ _id: id }, data, { multi: false }, (err, res) => {
       if (err) {
-        console.log('errerrerrerrerr');
-        console.log(err);
-        console.log('errerrerrerrerr');
         code = 1;
         throw err;
       }
-      console.log('resresresresres');
-      console.log(res);
-      console.log('resresresresres');
       // saved!
     });
   }
@@ -232,21 +213,18 @@ const update = async(ctx, _next) => {
 const remove = async(ctx, _next) => {
   let code = 0;
   let id = ctx.params.id;
-  console.log(id);
   await models.Article.findOneAndRemove({ _id: id }, (err, res) => {
     if (err) {
       console.log(err);
       code = 1;
       throw err;
     }
-    console.log(res);
     // deleted!
   })
   ctx.body = { code, id };
 }
 
 const checkLogin = async(ctx, next) => {
-  console.log(ctx.state.isUserSignIn);
   if (!ctx.state.isUserSignIn) {
     ctx.status = 302;
     ctx.redirect('/');
@@ -264,7 +242,6 @@ const checkArticleOwner = async(ctx, next) => {
   let query = { _id: id };
   let res = await getArticles(query, select, '', true, populate);
   if (res.data.length) {
-    console.log(res.data[0]);
     if (res.data[0].createdBy['_id'].equals(currentUser.id)) {
       await next();
     } else {
@@ -337,7 +314,6 @@ const getArticles = async(query = '', select, sort = '', lean = true, populate =
     options['limit'] = perPage;
   }
   await models.Article.paginate(query, options).then((result) => {
-    // console.log(result);
     if (result.docs.length) {
       data = result.docs;
       pages = result.pages;

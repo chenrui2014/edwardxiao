@@ -29,8 +29,6 @@ const index = async(ctx, _next) => {
   let populate = 'createdBy';
   let sort = { sequence: 1 };
   let res = await getArticleCategories(query, select, sort, true, populate, page, perPage);
-  console.log('======');
-  console.log(res);
   data = res.data;
   pages = res.pages;
   ctx.body = { code, data, page, pages };
@@ -100,7 +98,6 @@ const create = async(ctx, _next) => {
   let code = 0;
   let msg = '';
   let newUniqueKey = '';
-  console.log(data);
   let isDuplicate = false;
   await models.ArticleCategory.findOne({title: title}, (err, res) => {
     if (err) {
@@ -136,7 +133,6 @@ const create = async(ctx, _next) => {
         code = 1;
         throw err;
       }
-      console.log(res);
       newUniqueKey = res.uniqueKey;
       // saved!
     });
@@ -226,7 +222,6 @@ const update = async(ctx, _next) => {
         code = 1;
         throw err;
       }
-      console.log(res);
       // saved!
     })
   }
@@ -236,21 +231,18 @@ const update = async(ctx, _next) => {
 const remove = async(ctx, _next) => {
   let code = 0;
   let id = ctx.params.id;
-  console.log(id);
   await models.ArticleCategory.findOneAndRemove({ _id: id }, (err, res) => {
     if (err) {
       console.log(err);
       code = 1;
       throw err;
     }
-    console.log(res);
     // deleted!
   })
   ctx.body = { code, id };
 }
 
 const checkLogin = async(ctx, next) => {
-  console.log(ctx.state.isUserSignIn);
   if (!ctx.state.isUserSignIn) {
     ctx.status = 302;
     ctx.redirect('/');
@@ -268,7 +260,6 @@ const checkArticleCategoryOwner = async(ctx, next) => {
   let query = { _id: id };
   let res = await getArticleCategories(query, select, '', true, populate);
   if (res.data.length) {
-    console.log(res.data[0]);
     if (res.data[0].createdBy['_id'].equals(currentUser.id)) {
       await next();
     } else {
@@ -355,7 +346,6 @@ const getArticleCategories = async(query = '', select, sort = '' , lean = true, 
     options['limit'] = perPage;
   }
   await models.ArticleCategory.paginate(query, options).then((result) => {
-    // console.log(result);
     if (result.docs.length) {
       data = result.docs;
       pages = result.pages;

@@ -1,4 +1,4 @@
-import config from '../../config/config.js';
+import ENV from '../../.env.js';
 import fs from 'fs';
 import path from 'path';
 import moment from 'moment';
@@ -18,42 +18,26 @@ function getAssetName(asset) {
 }
 
 exports.assetUrl = (assetsName) => {
-  console.log(assetsName);
   const publicAsset = getAssetName(assetsName);
-  console.log(publicAsset);
   if (!publicAsset) {
     assetsName = vendorManifest[assetsName];
-    return `http://${CDN.URL}/assets/${assetsName}`;
+    if (ENV.APP_ENV == 'production'){
+      return `http://${CDN.URL}/assets/${assetsName}`;
+    }
+    else{
+      return `/assets/${assetsName}`;
+    }
   }
   else{
-    return `http://${CDN.URL}/assets/${publicAsset}`;
+    if (ENV.APP_ENV == 'production'){
+      return `http://${CDN.URL}/assets/${publicAsset}`;
+    }
+    else{
+      return `/assets/${publicAsset}`;
+    }
   }
   return publicAsset;
 };
-
-// exports.assetUrl = function (asset) {
-//   const publicAsset = manifest[asset];
-//   let url = null;
-//   if(publicAsset === undefined) {
-//     url = config.assetHost + '/' + asset;
-//   }
-//   else {
-//     url = config.assetHost + '/assets/' + publicAsset;
-//   }
-//   return url;
-// };
-
-// exports.vendorAssetUrl = function (asset) {
-//   const publicAsset = vendorManifest[asset];
-//   let url = null;
-//   if(publicAsset === undefined) {
-//     url = config.assetHost + '/' + asset;
-//   }
-//   else {
-//     url = config.assetHost + '/assets/' + publicAsset;
-//   }
-//   return url;
-// };
 
 exports.isActive = function (action, param) {
   let active = '';
@@ -62,8 +46,6 @@ exports.isActive = function (action, param) {
   }
   return active;
 };
-
-// moment.locale('zh-cn')
 
 exports.timeAgo = function (date) {
   date = moment(date);

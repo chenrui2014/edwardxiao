@@ -7,9 +7,7 @@ const PUBLIC_PATH = path.resolve(__dirname, '../', '../', '../', 'public/assets'
 const ASSET_PATH = path.resolve(__dirname, '../', '../', '../', 'public/assets');
 const MODULES_PATH = path.join(ROOT_PATH, './node_modules');
 const SERVER_PATH = `${CDN.URL}/assets/`;
-console.log(11111);
-console.log(SERVER_PATH);
-console.log(11111);
+
 module.exports = {
   CURRENT_PATH: CURRENT_PATH,
   ROOT_PATH: ROOT_PATH,

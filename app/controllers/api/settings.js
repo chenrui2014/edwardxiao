@@ -1,5 +1,5 @@
 import models from '../../models/index';
-import config from '../../../config/config';
+import ENV from '../../../.env';
 
 const locale = async(ctx, _next) => {
   let locale = ctx.request.body.locale;
@@ -9,10 +9,10 @@ const locale = async(ctx, _next) => {
 
 const uptoken = async(ctx, _next) => {
   let qiniu = require("qiniu");
-  qiniu.conf.ACCESS_KEY = config.qiniu.ACCESS_KEY;
-  qiniu.conf.SECRET_KEY = config.qiniu.SECRET_KEY;
+  qiniu.conf.ACCESS_KEY = ENV.QINIU.ACCESS_KEY;
+  qiniu.conf.SECRET_KEY = ENV.QINIU.SECRET_KEY;
 
-  let bucket = config.qiniu.bucket;
+  let bucket = ENV.QINIU.BUCKET_NAME;
 
   function uptoken(bucket) {
     var putPolicy = new qiniu.rs.PutPolicy(bucket);

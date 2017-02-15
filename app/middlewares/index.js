@@ -2,7 +2,7 @@ import logger from 'koa-logger';
 import helpers from '../helpers';
 import models from '../models';
 import _ from 'lodash';
-import config from '../../config/config';
+import ENV from '../../.env';
 
 async function catchError(ctx, next) {
   // console.log(ctx);
@@ -64,7 +64,7 @@ async function addHelper(ctx, next) {
   ctx.state = {
     csrf: ctx.csrf,
     captchaData: captchaData,
-    qiniuDomain: config.qiniu.domain,
+    qiniuDomain: ENV.QINIU.DOMAIN,
     locale: locale,
     helpers: helpers,
     currentUser: currentUser,

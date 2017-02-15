@@ -8,7 +8,7 @@ import bodyParser from 'koa-bodyparser';
 import methodOverride from 'koa-methodoverride';
 import logger from 'koa-logger';
 
-import config from '../config/config';
+import ENV from '../.env';
 import router from './routes';
 import koaRedis from 'koa-redis';
 import models from './models';
@@ -16,7 +16,7 @@ import middlewares from './middlewares';
 import cacheMiddle from './middlewares/cache';
 
 const redisStore = koaRedis({
-  url: config.redisUrl
+  url: ENV.REDIS_URL
 });
 
 const app = new Koa();
@@ -24,19 +24,19 @@ app.use(bodyParser());
 app.use(convert(json()));
 app.use(convert(logger()));
 
-if(config.serveStatic){
+if(ENV.SERVE_STATIC){
   app.use(convert(require('koa-static')(__dirname + '/../public')));
 }
 
 app.keys = ['secret', 'key'];
 app.use(convert(session({
   store: redisStore,
-  prefix: 'edwardxiao:sess:',
-  key: 'edwardxiao.sid'
+  prefix: `${ENV.APP_NAME}:sess:`,
+  key: `${ENV.APP_NAME}.sid`
 })));
 
 app.use(cacheMiddle({
-  redis: { url: config.redisUrl }
+  redis: { url: ENV.REDIS_URL }
 }));
 
 //views with pug
@@ -48,5 +48,5 @@ app.use(convert(csrf()));
 // add helpers for views
 app.use(middlewares.addHelper);
 app.use(router.routes(), router.allowedMethods());
-app.listen(config.port);
+app.listen(ENV.PORT);
 export default app;
