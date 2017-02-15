@@ -11,4 +11,5 @@ module.exports = {
   'are-you-sure': '閣下當真確定嗎',
   'go-back': '立即返回',
   'unauthorized': '沒有權限',
+  'load-more': '載入更多',
 };

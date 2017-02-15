@@ -1,7 +1,13 @@
+import bowser from 'bowser';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import Utils from '../../../common/Utils';
 import Masonry from 'react-masonry-component';
+
+import {
+  fetchArticleList,
+} from '../../actions/index';
 
 let masonryOptions = {
     // isFitWidth: true,
@@ -16,35 +22,64 @@ class Portfolio extends Component {
     }
   }
 
-  componentDidMount(){
-    Utils.initSpin('slide-modal-loader');
-    if (this.props.list.length){
-      this.props.list.map((item, key) => {Utils.initSpin(`spin-loader-${key}`);});
-    }
-    this.setState({isLoading: false});
+  setIsLoading(bool) {
+    this.setState({isLoading: bool});
   }
 
-  // componentDidUpdate(prevProps){
-  //   if (list.length){
-  //     list.map((item, key) => {Utils.initSpin(`spin-loader-${key}`);});
-  //   }
-  // }
+  componentWillMount(){
+    this.props.fetchArticleList(1, this.props.portfolioType, 'portfolio');
+    if (!_.isNull(this.props.articleList)){
+      this.setIsLoading(false);
+    }
+  }
+
+  componentDidMount(){
+    if (!_.isNull(this.props.articleList)){
+      this.setIsLoading(false);
+    }
+    if (!(bowser.msie && bowser.version <= 9)) {
+      Utils.initSpin('slide-modal-loader');
+    }
+  }
 
   componentDidUpdate(prevProps, prevState){
-    if (prevState.isLoading && !this.state.isLoading){
-      Utils.stopSpin('slide-modal-loader');
+    if (prevProps.portfolioType != this.props.portfolioType){
+      this.props.fetchArticleList(1, this.props.portfolioType, 'portfolio');
+    }
+    if (_.isNull(prevProps.articleList) && !_.isNull(this.props.articleList)){
+      this.setIsLoading(false);
+      if (this.props.articleList.length){
+        this.props.articleList.map((item, key) => {Utils.initSpin(`spin-loader-${key}`);});
+      }
     }
   }
 
   handleImageLoaded(id, imageElementId){
     Utils.stopSpin(id);
-    $('#' + imageElementId).addClass('visible');
+  }
+
+  // handleLayoutComplete(laidOutItems){
+  //   $('.portfolio-items').addClass('visible');
+  //   $('.load-button-wrapper').addClass('visible');
+  //   Utils.stopSpin('slide-modal-loader');
+  // }
+
+  handleImagesLoaded(){
+    $('.portfolio-items').addClass('visible');
+    $('.load-button-wrapper').addClass('visible');
+    Utils.stopSpin('slide-modal-loader');
+  }
+
+  fetch(append){
+    this.props.fetchArticleList(this.props.articleListCurrentPage + 1, this.props.portfolioType, 'portfolio', append);
   }
 
   render() {
     let {
       locale,
-      list,
+      articleList,
+      articleListCurrentPage,
+      articleListTotalPage,
     } = this.props;
     let {
       isLoading
@@ -55,29 +90,54 @@ class Portfolio extends Component {
     let content;
     let listHtml;
     if (!isLoading){
-      if (list.length){
-        listHtml = list.map((item, key) => {
-          return (
-            <div className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12" title={item.title}>
-              <div className="portfolio-item">
-                <div className="spin-loader" id={`spin-loader-${key}`}></div>
-                <img src={`${item.cover}`} className="fade" id={`gallery-image-${key}`} onLoad={this.handleImageLoaded.bind(this, `spin-loader-${key}`, `gallery-image-${key}`)}/>
-              </div>
+      if (articleList.length){
+        listHtml = articleList.map((item, key) => {
+          let itemHtml = (
+            <div className="portfolio-item">
+              <div className="spin-loader" id={`spin-loader-${key}`}></div>
+              <img src={`${item.cover}`} className="" id={`gallery-image-${key}`} onLoad={this.handleImageLoaded.bind(this, `spin-loader-${key}`, `gallery-image-${key}`)}/>
             </div>
           );
+          let html = (
+            <div className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12" >
+              {itemHtml}
+            </div>
+          );
+          if (item.title != '' && item.title != ' '){
+            html = (
+              <div className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12" title={item.title}>
+                {itemHtml}
+              </div>
+            );
+          }
+          return html;
         });
       }
-      content = (
-        <div className="row">
+      let masonryHtml;
+      if (bowser.msie && bowser.version <= 9) {
+        masonryHtml = listHtml;
+      }
+      else {
+        masonryHtml = (
           <Masonry
-            className={'portfolio-items'} // default ''
+            className={bowser.msie ? `portfolio-items fade msie` : `portfolio-items fade`} // default ''
             elementType={'div'} // default 'div'
             options={{}} // default {}
             disableImagesLoaded={false} // default false
             updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
+            // onLayoutComplete={laidOutItems => this.handleLayoutComplete(laidOutItems)}
+            onImagesLoaded={this.handleImagesLoaded.bind(this)}
           >
             {listHtml}
           </Masonry>
+        );
+      }
+      content = (
+        <div className={bowser.msie && bowser.version <= 9 ? `row portfolio-items msie` : `row`}>
+          {masonryHtml}
+          <div className="load-button-wrapper al-center fade mgt-10 mgb-20">
+            {articleListCurrentPage != articleListTotalPage ? <div className="my-button my-button--gray-border" onClick={this.fetch.bind(this, true)}>{LANG_ACTION['load-more']}</div> : ''}
+          </div>
         </div>
       );
     }
@@ -90,13 +150,41 @@ class Portfolio extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  let {
+    locale,
+    articleList,
+    articleListCurrentPage,
+    articleListTotalPage,
+    portfolioType,
+  } = state;
+  return {
+    locale,
+    articleList,
+    articleListCurrentPage,
+    articleListTotalPage,
+    portfolioType,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchArticleList: (page, category, articleType, append) => {
+      dispatch(fetchArticleList(page, category, articleType, append));
+    },
+  };
+}
+
 Portfolio.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 
 Portfolio.propTypes = {
   locale: React.PropTypes.string.isRequired,
-  changeCaptcha: React.PropTypes.func.isRequired,
+  portfolioType: React.PropTypes.string.isRequired,
+  articleList: React.PropTypes.array.isRequired,
+  articleListCurrentPage: React.PropTypes.number.isRequired,
+  articleListTotalPage: React.PropTypes.number.isRequired,
+  fetchArticleList: React.PropTypes.func.isRequired,
 }
 
-export default Portfolio;
+export default connect(mapStateToProps, mapDispatchToProps)(Portfolio);

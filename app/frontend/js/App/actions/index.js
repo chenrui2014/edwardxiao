@@ -92,6 +92,12 @@ export const setArticleCategoryListTotalPage = (articleCategoryListTotalPage) =>
   articleCategoryListTotalPage
 });
 
+export const SET_PORTFOLIO_TYPE = 'SET_PORTFOLIO_TYPE';
+export const setPortfolioType = (portfolioType) => ({
+  type: SET_PORTFOLIO_TYPE,
+  portfolioType
+});
+
 export const SET_IS_NOT_FOUND = 'SET_IS_NOT_FOUND';
 export const setIsNotFound = (isNotFound) => ({
   type: SET_IS_NOT_FOUND,
@@ -100,7 +106,6 @@ export const setIsNotFound = (isNotFound) => ({
 
 export const changeLocale = (locale) => (dispatch) => {
   changeLocaleApi(locale).then((res) => {
-    console.log(res);
     if (res.code === 0) {
       dispatch(setLocale(res.data.locale));
     } else {
@@ -131,7 +136,6 @@ function changeLocaleApi(locale) {
 
 export const changeCaptcha = () => (dispatch) => {
   changeCaptchaApi().then((res) => {
-    console.log(res);
     if (res.code === 0) {
       dispatch(setCaptcha(res.data.captcha));
     } else {
@@ -161,7 +165,6 @@ function changeCaptchaApi() {
 
 export const login = (username, password, captchaCode) => (dispatch, getState) => {
   loginApi(username, password, captchaCode).then((res) => {
-    console.log(res);
     if (res.code === 0) {
       dispatch(setUserInfo(res.data.currentUser));
       $('#myModal').modal('toggle');
@@ -177,7 +180,6 @@ export const login = (username, password, captchaCode) => (dispatch, getState) =
       }
     } else {
       if (res.data.captcha) {
-        console.log(res.data.captcha);
         dispatch(setCaptcha(res.data.captcha));
         if (res.msg) {
           if (!$('#captchaCode').parent().siblings('.my-validator-message').length) {
@@ -215,7 +217,6 @@ function loginApi(username, password, captchaCode) {
 
 export const signup = (id, nickname, phone, email, verifyCode, password, avatar, captchaCode) => (dispatch) => {
   signupApi(id, nickname, phone, email, verifyCode, password, avatar, captchaCode).then((res) => {
-    console.log(res);
     if (res.code === 0) {
       if (res.data.currentUser){
         dispatch(setUserInfo(res.data.currentUser));
@@ -254,7 +255,6 @@ export const signup = (id, nickname, phone, email, verifyCode, password, avatar,
     }
     else if (res.code === 5){
       if (res.data.captcha) {
-        console.log(res.data.captcha);
         dispatch(setCaptcha(res.data.captcha));
         if (res.msg) {
           if (!$('#captchaCode').parent().siblings('.my-validator-message').length) {
@@ -285,9 +285,7 @@ function signupApi(id, nickname, role, phone, email, verifyCode, password, avata
 }
 
 export const remove = (id) => (dispatch) => {
-  console.log(id);
   removeApi(id).then((res) => {
-    console.log(res);
     if (res.code === 0) {
       window.location = '/';
     } else {
@@ -318,7 +316,6 @@ function removeApi(id) {
 
 export const logout = () => (dispatch) => {
   logoutApi().then((res) => {
-    console.log(res);
     if (res.code === 0) {
       window.location = '/';
     } else {
@@ -349,7 +346,6 @@ function logoutApi() {
 export const fetchVerifyCode = (phone) => (dispatch) => {
   dispatch(setIsSendVerifyCode(true));
   fetchVerifyCodeApi(phone).then((res) => {
-    console.log(res);
     if (res.code === 0) {
       // Utils.stopSpin('spin-loader');
     } else {
@@ -382,13 +378,26 @@ function fetchVerifyCodeApi(phone) {
   })
 }
 
-export const fetchArticleList = (page, category, type) => (dispatch) => {
+export const fetchArticleList = (page, category, type, append = false) => (dispatch, getState) => {
   Utils.initSpin('spin-loader');
   fetchArticleListApi(page, category, type).then((res) => {
-    console.log(res);
     if (res.code === 0){
-      console.log(res.data);
-      dispatch(setArticleList(res.data));
+      let newArticleList = [];
+      if (append){
+        let {
+          articleList
+        } = getState();
+        if (!_.isNull(articleList)){
+          newArticleList = articleList.concat(res.data);
+        }
+        else{
+          newArticleList = res.data;
+        }
+      }
+      else{
+        newArticleList = res.data;
+      }
+      dispatch(setArticleList(newArticleList));
       dispatch(setArticleListTotalPage(parseInt(res.pages)));
       dispatch(setArticleListCurrentPage(parseInt(res.page)));
       Utils.stopSpin('spin-loader');
@@ -424,9 +433,7 @@ function fetchArticleListApi(page, category, type) {
 export const fetchArticleCategoryList = (nextPage) => (dispatch) => {
   Utils.initSpin('spin-loader');
   fetchArticleCategoryListApi(nextPage).then((res) => {
-    console.log(res);
     if (res.code === 0){
-      console.log(res.data);
       dispatch(setArticleCategoryList(res.data));
       dispatch(setArticleCategoryListTotalPage(parseInt(res.pages)));
       dispatch(setArticleCategoryListCurrentPage(parseInt(res.page)));

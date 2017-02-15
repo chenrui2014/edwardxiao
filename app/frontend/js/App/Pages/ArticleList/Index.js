@@ -35,8 +35,8 @@ class ArticleList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage);
-    this.props.fetchArticleList(this.props.articleListCurrentPage, 'all', this.state.articleType);
+    this.props.fetchArticleCategoryList(1);
+    this.props.fetchArticleList(1, this.props.articleCategory, this.state.articleType);
     if (!_.isNull(this.props.articleList)){
       this.setState({isLoading: false});
     }
@@ -49,7 +49,7 @@ class ArticleList extends Component {
     if (_.isNull(prevProps.userInfo) && !_.isNull(this.props.userInfo)){
       if (this.props.userInfo.role == 'admin'){
         this.setState({articleType: ''});
-        this.props.fetchArticleList(this.props.articleListCurrentPage, 'all', '');
+        this.props.fetchArticleList(this.props.articleListCurrentPage + 1, this.props.articleCategory, '');
       }
     }
     // if (!_.isNull(prevProps.articleList)){
@@ -66,7 +66,6 @@ class ArticleList extends Component {
   remove(id) {
     Utils.initSpin('spin-loader');
     this.removeApi(id).then((res) => {
-      console.log(res);
       if (res.code === 0){
         let newArticleList = [];
         this.props.articleList.map((item, key) => {
@@ -173,8 +172,6 @@ class ArticleList extends Component {
            {articleCategoryNavListHtml}
           </div>
         );
-        console.log('articleList');
-        console.log(articleList);
         if (articleList.length){
           articleListHtml = articleList.map((item, key) => {
             return (
@@ -200,8 +197,6 @@ class ArticleList extends Component {
               />
             );
           });
-          console.log('articleListTotalPage: ' + articleListTotalPage);
-          console.log('articleListCurrentPage: ' + articleListCurrentPage);
           paginationHtml = (
             <ReactPaginate
               previousLabel={<span className="icon icon-chevron-left"></span>}

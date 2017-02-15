@@ -187,7 +187,6 @@ class Signup extends Component {
       this.timer();
       this.setIsSendVerifyCode(true);
       this.fetchVerifyCodeApi(this.state.username).then((res) => {
-        console.log(res);
         if (res.code === 0){
           // Utils.stopSpin('spin-loader');
         }

@@ -6,6 +6,11 @@ import {
   SLIDE_MODAL_CONTENT_COMPONENT_OBJECT,
 } from '../../reducers/ConstValue';
 
+import {
+  setArticleList,
+  setSlideModalContentName,
+} from '../../actions/index';
+
 class Modal extends Component {
 
   constructor(props) {
@@ -13,7 +18,11 @@ class Modal extends Component {
   }
 
   closeSlideModal() {
+    this.props.setArticleList(null);
     $('.slide-modal').removeClass('visible');
+    $('.portfolio-items').removeClass('visible');
+    this.props.setSlideModalContentName('Empty');
+    $.fn.fullpage.setAllowScrolling(true);
   }
 
   render() {
@@ -22,7 +31,6 @@ class Modal extends Component {
       className,
     } = this.props;
     let title;
-    console.log(slideModalContentName);
     let Component = SLIDE_MODAL_CONTENT_COMPONENT_OBJECT[slideModalContentName];
     if (!className){
       className = '';
@@ -48,7 +56,12 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-
+    setArticleList: (list) => {
+      dispatch(setArticleList(list));
+    },
+    setSlideModalContentName: (val) => {
+      dispatch(setSlideModalContentName(val));
+    },
   };
 }
 
@@ -57,6 +70,8 @@ Modal.contextTypes = {
 };
 
 Modal.propTypes = {
+  setArticleList: React.PropTypes.func.isRequired,
+  setSlideModalContentName: React.PropTypes.func.isRequired,
   slideModalContentName: React.PropTypes.bool.isRequired,
 }
 

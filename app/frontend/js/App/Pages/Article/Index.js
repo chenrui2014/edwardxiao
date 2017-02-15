@@ -62,9 +62,7 @@ class Article extends Component {
   fetchArticle(id) {
     Utils.initSpin('spin-loader');
     this.fetchArticleApi(id).then((res) => {
-      console.log(res);
       if (res.code === 0){
-        // console.log(res.data);
         this.setState({articleCategoryOptions: res.data});
         if (res.data.length){
           let {

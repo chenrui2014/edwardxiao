@@ -73,9 +73,7 @@ class ArticleForm extends Component {
   fetchArticle(id) {
     Utils.initSpin('spin-loader');
     this.fetchArticleApi(id).then((res) => {
-      console.log(res);
       if (res.code === 0){
-        // console.log(res.data);
         if (res.data.length){
           let {
             id,
@@ -324,9 +322,7 @@ class ArticleForm extends Component {
   fetchArticleCategoryOptions() {
     Utils.initSpin('spin-loader');
     this.fetchArticleCategoryOptionsApi().then((res) => {
-      console.log(res);
       if (res.code === 0){
-        // console.log(res.data);
         this.setState({articleCategoryOptions: res.data});
         if (res.data.length){
           if (_.isUndefined(this.props.params.id)){
@@ -393,9 +389,7 @@ class ArticleForm extends Component {
   submitForm(id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, isAdminOnly, content){
     Utils.initSpin('spin-loader');
     this.submitFormApi(id, title, uniqueKey, author, preface, desc, cover, articleCategory, sequence, type, tag, isBanned, isPrivate, isAdminOnly, content).then((res) => {
-      console.log(res);
       if (res.code === 0){
-        // console.log(res.data);
         this.context.router.push('/articles/' + res.uniqueKey);
       }
       else if (res.code === 3){

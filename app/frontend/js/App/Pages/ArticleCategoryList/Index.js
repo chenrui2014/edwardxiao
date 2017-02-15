@@ -34,7 +34,7 @@ class ArticleCategoryList extends Component {
   componentDidMount() {
     let userInfo = this.props.userInfo;
     if (!_.isNull(userInfo) && userInfo.role == 'admin'){
-      this.props.fetchArticleCategoryList(this.props.articleCategoryListCurrentPage);
+      this.props.fetchArticleCategoryList(1);
       if (!_.isNull(this.props.articleCategoryList)){
         this.setState({isLoading: false});
       }
@@ -62,7 +62,6 @@ class ArticleCategoryList extends Component {
   remove(id) {
     Utils.initSpin('spin-loader');
     this.removeApi(id).then((res) => {
-      console.log(res);
       if (res.code === 0){
         let newArticleCategoryList = [];
         this.props.articleCategoryList.map((item, key) => {
@@ -160,8 +159,6 @@ class ArticleCategoryList extends Component {
               />
             );
           });
-          console.log('articleCategoryListTotalPage: ' + articleCategoryListTotalPage);
-          console.log('articleCategoryListCurrentPage: ' + articleCategoryListCurrentPage);
           paginationHtml = (
             <ReactPaginate
               previousLabel={<span className="icon icon-chevron-left"></span>}

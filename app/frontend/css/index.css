@@ -115,6 +115,10 @@
   border-color: #f8f8f8;
 }
 
+.user-nav__item.input-group select option {
+  color: #000;
+}
+
 .mo-nav-column__item .mo-nav-column__item.user-nav {
   display: table-cell;
   vertical-align: middle;
@@ -366,6 +370,10 @@
 
 .portfolio-items {
   margin: 0 auto;
+}
+
+.portfolio-items.msie{
+  margin-bottom: 80px;
 }
 
 .portfolio-item {

@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import 'fullpage.js/dist/jquery.fullpage.min.js';
 import 'fullpage.js/vendors/scrolloverflow.min.js';
 import {
+  setPortfolioType,
   setSlideModalContentName,
 } from './actions/index';
 
@@ -55,7 +56,7 @@ class Index extends Component {
       slidesNavigation: true,
       slidesNavPosition: 'bottom',
       scrollOverflow: false,
-      normalScrollElements: '.slide-modal',
+      // normalScrollElements: '.slide-modal',
       onLeave: (index, nextIndex) => {
         $('.mo-nav-mobile__mask').click();
       },
@@ -75,7 +76,6 @@ class Index extends Component {
       },
       afterLoad: (anchorLink, index) => {
         $('.fullpage-wrapper').addClass('visible');
-        $('.fade').removeClass('visible');
         $('.section-' + index + ' .fade').addClass('visible');
         if (index == 1){
           if (!$('.intros').hasClass('visible')){
@@ -107,7 +107,7 @@ class Index extends Component {
             }, 800);
           }
         }
-        if (index == 4){
+        if (index == 4 || index == 5){
           if (!$('.contact').hasClass('visible')){
             Utils.initSpin('spin-loader');
               setTimeout(() => {
@@ -121,9 +121,11 @@ class Index extends Component {
     });
   }
 
-  setSlideModalContentNameName(val){
+  setSlideModalContentName(val){
+    $.fn.fullpage.setAllowScrolling(false);
     $('.slide-modal').addClass('visible');
-    this.props.setSlideModalContentName(val);
+    this.props.setPortfolioType(val);
+    this.props.setSlideModalContentName('Portfolio');
   }
 
   readMore(){
@@ -150,23 +152,23 @@ class Index extends Component {
           <div className="section design" data-anchor="designs">
             <div className="slide graphic-design">
               <div className="spin-loader" id="graphic-design-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'GraphicDesign')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div>
+              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'graphic_design')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div>
             </div>
             <div className="slide logo-design">
               <div className="spin-loader" id="logo-design-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'LogoDesign')}><span className="text">{LANG_GENERAL['logo-design']}</span><span className="icon icon-more"></span></div>
+              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'logo_design')}><span className="text">{LANG_GENERAL['logo-design']}</span><span className="icon icon-more"></span></div>
             </div>
             <div className="slide industrial-design">
               <div className="spin-loader" id="industrial-design-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'IndustrialDesign')}><span className="text">{LANG_GENERAL['industrial-design']}</span><span className="icon icon-more"></span></div>
+              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'industrial_design')}><span className="text">{LANG_GENERAL['industrial-design']}</span><span className="icon icon-more"></span></div>
             </div>
             <div className="slide web-design">
               <div className="spin-loader" id="web-design-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'WebDesign')}><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div>
+              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'web_design')}><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div>
             </div>
             <div className="slide photograph">
               <div className="spin-loader" id="photograph-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentNameName.bind(this, 'Photograph')}><span className="text">{LANG_GENERAL['photograph']}</span><span className="icon icon-more"></span></div>
+              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'photograph')}><span className="text">{LANG_GENERAL['photograph']}</span><span className="icon icon-more"></span></div>
             </div>
           </div>
           <div className="section article" data-anchor="articles">
@@ -188,7 +190,7 @@ class Index extends Component {
               <div className="title mgt-20"><span className="fa fa-envelope"></span>&nbsp;<span className="text"><a className="white" href="mailto:edwardfhsiao@gmail.com">edwardfhsiao@gmail.com</a></span></div>
             </div>
           </div>
-          <div className="section fp-auto-height" data-anchor="footer">
+          <div className="section fp-auto-height footer" data-anchor="footer">
             <div className="copyright al-center">Copyright © Edward Xiao</div>
           </div>
         </div>
@@ -215,6 +217,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    setPortfolioType: (val) => {
+      dispatch(setPortfolioType(val));
+    },
     setSlideModalContentName: (val) => {
       dispatch(setSlideModalContentName(val));
     },
@@ -226,6 +231,7 @@ Index.contextTypes = {
 };
 
 Index.propTypes = {
+  setPortfolioType: React.PropTypes.func.isRequired,
   setSlideModalContentName: React.PropTypes.func.isRequired,
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,

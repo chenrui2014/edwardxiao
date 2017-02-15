@@ -128,6 +128,15 @@ export function articleCategoryListTotalPage(articleCategoryListTotalPage = DEFA
   }
 }
 
+export function portfolioType(portfolioType = DEFAULT_STATE.portfolioType, action) {
+  switch (action.type) {
+    case ACTION.SET_PORTFOLIO_TYPE:
+      return action.portfolioType;
+    default:
+      return portfolioType;
+  }
+}
+
 export function isNotFound(isNotFound = DEFAULT_STATE.isNotFound, action) {
   switch (action.type) {
     case ACTION.SET_IS_NOT_FOUND:

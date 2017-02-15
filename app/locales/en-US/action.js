@@ -11,4 +11,5 @@ module.exports = {
   'are-you-sure': 'are you absolutely sure',
   'go-back': 'Go Back',
   'unauthorized': 'unauthorized',
+  'load-more': 'load more',
 };
