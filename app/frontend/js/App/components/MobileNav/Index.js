@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
-  setIsLogin,
+  setModalContentName,
   logout,
 } from './../../actions/index';
 
@@ -17,8 +17,8 @@ class Nav extends Component {
     this.props.changeLocale(val);
   }
 
-  setIsLogin(val){
-    this.props.setIsLogin(val);
+  setModalContentName(val){
+    this.props.setModalContentName(val);
   }
 
   logout(){
@@ -39,9 +39,9 @@ class Nav extends Component {
       userHtml = (
         <div className="mo-nav-column__item">
           <div className="mo-nav-column__item user-nav">
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setIsLogin.bind(this, true)}>{LANG_USER.login}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setModalContentName.bind(this, 'Login')}>{LANG_USER.login}</span>
             <span className="user-nav__item">&nbsp;/&nbsp;</span>
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setIsLogin.bind(this, false)}>{LANG_USER.signup}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setModalContentName.bind(this, 'Signup')}>{LANG_USER.signup}</span>
           </div>
         </div>
       );
@@ -115,8 +115,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    setIsLogin: (val) => {
-      dispatch(setIsLogin(val));
+    setModalContentName: (val) => {
+      dispatch(setModalContentName(val));
     },
     logout: (val) => {
       dispatch(logout(val));
@@ -131,7 +131,7 @@ Nav.contextTypes = {
 Nav.propTypes = {
   locale: React.PropTypes.string.isRequired,
   userInfo: React.PropTypes.object.isRequired,
-  setIsLogin: React.PropTypes.func.isRequired,
+  setModalContentName: React.PropTypes.func.isRequired,
   logout: React.PropTypes.func.isRequired,
 }
 

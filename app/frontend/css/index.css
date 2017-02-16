@@ -113,6 +113,7 @@
 
 .user-nav__item.input-group select {
   border-color: #f8f8f8;
+  font-size: 12px;
 }
 
 .user-nav__item.input-group select option {
