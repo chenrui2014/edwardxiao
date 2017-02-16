@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pm2": "APP_VERSION=$npm_package_version bnr pro:app:start",
+    "pm2": "NODE_ENV=production ./node_modules/.bin/pm2 start index.js -i 2 --name \"edwardxiao\" --max-memory-restart 300M --merge-logs --log-date-format=\"YYYY-MM-DD HH:mm Z\" --output=\"log/production.log\"",
     "start_dev": "./node_modules/.bin/nodemon index.js & npm run build_dev",
     "start_prod": "./node_modules/.bin/nodemon index.js & npm run build_prod",
     "webpack_dev": "NODE_ENV=development webpack --config app/frontend/webpack/development.config.js --progress --watch",
