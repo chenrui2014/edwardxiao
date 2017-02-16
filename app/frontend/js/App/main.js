@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 import Utils from '../common/utils';
-import Modal from './components/Modal/index';
+// import Modal from './components/Modal/index';
 import SlideModal from './components/SlideModal/index';
 import {
   authorize
@@ -38,7 +38,6 @@ class Main extends Component {
     return(
       <div className="page-transition">
         {children}
-        <Modal/>
         <SlideModal/>
       </div>
     );
