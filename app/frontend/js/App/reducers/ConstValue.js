@@ -1,5 +1,5 @@
-// import Login from '../components/Login';
-// import Signup from '../components/Signup';
+import Login from '../components/Login';
+import Signup from '../components/Signup';
 import MyAccount from '../components/MyAccount';
 import Portfolio from '../components/Portfolio';
 import Empty from '../components/Empty';
@@ -24,8 +24,8 @@ export const DEFAULT_STATE = {
 };
 
 export const MODAL_CONTENT_COMPONENT_OBJECT = {
-  // Login,
-  // Signup,
+  Login,
+  Signup,
   MyAccount,
   Empty,
 };

@@ -10,6 +10,7 @@
     "start_prod": "./node_modules/.bin/nodemon index.js & npm run build_prod",
     "webpack_dev": "NODE_ENV=development webpack --config app/frontend/webpack/development.config.js --progress --watch",
     "webpack_prod": "NODE_ENV=production webpack --config app/frontend/webpack/production.config.js --progress -p",
+    "webpack_prod_display_error": "NODE_ENV=production webpack --config app/frontend/webpack/production.config.js --progress -display-error-details -p",
     "webpack_dll_dev": "NODE_ENV=development webpack --config app/frontend/webpack/vendor-bundles.webpack.config.js -p",
     "webpack_dll_prod": "NODE_ENV=production webpack --config app/frontend/webpack/vendor-bundles.webpack.config.production.js -p",
     "build_dev": "rm -rf public/assets && npm run webpack_dll_prod && npm run webpack_dev",
