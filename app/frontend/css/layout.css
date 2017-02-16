@@ -1645,7 +1645,7 @@ body .ftf-yuan {
   left: 0;
   right: 0;
   visibility: hidden;
-  z-index: 21;
+  z-index: 25;
   transition: visibility .2s;
 }
 

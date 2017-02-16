@@ -52,7 +52,7 @@ class Index extends Component {
       slidesNavigation: true,
       slidesNavPosition: 'bottom',
       scrollOverflow: false,
-      // normalScrollElements: '.slide-modal',
+      normalScrollElements: '.slide-modal-content, .modal',
       onLeave: (index, nextIndex) => {
         $('.mo-nav-mobile__mask').click();
       },
