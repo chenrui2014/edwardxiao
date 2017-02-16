@@ -20,13 +20,15 @@ function getAssetName(asset) {
 exports.assetUrl = (assetsName) => {
   const publicAsset = getAssetName(assetsName);
   if (!publicAsset) {
-    assetsName = vendorManifest[assetsName];
-    console.log(ENV.APP_ENV);
+    let vendorAsset = vendorManifest[assetsName];
+    if (!vendorAsset){
+      vendorAsset = assetsName;
+    }
     if (ENV.APP_ENV == 'production'){
-      return `http://${CDN.URL}/assets/${assetsName}`;
+      return `http://${CDN.URL}/assets/${vendorAsset}`;
     }
     else{
-      return `/assets/${assetsName}`;
+      return `/assets/${vendorAsset}`;
     }
   }
   else{

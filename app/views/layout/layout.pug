@@ -31,7 +31,7 @@ html
       window.USER_INFO = !{ JSON.stringify(currentUser) };
       window.CAPTCHA_DATA = !{ JSON.stringify(captchaData) };
       window.QINIU_DOMAIN = !{ JSON.stringify(qiniuDomain) }
-    script(src='/assets/static/js/plupload.full.min.js')
+    script(src=helpers.assetUrl('static/js/plupload.full.min.js'))
     script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src=helpers.assetUrl('react_vendors.js'))
     script(src=helpers.assetUrl('common.js'))
@@ -45,7 +45,7 @@ html
       window.USER_INFO = !{ JSON.stringify(currentUser) };
       window.CAPTCHA_DATA = !{ JSON.stringify(captchaData) };
       window.QINIU_DOMAIN = !{ JSON.stringify(qiniuDomain) }
-    script(src='/assets/static/js/plupload.full.min.js')
+    script(src=helpers.assetUrl('static/js/plupload.full.min.js'))
     script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src='https://cdn.staticfile.org/tinymce/4.5.1/tinymce.min.js')
     script(src=helpers.assetUrl('react_vendors.js'))
