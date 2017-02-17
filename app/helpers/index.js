@@ -25,7 +25,7 @@ exports.assetUrl = (assetsName) => {
       vendorAsset = assetsName;
     }
     if (ENV.APP_ENV == 'production'){
-      return `http://${CDN.URL}/assets/${vendorAsset}`;
+      return `https://${CDN.URL}/assets/${vendorAsset}`;
     }
     else{
       return `/assets/${vendorAsset}`;
@@ -33,7 +33,7 @@ exports.assetUrl = (assetsName) => {
   }
   else{
     if (ENV.APP_ENV == 'production'){
-      return `http://${CDN.URL}/assets/${publicAsset}`;
+      return `https://${CDN.URL}/assets/${publicAsset}`;
     }
     else{
       return `/assets/${publicAsset}`;
