@@ -20,13 +20,15 @@ async function catchError(ctx, next) {
     let status = err.status || 500;
     ctx.status = status;
     ctx.state = {
-      csrf: ctx.csrf,
-      captchaData: '',
+      preloadedState: {
+        currentUser: null,
+        csrf: ctx.csrf,
+        captchaData: '',
+        locale: locale,
+        qiniuDomain: '',
+      },
       status: status,
       helpers: helpers,
-      currentUser: null,
-      locale: locale,
-      qiniuDomain: '',
     };
     await ctx.render('error/error', {});
   }
@@ -62,15 +64,17 @@ async function addHelper(ctx, next) {
     captchaData = ctx.session.captchaData
   }
   ctx.state = {
-    csrf: ctx.csrf,
-    captchaData: captchaData,
-    qiniuDomain: ENV.QINIU.DOMAIN,
-    locale: locale,
+    preloadedState: {
+      currentUser: currentUser,
+      csrf: ctx.csrf,
+      captchaData: captchaData,
+      qiniuDomain: ENV.QINIU.DOMAIN,
+      locale: locale,
+    },
     helpers: helpers,
-    currentUser: currentUser,
     isUserSignIn: (currentUser != null)
   };
-  console.log(ctx.state.currentUser);
+  console.log(ctx.state.preloadedState.currentUser);
   await next();
 }
 

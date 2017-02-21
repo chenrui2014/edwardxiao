@@ -6,7 +6,7 @@ const router = Router({
 });
 router.get('/', articles.index);
 router.get('/new', articles.index);
-router.get('/:id', articles.index);
+router.get('/:id', articles.show);
 router.get('/:id/edit', articles.index);
 
 // for require auto in index.js

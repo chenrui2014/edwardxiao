@@ -175,16 +175,16 @@ function mapDispatchToProps(dispatch) {
 }
 
 Portfolio.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 Portfolio.propTypes = {
-  locale: React.PropTypes.string.isRequired,
-  portfolioType: React.PropTypes.string.isRequired,
-  articleList: React.PropTypes.array.isRequired,
-  articleListCurrentPage: React.PropTypes.number.isRequired,
-  articleListTotalPage: React.PropTypes.number.isRequired,
-  fetchArticleList: React.PropTypes.func.isRequired,
+  locale: React.PropTypes.string,
+  portfolioType: React.PropTypes.string,
+  articleList: React.PropTypes.array,
+  articleListCurrentPage: React.PropTypes.number,
+  articleListTotalPage: React.PropTypes.number,
+  fetchArticleList: React.PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Portfolio);

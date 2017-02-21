@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import 'bootstrap-sass/assets/javascripts/bootstrap/modal.js';
-import 'bootstrap-sass/assets/javascripts/bootstrap/transition.js';
 import _ from 'lodash';
 import {
   changeLocale,
@@ -13,6 +11,13 @@ class Footer extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount(){
+    if (typeof window !== 'undefined'){
+      require('bootstrap-sass/assets/javascripts/bootstrap/modal.js');
+      require('bootstrap-sass/assets/javascripts/bootstrap/transition.js');
+    }
   }
 
   changeLocale(){
@@ -35,7 +40,7 @@ class Footer extends Component {
   render() {
     let {
       locale,
-      userInfo,
+      currentUser,
       className,
     } = this.props;
     if (_.isUndefined(className)){
@@ -57,11 +62,11 @@ class Footer extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    userInfo,
+    currentUser,
   } = state;
   return {
     locale,
-    userInfo,
+    currentUser,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -79,15 +84,15 @@ function mapDispatchToProps(dispatch) {
 }
 
 Footer.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 Footer.propTypes = {
-  locale: React.PropTypes.string.isRequired,
-  userInfo: React.PropTypes.object.isRequired,
-  changeLocale: React.PropTypes.func.isRequired,
-  setModalContentName: React.PropTypes.func.isRequired,
-  logout: React.PropTypes.func.isRequired,
+  locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
+  changeLocale: React.PropTypes.func,
+  setModalContentName: React.PropTypes.func,
+  logout: React.PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Footer);

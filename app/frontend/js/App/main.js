@@ -47,7 +47,7 @@ class Main extends Component {
 
 function mapStateToProps(state) {
   return {
-    userInfo: state.userInfo,
+    currentUser: state.currentUser,
   };
 }
 
@@ -61,8 +61,8 @@ function mapDispatchToProps(dispatch) {
 
 
 Main.propTypes = {
-  children: React.PropTypes.element.isRequired,
-  location: React.PropTypes.object.isRequired,
+  children: React.PropTypes.element,
+  location: React.PropTypes.object,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

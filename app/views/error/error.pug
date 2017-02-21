@@ -2,6 +2,7 @@ extends ../layout/layout.pug
 
 block content
   #root
+    != prerenderHtml
 block dynamicCss
   link(rel="stylesheet" href=helpers.assetUrl('index.css'))
 block dynamicJsIe

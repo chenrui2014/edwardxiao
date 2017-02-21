@@ -51,7 +51,7 @@ class ArticleCategoryForm extends Component {
   }
 
   componentDidMount() {
-    if (!_.isNull(this.props.userInfo) && this.props.userInfo.role == 'admin'){
+    if (!_.isNull(this.props.currentUser) && this.props.currentUser.role == 'admin'){
       this.fetchArticleCategoryOptions();
       if (this.props.params.id){
         this.fetchArticleCategory(this.props.params.id);
@@ -154,7 +154,7 @@ class ArticleCategoryForm extends Component {
         uptoken_url: '/api/settings/uptoken',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
         get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的 uptoken
         unique_names: true,              // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
-        domain: QINIU_DOMAIN,     // bucket 域名，下载资源时用到，**必需**
+        domain: __PRELOADED_STATE__.qiniuDomain,     // bucket 域名，下载资源时用到，**必需**
         container: 'container',             // 上传区域 DOM ID，默认是 browser_button 的父元素，
         max_file_size: '100mb',             // 最大文件体积限制
         flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入 flash,相对路径
@@ -193,7 +193,7 @@ class ArticleCategoryForm extends Component {
               //    "key": "gogopher.jpg"
               //  }
               // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
-              var domain = `http://${QINIU_DOMAIN}/`;
+              var domain = `http://${__PRELOADED_STATE__.qiniuDomain}/`;
               var res = JSON.parse(info);
               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
               this.setState({
@@ -215,7 +215,7 @@ class ArticleCategoryForm extends Component {
         uptoken_url: '/api/settings/uptoken',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
         get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的 uptoken
         unique_names: true,              // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
-        domain: QINIU_DOMAIN,     // bucket 域名，下载资源时用到，**必需**
+        domain: __PRELOADED_STATE__.qiniuDomain,     // bucket 域名，下载资源时用到，**必需**
         container: 'contentContainer',             // 上传区域 DOM ID，默认是 browser_button 的父元素，
         max_file_size: '100mb',             // 最大文件体积限制
         flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入 flash,相对路径
@@ -237,7 +237,7 @@ class ArticleCategoryForm extends Component {
             // 每个文件上传时,处理相关的事情
           },
           'FileUploaded': (up, file, info) => {
-            var domain = `http://${QINIU_DOMAIN}/`;
+            var domain = `http://${__PRELOADED_STATE__.qiniuDomain}/`;
             var res = JSON.parse(info);
             var sourceLink = domain + res.key; //获取上传成功后的文件的Url
             this.editor.insertContent('<img src="'+ sourceLink +'"/>');;
@@ -486,7 +486,7 @@ class ArticleCategoryForm extends Component {
       locale,
       isNotFound,
       articleCategoryList,
-      userInfo,
+      currentUser,
     } = this.props;
     let {
       isLoading,
@@ -899,13 +899,13 @@ function mapStateToProps(state) {
     locale,
     articleCategoryList,
     isNotFound,
-    userInfo,
+    currentUser,
   } = state;
   return {
     locale,
     articleCategoryList,
     isNotFound,
-    userInfo,
+    currentUser,
   };
 }
 
@@ -921,18 +921,18 @@ function mapDispatchToProps(dispatch) {
 }
 
 ArticleCategoryForm.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 ArticleCategoryForm.propTypes = {
-  params: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
-  locale: React.PropTypes.string.isRequired,
-  userInfo: React.PropTypes.object.isRequired,
-  articleCategoryList: React.PropTypes.array.isRequired,
-  fetchArticleCategoryList: React.PropTypes.func.isRequired,
-  setIsNotFound: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object,
+  location: React.PropTypes.object,
+  isLoading: React.PropTypes.bool,
+  locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
+  articleCategoryList: React.PropTypes.array,
+  fetchArticleCategoryList: React.PropTypes.func,
+  setIsNotFound: React.PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleCategoryForm);

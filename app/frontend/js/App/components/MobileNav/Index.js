@@ -6,7 +6,7 @@ import {
   logout,
 } from './../../actions/index';
 
-class Nav extends Component {
+class MobileNav extends Component {
 
   constructor(props) {
     super(props);
@@ -28,14 +28,14 @@ class Nav extends Component {
   render() {
     let {
       locale,
-      userInfo,
+      currentUser,
       isIndex,
       activeTab,
     } = this.props;
     let userHtml;
     let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
     let LANG_USER = require('../../../../../locales/' + locale + '/user');
-    if (_.isNull(userInfo)){
+    if (_.isNull(currentUser)){
       userHtml = (
         <div className="mo-nav-column__item">
           <div className="mo-nav-column__item user-nav">
@@ -50,7 +50,7 @@ class Nav extends Component {
       userHtml = (
         <div className="mo-nav-column__item">
           <div className="mo-nav-column__item user-nav">
-            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setModalContentName.bind(this, 'MyAccount')}>{userInfo.nickname}</span>
+            <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.setModalContentName.bind(this, 'MyAccount')}>{currentUser.nickname}</span>
             <span className="user-nav__item">&nbsp;/&nbsp;</span>
             <span className="user-nav__item cursor-pointer" data-toggle="modal" data-target="#myModal" onClick={this.logout.bind(this, false)}>{LANG_USER.logout}</span>
           </div>
@@ -106,11 +106,11 @@ class Nav extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    userInfo,
+    currentUser,
   } = state;
   return {
     locale,
-    userInfo,
+    currentUser,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -124,15 +124,15 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-Nav.contextTypes = {
-  router: React.PropTypes.object.isRequired
+MobileNav.contextTypes = {
+  router: React.PropTypes.object
 };
 
-Nav.propTypes = {
-  locale: React.PropTypes.string.isRequired,
-  userInfo: React.PropTypes.object.isRequired,
-  setModalContentName: React.PropTypes.func.isRequired,
-  logout: React.PropTypes.func.isRequired,
+MobileNav.propTypes = {
+  locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
+  setModalContentName: React.PropTypes.func,
+  logout: React.PropTypes.func,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Nav);
+export default connect(mapStateToProps, mapDispatchToProps)(MobileNav);

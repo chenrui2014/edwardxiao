@@ -198,15 +198,15 @@ function mapDispatchToProps(dispatch) {
 }
 
 Login.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 Login.propTypes = {
-  locale: React.PropTypes.string.isRequired,
-  captcha: React.PropTypes.string.isRequired,
-  login: React.PropTypes.func.isRequired,
-  setModalContentName: React.PropTypes.func.isRequired,
-  changeCaptcha: React.PropTypes.func.isRequired,
+  locale: React.PropTypes.string,
+  captcha: React.PropTypes.string,
+  login: React.PropTypes.func,
+  setModalContentName: React.PropTypes.func,
+  changeCaptcha: React.PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

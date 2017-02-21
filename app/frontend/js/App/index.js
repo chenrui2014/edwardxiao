@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import 'fullpage.js/dist/jquery.fullpage.min.js';
-import 'fullpage.js/vendors/scrolloverflow.min.js';
 import {
   setPortfolioType,
   setSlideModalContentName,
@@ -23,16 +21,16 @@ class Index extends Component {
   }
 
   componentDidMount() {
-    if (typeof $.fn.fullpage.destroy == 'function') {
-      $.fn.fullpage.destroy('all');
+    if (window){
+      require('fullpage.js/dist/jquery.fullpage.min.js');
+      require('fullpage.js/vendors/scrolloverflow.min.js');
     }
+    this.destroyFullpage();
     this.initFullpage();
   }
 
   componentWillUnmount(){
-    if (typeof $.fn.fullpage.destroy == 'function') {
-      $.fn.fullpage.destroy('all');
-    }
+    this.destroyFullpage();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -43,78 +41,88 @@ class Index extends Component {
     this.context.router.push(url);
   }
 
+  destroyFullpage(){
+    if (window){
+      if (typeof $.fn.fullpage.destroy == 'function') {
+        $.fn.fullpage.destroy('all');
+      }
+    }
+  }
+
   initFullpage(){
-    $('#fullpage').fullpage({
-      sectionsColor: ['#f8f8f8', '#ececec', '#f8f8f8', '#ececec', '#f8f8f8'],
-      menu: '.menu',
-      navigation: false,
-      navigationPosition: 'right',
-      slidesNavigation: true,
-      slidesNavPosition: 'bottom',
-      scrollOverflow: false,
-      normalScrollElements: '.slide-modal-content, .modal',
-      onLeave: (index, nextIndex) => {
-        $('.mo-nav-mobile__mask').click();
-      },
-      onSlideLeave: (anchorLink, index, slideIndex, direction, nextSlideIndex) => {
-        if(nextSlideIndex == 1){
-          $('.logo-design').addClass('visible');
-        }
-        if(nextSlideIndex == 2){
-          $('.industrial-design').addClass('visible');
-        }
-        if(nextSlideIndex == 3){
-          $('.web-design').addClass('visible');
-        }
-        if(nextSlideIndex == 4){
-          $('.photograph').addClass('visible');
-        }
-      },
-      afterLoad: (anchorLink, index) => {
-        $('.fullpage-wrapper').addClass('visible');
-        $('.section-' + index + ' .fade').addClass('visible');
-        if (index == 1){
-          if (!$('.intros').hasClass('visible')){
-            Utils.initSpin('spin-loader');
-              setTimeout(() => {
-              $('.intros').addClass('visible');
-              Utils.stopSpin('spin-loader');
-              return;
-            }, 800);
+    if (window){
+      $('#fullpage').fullpage({
+        sectionsColor: ['#f8f8f8', '#ececec', '#f8f8f8', '#ececec', '#f8f8f8'],
+        menu: '.menu',
+        navigation: false,
+        navigationPosition: 'right',
+        slidesNavigation: true,
+        slidesNavPosition: 'bottom',
+        scrollOverflow: false,
+        normalScrollElements: '.slide-modal-content, .modal',
+        onLeave: (index, nextIndex) => {
+          $('.mo-nav-mobile__mask').click();
+        },
+        onSlideLeave: (anchorLink, index, slideIndex, direction, nextSlideIndex) => {
+          if(nextSlideIndex == 1){
+            $('.logo-design').addClass('visible');
           }
-        }
-        if (index == 2){
-          if (!$('.graphic-design').hasClass('visible')){
-            Utils.initSpin('spin-loader');
-              setTimeout(() => {
-              $('.graphic-design').addClass('visible');
-              Utils.stopSpin('spin-loader');
-              return;
-            }, 800);
+          if(nextSlideIndex == 2){
+            $('.industrial-design').addClass('visible');
           }
-        }
-        if (index == 3){
-          if (!$('.article').hasClass('visible')){
-            Utils.initSpin('spin-loader');
-              setTimeout(() => {
-              $('.article').addClass('visible');
-              Utils.stopSpin('spin-loader');
-              return;
-            }, 800);
+          if(nextSlideIndex == 3){
+            $('.web-design').addClass('visible');
           }
-        }
-        if (index == 4 || index == 5){
-          if (!$('.contact').hasClass('visible')){
-            Utils.initSpin('spin-loader');
-              setTimeout(() => {
-              $('.contact').addClass('visible');
-              Utils.stopSpin('spin-loader');
-              return;
-            }, 800);
+          if(nextSlideIndex == 4){
+            $('.photograph').addClass('visible');
           }
-        }
-      },
-    });
+        },
+        afterLoad: (anchorLink, index) => {
+          $('.fullpage-wrapper').addClass('visible');
+          $('.section-' + index + ' .fade').addClass('visible');
+          if (index == 1){
+            if (!$('.intros').hasClass('visible')){
+              Utils.initSpin('spin-loader');
+                setTimeout(() => {
+                $('.intros').addClass('visible');
+                Utils.stopSpin('spin-loader');
+                return;
+              }, 800);
+            }
+          }
+          if (index == 2){
+            if (!$('.graphic-design').hasClass('visible')){
+              Utils.initSpin('spin-loader');
+                setTimeout(() => {
+                $('.graphic-design').addClass('visible');
+                Utils.stopSpin('spin-loader');
+                return;
+              }, 800);
+            }
+          }
+          if (index == 3){
+            if (!$('.article').hasClass('visible')){
+              Utils.initSpin('spin-loader');
+                setTimeout(() => {
+                $('.article').addClass('visible');
+                Utils.stopSpin('spin-loader');
+                return;
+              }, 800);
+            }
+          }
+          if (index == 4 || index == 5){
+            if (!$('.contact').hasClass('visible')){
+              Utils.initSpin('spin-loader');
+                setTimeout(() => {
+                $('.contact').addClass('visible');
+                Utils.stopSpin('spin-loader');
+                return;
+              }, 800);
+            }
+          }
+        },
+      });
+    }
   }
 
   setSlideModalContentName(val){
@@ -203,11 +211,11 @@ class Index extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    userInfo,
+    currentUser,
   } = state;
   return {
     locale,
-    userInfo,
+    currentUser,
   };
 }
 
@@ -223,14 +231,14 @@ function mapDispatchToProps(dispatch) {
 }
 
 Index.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 Index.propTypes = {
-  setPortfolioType: React.PropTypes.func.isRequired,
-  setSlideModalContentName: React.PropTypes.func.isRequired,
-  locale: React.PropTypes.string.isRequired,
-  userInfo: React.PropTypes.object.isRequired,
+  setPortfolioType: React.PropTypes.func,
+  setSlideModalContentName: React.PropTypes.func,
+  locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index);

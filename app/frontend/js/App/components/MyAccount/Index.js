@@ -18,15 +18,15 @@ class MyAccount extends Component {
     super(props);
     this.state = {
       counter: 60,
-      nickname: props.userInfo.nickname,
-      role: props.userInfo.role,
-      phone: props.userInfo.phone,
-      email: props.userInfo.email,
+      nickname: props.currentUser.nickname,
+      role: props.currentUser.role,
+      phone: props.currentUser.phone,
+      email: props.currentUser.email,
       verifyCode: '',
       password: '',
       repassword: '',
       isSendVerifyCode: false,
-      avatar: props.userInfo.avatar,
+      avatar: props.currentUser.avatar,
       captchaCode: '',
       isUploading: false,
       isPreview: true,
@@ -44,7 +44,7 @@ class MyAccount extends Component {
     if (prevProps.isSendVerifyCode && !this.props.isSendVerifyCode){
       this.clearTime();
     }
-    if (prevProps.userInfo != this.props.userInfo){
+    if (prevProps.currentUser != this.props.currentUser){
       this.setState({isPreview: true});
     }
   }
@@ -57,7 +57,7 @@ class MyAccount extends Component {
         uptoken_url: '/api/settings/uptoken',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
         get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的 uptoken
         unique_names: true,              // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
-        domain: QINIU_DOMAIN,     // bucket 域名，下载资源时用到，**必需**
+        domain: __PRELOADED_STATE__.qiniuDomain,     // bucket 域名，下载资源时用到，**必需**
         container: 'container',             // 上传区域 DOM ID，默认是 browser_button 的父元素，
         max_file_size: '100mb',             // 最大文件体积限制
         flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入 flash,相对路径
@@ -96,7 +96,7 @@ class MyAccount extends Component {
               //    "key": "gogopher.jpg"
               //  }
               // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
-              var domain = `http://${QINIU_DOMAIN}/`;
+              var domain = `http://${__PRELOADED_STATE__.qiniuDomain}/`;
               var res = JSON.parse(info);
               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
               this.setState({
@@ -181,7 +181,7 @@ class MyAccount extends Component {
 
   setIsPreview(isPreview){
     if (isPreview){
-      if(this.setState({avatar: this.props.userInfo.avatar}));
+      if(this.setState({avatar: this.props.currentUser.avatar}));
     }
     this.setState({isPreview});
   }
@@ -262,9 +262,9 @@ class MyAccount extends Component {
   }
 
   signup(e){
-    if (validator.isValidForm($('#userInfo'))){
+    if (validator.isValidForm($('#currentUser'))){
       let {
-        userInfo
+        currentUser
       } = this.props;
       let {
         nickname,
@@ -276,7 +276,7 @@ class MyAccount extends Component {
         avatar,
         captchaCode,
       } = this.state;
-      this.props.signup(userInfo.id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode);
+      this.props.signup(currentUser.id, nickname, role, phone, email, verifyCode, password, avatar, captchaCode);
     }
     e.preventDefault();
   }
@@ -290,7 +290,7 @@ class MyAccount extends Component {
   }
 
   delete(){
-    this.props.remove(this.props.userInfo.id);
+    this.props.remove(this.props.currentUser.id);
   }
 
   setIsDelete(isDelete){
@@ -306,7 +306,7 @@ class MyAccount extends Component {
     let {
       locale,
       captcha,
-      userInfo,
+      currentUser,
     } = this.props;
     let {
       counter,
@@ -392,15 +392,15 @@ class MyAccount extends Component {
           <div className="row-wrapper">
             <div className="input-group width-100pc">
               <span className="input-title">{LANG_USER['nickname']}</span>
-              <div className="dp-inline-block mgl-10">{userInfo.nickname}</div>
+              <div className="dp-inline-block mgl-10">{currentUser.nickname}</div>
             </div>
           </div>
         );
-        phoneText = userInfo.phone;
+        phoneText = currentUser.phone;
         if (phoneText == ''){
           phoneText = LANG_USER.unset;
         }
-        emailText = userInfo.email;
+        emailText = currentUser.email;
         if (emailText == ''){
           emailText = LANG_USER.unset;
         }
@@ -649,7 +649,7 @@ class MyAccount extends Component {
           </button>
         </div>
         <div className="modal-body">
-          <form className="signup" id="userInfo" onSubmit={this.signup.bind(this)} autoComplete="off">
+          <form className="signup" id="currentUser" onSubmit={this.signup.bind(this)} autoComplete="off">
             <div className="input-wapper">
               <div id="container" className={!isDelete ? `avatar-container` : `avatar-container hidden`}>
                 {avatarHtml}
@@ -683,12 +683,12 @@ class MyAccount extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    userInfo,
+    currentUser,
     captcha,
   } = state;
   return {
     locale,
-    userInfo,
+    currentUser,
     captcha,
   };
 }
@@ -707,15 +707,15 @@ function mapDispatchToProps(dispatch) {
 }
 
 MyAccount.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 MyAccount.propTypes = {
-  locale: React.PropTypes.string.isRequired,
-  captcha: React.PropTypes.string.isRequired,
-  signup: React.PropTypes.func.isRequired,
-  remove: React.PropTypes.func.isRequired,
-  changeCaptcha: React.PropTypes.func.isRequired,
+  locale: React.PropTypes.string,
+  captcha: React.PropTypes.string,
+  signup: React.PropTypes.func,
+  remove: React.PropTypes.func,
+  changeCaptcha: React.PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyAccount);

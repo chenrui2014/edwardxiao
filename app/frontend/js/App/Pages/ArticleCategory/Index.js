@@ -46,8 +46,8 @@ class ArticleCategory extends Component {
   }
 
   componentDidMount() {
-    let userInfo = this.props.userInfo;
-    if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+    let currentUser = this.props.currentUser;
+    if (!_.isNull(currentUser) && currentUser.role == 'admin'){
       this.fetchArticleCategory(this.props.params.id);
     }
     else{
@@ -149,7 +149,7 @@ class ArticleCategory extends Component {
       locale,
       isNotFound,
       articleCategoryList,
-      userInfo,
+      currentUser,
     } = this.props;
     let {
       isLoading,
@@ -191,7 +191,7 @@ class ArticleCategory extends Component {
         coverHtml = <span className="icon icon-sentiment-satisfied"></span>;
       }
       if (!isLoading){
-        if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+        if (!_.isNull(currentUser) && currentUser.role == 'admin'){
           editArticleCategoryButton = (
             <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories/' + uniqueKey + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['articleCategory']}</div>
           );
@@ -256,13 +256,13 @@ function mapStateToProps(state) {
     locale,
     articleCategoryList,
     isNotFound,
-    userInfo,
+    currentUser,
   } = state;
   return {
     locale,
     articleCategoryList,
     isNotFound,
-    userInfo,
+    currentUser,
   };
 }
 
@@ -278,18 +278,18 @@ function mapDispatchToProps(dispatch) {
 }
 
 ArticleCategory.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 ArticleCategory.propTypes = {
-  params: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
-  locale: React.PropTypes.string.isRequired,
-  userInfo: React.PropTypes.object.isRequired,
-  articleCategoryList: React.PropTypes.array.isRequired,
-  fetchArticleCategoryList: React.PropTypes.func.isRequired,
-  setIsNotFound: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object,
+  location: React.PropTypes.object,
+  isLoading: React.PropTypes.bool,
+  locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
+  articleCategoryList: React.PropTypes.array,
+  fetchArticleCategoryList: React.PropTypes.func,
+  setIsNotFound: React.PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleCategory);

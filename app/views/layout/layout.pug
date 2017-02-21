@@ -3,9 +3,10 @@ html
   head
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(http-equiv="Content-Security-Policy" content="upgrade-insecure-requests")
     meta(name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no")
     meta(name="author" content=(author || "Edward Xiao"))
-    meta(name="keywords" content=(keywords || "Edward, Xiao, Xiaomeng, Edward Xiao, web, design, development, front-end, frontend, creative, react, node, koa, 肖肖梦, website, webpage, 网站开发, 前端, 设计"))
+    meta(name="keywords" content=(keywords || "Edward, Xiao, Xiaomeng, Edward Xiao, web, design, designer, development, developer, programmer, front-end, frontend, creative, react, node, koa, 肖肖梦, website, webpage, 网站开发, 前端, 设计"))
     meta(name="description" content=(description || "Edward Xiao"))
     title
       = title || 'Edward Xiao'
@@ -52,11 +53,7 @@ html
     <![endif]-->
     <!--[if gt IE 8]>
     script.
-      window.CSRF = !{ JSON.stringify(csrf) };
-      window.LOCALE = !{ JSON.stringify(locale) };
-      window.USER_INFO = !{ JSON.stringify(currentUser) };
-      window.CAPTCHA_DATA = !{ JSON.stringify(captchaData) };
-      window.QINIU_DOMAIN = !{ JSON.stringify(qiniuDomain) }
+      window.__PRELOADED_STATE__ = !{ JSON.stringify(preloadedState) }
     script(src=helpers.assetUrl('static/js/plupload.full.min.js'))
     script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src=helpers.assetUrl('react_vendors.js'))
@@ -66,11 +63,7 @@ html
     <![endif]-->
     <!--[if !IE]>-->
     script.
-      window.CSRF = !{ JSON.stringify(csrf) };
-      window.LOCALE = !{ JSON.stringify(locale) };
-      window.USER_INFO = !{ JSON.stringify(currentUser) };
-      window.CAPTCHA_DATA = !{ JSON.stringify(captchaData) };
-      window.QINIU_DOMAIN = !{ JSON.stringify(qiniuDomain) }
+      window.__PRELOADED_STATE__ = !{ JSON.stringify(preloadedState) }
     script(src=helpers.assetUrl('static/js/plupload.full.min.js'))
     script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src='https://cdn.staticfile.org/tinymce/4.5.1/tinymce.min.js')

@@ -10,12 +10,12 @@ export function locale(locale = DEFAULT_STATE.locale, action) {
   }
 }
 
-export function userInfo(userInfo = DEFAULT_STATE.userInfo, action) {
+export function currentUser(currentUser = DEFAULT_STATE.currentUser, action) {
   switch (action.type) {
-    case ACTION.SET_USER_INFO:
-      return action.userInfo
+    case ACTION.SET_CURRENT_USER:
+      return action.currentUser
     default:
-      return userInfo;
+      return currentUser;
   }
 }
 
@@ -61,6 +61,24 @@ export function captcha(captcha = DEFAULT_STATE.captcha, action) {
       return action.captcha;
     default:
       return captcha;
+  }
+}
+
+export function article(article = DEFAULT_STATE.article, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE:
+      return action.article;
+    default:
+      return article;
+  }
+}
+
+export function articleCategoryOptions(articleCategoryOptions = DEFAULT_STATE.articleCategoryOptions, action) {
+  switch (action.type) {
+    case ACTION.SET_ARTICLE_CATEGORY_OPTIONS:
+      return action.articleCategoryOptions;
+    default:
+      return articleCategoryOptions;
   }
 }
 

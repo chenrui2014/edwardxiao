@@ -52,11 +52,11 @@ class ArticleItem extends Component {
       updatedAt,
       createdBy,
       updatedBy,
-      userInfo,
+      currentUser,
     } = this.props;
     let trashHtml;
     let LANG_USER = require('../../../../../../locales/' + locale + '/user');
-    if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+    if (!_.isNull(currentUser) && currentUser.role == 'admin'){
       trashHtml = (
         <div className="trash" onClick={this.remove.bind(this, id)}><span className="icon icon-trash"></span></div>
       );
@@ -76,21 +76,21 @@ class ArticleItem extends Component {
 }
 
 ArticleItem.propTypes = {
-  locale: React.PropTypes.string.isRequired,
-  id: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired,
-  uniqueKey: React.PropTypes.string.isRequired,
-  author: React.PropTypes.string.isRequired,
-  preface: React.PropTypes.string.isRequired,
-  desc: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
-  cover: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  isShow: React.PropTypes.bool.isRequired,
-  createdAt: React.PropTypes.string.isRequired,
-  updatedAt: React.PropTypes.string.isRequired,
-  createdBy: React.PropTypes.string.isRequired,
-  updatedBy: React.PropTypes.string.isRequired,
+  locale: React.PropTypes.string,
+  id: React.PropTypes.string,
+  title: React.PropTypes.string,
+  uniqueKey: React.PropTypes.string,
+  author: React.PropTypes.string,
+  preface: React.PropTypes.string,
+  desc: React.PropTypes.string,
+  content: React.PropTypes.string,
+  cover: React.PropTypes.string,
+  type: React.PropTypes.string,
+  isShow: React.PropTypes.bool,
+  createdAt: React.PropTypes.string,
+  updatedAt: React.PropTypes.string,
+  createdBy: React.PropTypes.string,
+  updatedBy: React.PropTypes.string,
 };
 
 export default ArticleItem;

@@ -5,9 +5,11 @@ class MyMessage {
   }
 
   init(){
-    $(document).on('click', '.my-message__close', (evt) => {
-      $(evt.target).parent().removeClass('show');
-    });
+    if (typeof window !== 'undefined'){
+      $(document).on('click', '.my-message__close', (evt) => {
+        $(evt.target).parent().removeClass('show');
+      });
+    }
   }
 
   createBox(className, content) {

@@ -16,7 +16,6 @@ import MobileNav from '../../components/MobileNav/index';
 import Nav from '../../components/Nav/index';
 import Footer from '../../components/Footer/index';
 import NotFound from '../NotFound';
-import '../../../../css/articles.css';
 import ArticleItem from './components/ArticleItem';
 
 class ArticleList extends Component {
@@ -24,9 +23,9 @@ class ArticleList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
+      isLoading: typeof window !== 'undefined' ? true : false,
       backUrl: null,
-      articleType: !_.isNull(props.userInfo) && props.userInfo.role == 'admin' ? '' : 'article',
+      articleType: !_.isNull(props.currentUser) && props.currentUser.role == 'admin' ? '' : 'article',
     }
   }
 
@@ -35,8 +34,11 @@ class ArticleList extends Component {
   }
 
   componentDidMount() {
+    if (window){
+      require('../../../../css/articles.css');
+    }
     this.props.fetchArticleCategoryList(1);
-    this.props.fetchArticleList(1, this.props.articleCategory, this.state.articleType);
+    this.props.fetchArticleList(this.props.articleListCurrentPage, this.props.articleCategory, this.state.articleType);
     if (!_.isNull(this.props.articleList)){
       this.setState({isLoading: false});
     }
@@ -46,10 +48,10 @@ class ArticleList extends Component {
     if (_.isNull(prevProps.articleList) && !_.isNull(this.props.articleList)){
       this.setState({isLoading: false});
     }
-    if (_.isNull(prevProps.userInfo) && !_.isNull(this.props.userInfo)){
-      if (this.props.userInfo.role == 'admin'){
+    if (_.isNull(prevProps.currentUser) && !_.isNull(this.props.currentUser)){
+      if (this.props.currentUser.role == 'admin'){
         this.setState({articleType: ''});
-        this.props.fetchArticleList(this.props.articleListCurrentPage + 1, this.props.articleCategory, '');
+        this.props.fetchArticleList(this.props.articleListCurrentPage, this.props.articleCategory, '');
       }
     }
     // if (!_.isNull(prevProps.articleList)){
@@ -122,7 +124,7 @@ class ArticleList extends Component {
       articleList,
       articleListTotalPage,
       articleListCurrentPage,
-      userInfo,
+      currentUser,
     } = this.props;
     let {
       isLoading
@@ -143,7 +145,7 @@ class ArticleList extends Component {
       let newArticleButton;
       let newArticleCategpryButton;
       if (!isLoading){
-        if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+        if (!_.isNull(currentUser) && currentUser.role == 'admin'){
           newArticleButton = (
             <div className="my-button my-button--blue mgr-10" onClick={this.go.bind(this, '/articles/new')}>{LANG_ACTION['add']}{LANG_NAV['article']}</div>
           );
@@ -158,7 +160,7 @@ class ArticleList extends Component {
               active = true;
             }
             return (
-              <div className={active ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, item.uniqueKey, this.state.articleType)}>
+              <div key={key} className={active ? `article-category__item active` : `article-category__item`} onClick={this.fetchArticleListByArticleCategory.bind(this, item.uniqueKey, this.state.articleType)}>
                 <span className="article-category__text">{item.title}</span>&nbsp;{active ? <span className="icon icon-check"></span> : ``}
               </div>
             );
@@ -176,6 +178,7 @@ class ArticleList extends Component {
           articleListHtml = articleList.map((item, key) => {
             return (
               <ArticleItem
+                key={key}
                 locale={locale}
                 id={item.id}
                 title={item.title}
@@ -189,11 +192,11 @@ class ArticleList extends Component {
                 isShow={item.isShow}
                 createdAt={item.createdAt}
                 updatedAt={item.updatedAt}
-                createdBy={item.createdBy}
+                createdBy={item.createdBy.nickname}
                 updatedBy={item.updatedBy}
                 go={this.go.bind(this)}
                 remove={this.remove.bind(this)}
-                userInfo={userInfo}
+                currentUser={currentUser}
               />
             );
           });
@@ -231,7 +234,7 @@ class ArticleList extends Component {
           <Nav isIndex={false} activeTab="articles"/>
           <div className="core-content background-white">
             <div className="core">
-              {!_.isNull(userInfo) && userInfo.role == 'admin' ? <div className="mobile-table article-list">
+              {!_.isNull(currentUser) && currentUser.role == 'admin' ? <div className="mobile-table article-list">
                 <div className="mobile-table__cel category-nav no-mobile-990">&nbsp;</div>
                 <div className="mobile-table__cel">
                 {newArticleButton}
@@ -269,7 +272,7 @@ function mapStateToProps(state) {
     articleCategory,
     articleList,
     isNotFound,
-    userInfo,
+    currentUser,
     articleCategoryListCurrentPage,
     articleListCurrentPage,
     articleListTotalPage,
@@ -280,7 +283,7 @@ function mapStateToProps(state) {
     articleCategory,
     articleList,
     isNotFound,
-    userInfo,
+    currentUser,
     articleCategoryListCurrentPage,
     articleListCurrentPage,
     articleListTotalPage,
@@ -305,25 +308,25 @@ function mapDispatchToProps(dispatch) {
 }
 
 ArticleList.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 ArticleList.propTypes = {
-  params: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
-  locale: React.PropTypes.string.isRequired,
-  userInfo: React.PropTypes.object.isRequired,
-  articleCategoryListCurrentPage: React.PropTypes.number.isRequired,
-  articleListCurrentPage: React.PropTypes.number.isRequired,
-  articleListTotalPage: React.PropTypes.number.isRequired,
-  articleCategoryList: React.PropTypes.array.isRequired,
-  articleCategory: React.PropTypes.array.isRequired,
-  articleList: React.PropTypes.array.isRequired,
-  fetchArticleCategoryList: React.PropTypes.func.isRequired,
-  fetchArticleList: React.PropTypes.func.isRequired,
-  setIsNotFound: React.PropTypes.func.isRequired,
-  setArticleList: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object,
+  location: React.PropTypes.object,
+  isLoading: React.PropTypes.bool,
+  locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
+  articleCategoryListCurrentPage: React.PropTypes.number,
+  articleListCurrentPage: React.PropTypes.number,
+  articleListTotalPage: React.PropTypes.number,
+  articleCategoryList: React.PropTypes.array,
+  articleCategory: React.PropTypes.string,
+  articleList: React.PropTypes.array,
+  fetchArticleCategoryList: React.PropTypes.func,
+  fetchArticleList: React.PropTypes.func,
+  setIsNotFound: React.PropTypes.func,
+  setArticleList: React.PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);

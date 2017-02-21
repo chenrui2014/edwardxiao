@@ -1,4 +1,5 @@
 import models from '../../models/index';
+import helper from '../helper';
 import _ from 'lodash';
 
 const index = async(ctx, _next) => {
@@ -15,7 +16,7 @@ const index = async(ctx, _next) => {
   page = _.toNumber(page);
   perPage = _.toNumber(perPage);
   let query;
-  const currentUser = ctx.state.currentUser;
+  const currentUser = ctx.state.preloadedState.currentUser;
   if (!_.isNull(currentUser) && currentUser.role == 'admin'){
     query = {uniqueKey: {'$ne': 'root'}};
   }
@@ -28,7 +29,7 @@ const index = async(ctx, _next) => {
   let select = ['title', 'uniqueKey', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isAdminOnly', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
   let populate = 'createdBy';
   let sort = { sequence: 1 };
-  let res = await getArticleCategories(query, select, sort, true, populate, page, perPage);
+  let res = await helper.getArticleCategories(query, select, sort, true, populate, page, perPage);
   data = res.data;
   pages = res.pages;
   ctx.body = { code, data, page, pages };
@@ -43,11 +44,11 @@ const show = async(ctx, _next) => {
   let data = [];
   let select = ['title', 'uniqueKey', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isAdminOnly', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
   let populate = 'createdBy';
-  let res = await getArticleCategories(query, select, '', true, populate);
+  let res = await helper.getArticleCategories(query, select, '', true, populate);
   let ObjectId = require('mongoose').Types.ObjectId;
   if (!res.data.length && ObjectId.isValid(id)){
     query = { _id: id};
-    res = await getArticleCategories(query, select, '', true, populate);
+    res = await helper.getArticleCategories(query, select, '', true, populate);
   }
   data = res.data;
   ctx.body = { code, data };
@@ -57,7 +58,7 @@ const create = async(ctx, _next) => {
   let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
   let LANG_ARTICLE = require('../../locales/' + ctx.session.locale + '/article');
   let LANG_GENERAL = require('../../locales/' + ctx.session.locale + '/general');
-  const currentUser = ctx.state.currentUser;
+  const currentUser = ctx.state.preloadedState.currentUser;
   let mongoose = require('mongoose');
   let userId = mongoose.Types.ObjectId(currentUser.id);
   let {
@@ -144,7 +145,7 @@ const update = async(ctx, _next) => {
   let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
   let LANG_ARTICLE = require('../../locales/' + ctx.session.locale + '/article');
   let LANG_GENERAL = require('../../locales/' + ctx.session.locale + '/general');
-  const currentUser = ctx.state.currentUser;
+  const currentUser = ctx.state.preloadedState.currentUser;
   let mongoose = require('mongoose');
   let userId = mongoose.Types.ObjectId(currentUser.id);
   let {
@@ -253,12 +254,12 @@ const checkLogin = async(ctx, next) => {
 
 const checkArticleCategoryOwner = async(ctx, next) => {
   let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
-  const currentUser = ctx.state.currentUser;
+  const currentUser = ctx.state.preloadedState.currentUser;
   let id = ctx.params.id;
   let select = ['_id', 'createdBy'];
   let populate = 'createdBy';
   let query = { _id: id };
-  let res = await getArticleCategories(query, select, '', true, populate);
+  let res = await helper.getArticleCategories(query, select, '', true, populate);
   if (res.data.length) {
     if (res.data[0].createdBy['_id'].equals(currentUser.id)) {
       await next();
@@ -322,42 +323,10 @@ const getCategorieOptions = async(ctx, _next) => {
   let populate = 'createdBy';
   let query = { isBanned: false, isPrivate: false };
   let sort = { updatedBy: -1 };
-  let res = await getArticleCategories(query, select, sort, true, populate);
+  let res = await helper.getArticleCategories(query, select, sort, true, populate);
   data = res.data;
   ctx.body = { code, data };
 };
-
-const getArticleCategories = async(query = '', select, sort = '' , lean = true, populate = '', page = 0, perPage = 0) => {
-
-  let data = [];
-  let pages;
-  let options = {
-    select,
-    sort,
-    lean,
-  };
-  if (populate != ''){
-    options['populate'] = populate;
-  }
-  if (page != 0) {
-    options['page'] = page;
-  }
-  if (perPage != 0) {
-    options['limit'] = perPage;
-  }
-  await models.ArticleCategory.paginate(query, options).then((result) => {
-
-    if (result.docs.length) {
-      data = result.docs;
-      pages = result.pages;
-    }
-  });
-  let result = {
-    data,
-    pages,
-  }
-  return result;
-}
 
 export default {
   getCategorieOptions,

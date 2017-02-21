@@ -3,12 +3,17 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import MobileNav from '../../components/MobileNav/index';
 import Nav from '../../components/Nav/index';
-import '../../../../css/not_found.css';
 
 class NotFound extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount(){
+    if (window){
+      require('../../../../css/not_found.css');
+    }
   }
 
   go() {
@@ -58,11 +63,11 @@ function mapDispatchToProps() {
 }
 
 NotFound.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 Nav.propTypes = {
-  locale: React.PropTypes.string.isRequired,
+  locale: React.PropTypes.string,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotFound);

@@ -5,7 +5,7 @@ class MyValidator {
 
   }
 
-  validate($this, name = '', locale = window.LOCALE) {
+  validate($this, name = '', locale = __PRELOADED_STATE__.locale) {
     const LANG_FILE = {
       'zh-CN': require('../../../locales/zh-CN/validator'),
       'zh-HK': require('../../../locales/zh-HK/validator'),
@@ -116,7 +116,7 @@ class MyValidator {
     return true;
   }
 
-  validateLength (val, name, validatorMinLength, validatorMaxLength, locale = window.LOCALE){
+  validateLength (val, name, validatorMinLength, validatorMaxLength, locale = __PRELOADED_STATE__.locale){
     const LANG_FILE = {
       'zh-CN': require('../../../locales/zh-CN/validator'),
       'zh-HK': require('../../../locales/zh-HK/validator'),
@@ -141,7 +141,7 @@ class MyValidator {
     return result;
   }
 
-  validateExactLength (val, name, validatorLength, locale = window.LOCALE){
+  validateExactLength (val, name, validatorLength, locale = __PRELOADED_STATE__.locale){
     const LANG_FILE = {
       'zh-CN': require('../../../locales/zh-CN/validator'),
       'zh-HK': require('../../../locales/zh-HK/validator'),
@@ -160,7 +160,7 @@ class MyValidator {
     return result;
   }
 
-  validateAmount (val, name, validatorMinAmount, validatorMaxAmount, locale = window.LOCALE){
+  validateAmount (val, name, validatorMinAmount, validatorMaxAmount, locale = __PRELOADED_STATE__.locale){
     const LANG_FILE = {
       'zh-CN': require('../../../locales/zh-CN/validator'),
       'zh-HK': require('../../../locales/zh-HK/validator'),
@@ -186,7 +186,7 @@ class MyValidator {
     return result;
   }
 
-  validateEqualValue(name, val1, val2, locale = window.LOCALE){
+  validateEqualValue(name, val1, val2, locale = __PRELOADED_STATE__.locale){
     const LANG_FILE = {
       'zh-CN': require('../../../locales/zh-CN/validator'),
       'zh-HK': require('../../../locales/zh-HK/validator'),

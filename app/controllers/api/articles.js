@@ -1,4 +1,5 @@
 import models from '../../models/index';
+import helper from '../helper';
 import _ from 'lodash';
 
 const index = async(ctx, _next) => {
@@ -16,7 +17,7 @@ const index = async(ctx, _next) => {
   }
   page = _.toNumber(page);
   perPage = _.toNumber(perPage);
-  const currentUser = ctx.state.currentUser;
+  const currentUser = ctx.state.preloadedState.currentUser;
   let query;
   if (!_.isNull(currentUser) && currentUser.role == 'admin') {
     query = _.merge(query, { uniqueKey: { '$ne': 'root' } });
@@ -41,7 +42,7 @@ const index = async(ctx, _next) => {
   let select = ['title', 'uniqueKey', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'tag', 'isBanned', 'isPrivate', 'isAdminOnly', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
   let populate = 'createdBy';
   let sort = { sequence: 1 };
-  let res = await getArticles(query, select, sort, true, populate, page, perPage);
+  let res = await helper.getArticles(query, select, sort, true, populate, page, perPage);
   data = res.data;
   pages = res.pages;
   ctx.body = { code, data, page, pages };
@@ -56,11 +57,11 @@ const show = async(ctx, _next) => {
   let data = [];
   let select = ['title', 'uniqueKey', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isAdminOnly', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
   let populate = 'createdBy';
-  let res = await getArticles(query, select, '', true, populate);
+  let res = await helper.getArticles(query, select, '', true, populate);
   let ObjectId = require('mongoose').Types.ObjectId;
   if (!res.data.length && ObjectId.isValid(id)) {
     query = { _id: id };
-    res = await getArticles(query, select, '', true, populate);
+    res = await helper.getArticles(query, select, '', true, populate);
   }
   data = res.data;
   ctx.body = { code, data };
@@ -70,7 +71,7 @@ const create = async(ctx, _next) => {
   let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
   let LANG_ARTICLE = require('../../locales/' + ctx.session.locale + '/article');
   let LANG_GENERAL = require('../../locales/' + ctx.session.locale + '/general');
-  const currentUser = ctx.state.currentUser;
+  const currentUser = ctx.state.preloadedState.currentUser;
   let mongoose = require('mongoose');
   let userId = mongoose.Types.ObjectId(currentUser.id);
   let {
@@ -142,7 +143,7 @@ const update = async(ctx, _next) => {
   let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
   let LANG_ARTICLE = require('../../locales/' + ctx.session.locale + '/article');
   let LANG_GENERAL = require('../../locales/' + ctx.session.locale + '/general');
-  const currentUser = ctx.state.currentUser;
+  const currentUser = ctx.state.preloadedState.currentUser;
   let mongoose = require('mongoose');
   let userId = mongoose.Types.ObjectId(currentUser.id);
   let {
@@ -235,12 +236,12 @@ const checkLogin = async(ctx, next) => {
 
 const checkArticleOwner = async(ctx, next) => {
   let LANG_MESSAGE = require('../../locales/' + ctx.session.locale + '/message');
-  const currentUser = ctx.state.currentUser;
+  const currentUser = ctx.state.preloadedState.currentUser;
   let id = ctx.params.id;
   let select = ['_id', 'createdBy'];
   let populate = 'createdBy';
   let query = { _id: id };
-  let res = await getArticles(query, select, '', true, populate);
+  let res = await helper.getArticles(query, select, '', true, populate);
   if (res.data.length) {
     if (res.data[0].createdBy['_id'].equals(currentUser.id)) {
       await next();
@@ -294,37 +295,6 @@ const checkParamsBody = async(ctx, next) => {
   };
   await next();
 };
-
-const getArticles = async(query = '', select, sort = '', lean = true, populate = '', page = 0, perPage = 0) => {
-
-  let data = [];
-  let pages;
-  let options = {
-    select,
-    sort,
-    lean,
-  };
-  if (populate != '') {
-    options['populate'] = populate;
-  }
-  if (page != 0) {
-    options['page'] = page;
-  }
-  if (perPage != 0) {
-    options['limit'] = perPage;
-  }
-  await models.Article.paginate(query, options).then((result) => {
-    if (result.docs.length) {
-      data = result.docs;
-      pages = result.pages;
-    }
-  });
-  let result = {
-    data,
-    pages,
-  }
-  return result;
-}
 
 export default {
   index,

@@ -47,11 +47,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 Modal.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 Modal.propTypes = {
-  modalContentName: React.PropTypes.bool.isRequired,
+  modalContentName: React.PropTypes.string,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modal);

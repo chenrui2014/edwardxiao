@@ -11,7 +11,7 @@ import {
   setSlideModalContentName,
 } from '../../actions/index';
 
-class Modal extends Component {
+class SlideModal extends Component {
 
   constructor(props) {
     super(props);
@@ -65,14 +65,14 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-Modal.contextTypes = {
-  router: React.PropTypes.object.isRequired
+SlideModal.contextTypes = {
+  router: React.PropTypes.object
 };
 
-Modal.propTypes = {
-  setArticleList: React.PropTypes.func.isRequired,
-  setSlideModalContentName: React.PropTypes.func.isRequired,
-  slideModalContentName: React.PropTypes.bool.isRequired,
+SlideModal.propTypes = {
+  setArticleList: React.PropTypes.func,
+  setSlideModalContentName: React.PropTypes.func,
+  slideModalContentName: React.PropTypes.string,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(SlideModal);

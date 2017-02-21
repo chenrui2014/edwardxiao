@@ -14,7 +14,7 @@
     "webpack_prod_display_error": "NODE_ENV=production webpack --config app/frontend/webpack/production.config.js --progress -display-error-details -p",
     "webpack_dll_dev": "NODE_ENV=development webpack --config app/frontend/webpack/vendor-bundles.webpack.config.js -p",
     "webpack_dll_prod": "NODE_ENV=production webpack --config app/frontend/webpack/vendor-bundles.webpack.config.production.js -p",
-    "build_dev": "rm -rf public/assets && npm run webpack_dll_prod && npm run webpack_dev",
+    "build_dev": "rm -rf public/assets && npm run webpack_dll_dev && npm run webpack_dev",
     "build_prod": "rm -rf public/assets && npm run webpack_dll_prod && npm run webpack_prod",
     "deploy_cdn": "APP_VERSION=$npm_package_version NODE_ENV=production node ./scripts/deploy_cdn.js",
     "deploy_cdn_dev": "NODE_ENV=development node ./scripts/deploy_cdn.js",

@@ -20,10 +20,10 @@ export const setLocale = (locale) => ({
   locale
 });
 
-export const SET_USER_INFO = 'SET_USER_INFO';
-export const setUserInfo = (userInfo) => ({
-  type: SET_USER_INFO,
-  userInfo
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const setCurrentUser = (currentUser) => ({
+  type: SET_CURRENT_USER,
+  currentUser
 });
 
 export const SET_MODAL_CONTENT_NAME = 'SET_MODAL_CONTENT_NAME';
@@ -48,6 +48,18 @@ export const SET_IS_CAPTCHA = 'SET_IS_CAPTCHA';
 export const setCaptcha = (captcha) => ({
   type: SET_IS_CAPTCHA,
   captcha
+});
+
+export const SET_ARTICLE_CATEGORY_OPTIONS = 'SET_ARTICLE_CATEGORY_OPTIONS';
+export const setArticleCategoryOptions = (articleCategoryOptions) => ({
+  type: SET_ARTICLE_CATEGORY_OPTIONS,
+  articleCategoryOptions
+});
+
+export const SET_ARTICLE = 'SET_ARTICLE';
+export const setArticle = (article) => ({
+  type: SET_ARTICLE,
+  article
 });
 
 export const SET_ARTICLE_LIST = 'SET_ARTICLE_LIST';
@@ -166,7 +178,7 @@ function changeCaptchaApi() {
 export const login = (username, password, captchaCode) => (dispatch, getState) => {
   loginApi(username, password, captchaCode).then((res) => {
     if (res.code === 0) {
-      dispatch(setUserInfo(res.data.currentUser));
+      dispatch(setCurrentUser(res.data.currentUser));
       $('#myModal').modal('toggle');
       dispatch(setCaptcha(''));
       window.CAPTCHA_DATA = '';
@@ -219,7 +231,7 @@ export const signup = (id, nickname, phone, email, verifyCode, password, avatar,
   signupApi(id, nickname, phone, email, verifyCode, password, avatar, captchaCode).then((res) => {
     if (res.code === 0) {
       if (res.data.currentUser){
-        dispatch(setUserInfo(res.data.currentUser));
+        dispatch(setCurrentUser(res.data.currentUser));
         dispatch(setCaptcha(''));
         window.CAPTCHA_DATA = '';
       }
@@ -466,3 +478,65 @@ function fetchArticleCategoryListApi(nextPage) {
     });
   })
 }
+
+export const fetchArticle = (id) => (dispatch, getState) => {
+  Utils.initSpin('spin-loader');
+  fetchArticleApi(id).then((res) => {
+    console.log(res);
+    if (res.code === 0){
+      if (res.data.length){
+        let {
+          id,
+          title,
+          uniqueKey,
+          author,
+          preface,
+          desc,
+          cover,
+          articleCategory,
+          type,
+          tag,
+          isBanned,
+          isPrivate,
+          content,
+        } = res.data[0];
+        let currentUser = getState().currentUser;
+        if ((type != 'portfolio' && (_.isNull(currentUser) && currentUser.role != 'admin')) || (!_.isNull(currentUser) && currentUser.role == 'admin')){
+          dispatch(setArticle(res.data[0]));
+        }
+        else{
+          dispatch(setIsNotFound(true));
+        }
+      }
+      else{
+        dispatch(setIsNotFound(true));
+      }
+      Utils.stopSpin('spin-loader');
+    }
+    else{
+      if(res.msg){
+        alert(res.msg);
+      }
+    }
+  }).catch((err) => {
+    // debugger;
+    // alert('网络错误，请重试');
+    console.log(err);
+  });
+}
+
+function fetchArticleApi(id) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/api/articles/' + id,
+      type: 'get',
+      success: (data) => {
+        resolve(data);
+      },
+      error: (error) => {
+        reject(error);
+      }
+    });
+  })
+}
+

@@ -10,7 +10,9 @@ let manifestPath = path.resolve(__dirname, '../', '../', 'public', 'assets', 're
 let vendorManifestPath = path.resolve(__dirname, '../', '../', 'public', 'assets', 'manifest_vendor.json');
 if (fs.existsSync(manifestPath)) {
   manifest = require('../../public/assets/rev-manifest.json');
-  vendorManifest = require('../../public/assets/manifest_vendor.json');
+  if (ENV.APP_ENV == 'production'){
+    vendorManifest = require('../../public/assets/manifest_vendor.json');
+  }
 }
 
 function getAssetName(asset) {
@@ -21,41 +23,38 @@ exports.assetUrl = (assetsName) => {
   const publicAsset = getAssetName(assetsName);
   if (!publicAsset) {
     let vendorAsset = vendorManifest[assetsName];
-    if (!vendorAsset){
+    if (!vendorAsset) {
       vendorAsset = assetsName;
     }
-    if (ENV.APP_ENV == 'production'){
+    if (ENV.APP_ENV == 'production') {
       return `http://${CDN.URL}/assets/${vendorAsset}`;
-    }
-    else{
+    } else {
       return `/assets/${vendorAsset}`;
     }
-  }
-  else{
-    if (ENV.APP_ENV == 'production'){
+  } else {
+    if (ENV.APP_ENV == 'production') {
       return `http://${CDN.URL}/assets/${publicAsset}`;
-    }
-    else{
+    } else {
       return `/assets/${publicAsset}`;
     }
   }
   return publicAsset;
 };
 
-exports.isActive = function (action, param) {
+exports.isActive = function(action, param) {
   let active = '';
-  if(action == param){
+  if (action == param) {
     active = 'active';
   }
   return active;
 };
 
-exports.timeAgo = function (date) {
+exports.timeAgo = function(date) {
   date = moment(date);
   return date.fromNow();
 };
 
-exports.formatDate = function (date) {
+exports.formatDate = function(date) {
   date = moment(date);
   return date.format('YYYY-MM-DD HH:mm');
 };

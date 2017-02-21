@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
+  fetchArticle,
   setIsNotFound,
 } from '../../actions/index';
 
@@ -14,30 +15,13 @@ import MobileNav from '../../components/MobileNav/index';
 import Nav from '../../components/Nav/index';
 import Footer from '../../components/Footer/index';
 import NotFound from '../NotFound';
-import '../../../../css/articles.css';
 
 class Article extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
-      backUrl: null,
-      id: '',
-      title: '',
-      uniqueKey: '',
-      author: '',
-      preface: '',
-      desc: '',
-      cover: '',
-      articleCategory: '',
-      type: '',
-      tag: '',
-      isBanned: false,
-      isPrivate: false,
-      content: '',
-      articleCategoryOptions: [],
-      isUploading: false,
+      isLoading: typeof window !== 'undefined' ? true : false,
     }
   }
 
@@ -46,93 +30,30 @@ class Article extends Component {
   }
 
   componentDidMount() {
-    this.fetchArticle(this.props.params.id);
+    if (window){
+      require('../../../../css/articles.css');
+    }
+    if (!_.isNull(this.props.article)){
+      this.setIsLoading(false);
+      if ((this.props.params.id != this.props.article.id) || (this.props.params.id != this.props.article.uniqueKey)){
+        this.props.fetchArticle(this.props.params.id);
+      }
+    }
+    else{
+      if (this.props.params.id){
+        this.props.fetchArticle(this.props.params.id);
+      }
+    }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // if (prevState.id == '' && this.state.id !== ''){
-    //   this.setIsLoading(false);
-    // }
+  componentDidUpdate(prevProps) {
+    if (_.isNull(prevProps.article) && !_.isNull(this.props.article)){
+      this.setIsLoading(false);
+    }
   }
 
   handleImageLoaded() {
     Utils.stopSpin('cover-spin-loader');
-  }
-
-  fetchArticle(id) {
-    Utils.initSpin('spin-loader');
-    this.fetchArticleApi(id).then((res) => {
-      if (res.code === 0){
-        this.setState({articleCategoryOptions: res.data});
-        if (res.data.length){
-          let {
-            id,
-            title,
-            uniqueKey,
-            author,
-            preface,
-            desc,
-            cover,
-            articleCategory,
-            type,
-            tag,
-            isBanned,
-            isPrivate,
-            content,
-          } = res.data[0];
-          let userInfo = this.props.userInfo;
-          if ((type != 'portfolio' && (_.isNull(userInfo) && userInfo.role != 'admin')) || (!_.isNull(userInfo) && userInfo.role == 'admin')){
-            this.setState({
-              id: id,
-              title: title,
-              uniqueKey: uniqueKey,
-              author: author,
-              preface: preface,
-              desc: desc,
-              cover: cover,
-              articleCategory: articleCategory.title,
-              type: type,
-              tag: tag,
-              isBanned: isBanned,
-              isPrivate: isPrivate,
-              content: content,
-            });
-          }
-          else{
-            this.props.setIsNotFound(true);
-          }
-          this.setIsLoading(false);
-        }
-        else{
-          this.props.setIsNotFound(true);
-        }
-        Utils.stopSpin('spin-loader');
-      }
-      else{
-        if(res.msg){
-          alert(res.msg);
-        }
-      }
-    }).catch((err) => {
-      // debugger;
-      // alert('网络错误，请重试');
-      console.log(err);
-    });
-  }
-
-  fetchArticleApi(id) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: '/api/articles/' + id,
-        type: 'get',
-        success: (data) => {
-          resolve(data);
-        },
-        error: (error) => {
-          reject(error);
-        }
-      });
-    })
   }
 
   createContent() {
@@ -148,55 +69,53 @@ class Article extends Component {
     let {
       locale,
       isNotFound,
-      articleList,
-      userInfo,
+      article,
+      currentUser,
     } = this.props;
     let {
       isLoading,
-      isUploading,
-      id,
-      title,
-      uniqueKey,
-      author,
-      preface,
-      desc,
-      cover,
-      articleCategory,
-      type,
-      tag,
-      isBanned,
-      isPrivate,
-      content,
-      articleCategoryOptions,
     } = this.state;
+
     if (isNotFound){
       contentHtml = (<NotFound />);
     }
     else{
-
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
       let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
-      let articleListHtml;
       let articleCategoryOptionsHtml;
       let editArticleButton;
-
       let coverHtml;
-      if (cover != ''){
-        // coverHtml = <img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
-        coverHtml = <img className="" src={`${cover}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
-      }
-      else{
-        coverHtml = <span className="icon icon-sentiment-satisfied"></span>;
-      }
+
       if (!isLoading){
-        if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+        let {
+          id,
+          title,
+          uniqueKey,
+          author,
+          preface,
+          desc,
+          cover,
+          articleCategory,
+          type,
+          tag,
+          isBanned,
+          isPrivate,
+          content,
+        } = article;
+        if (cover != ''){
+          // coverHtml = <img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
+          coverHtml = <img className="" src={`${cover}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
+        }
+        else{
+          coverHtml = <span className="icon icon-sentiment-satisfied"></span>;
+        }
+        if (!_.isNull(currentUser) && currentUser.role == 'admin'){
           editArticleButton = (
             <div className="my-button my-button--blue" onClick={this.go.bind(this, '/articles/' + uniqueKey + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['article']}</div>
           );
         }
-        let backUrl = this.state.backUrl;
         contentHtml = (
           <div className="page-content article background-white">
             <MobileNav isIndex={false} activeTab="articles"/>
@@ -242,22 +161,22 @@ class Article extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    articleList,
+    article,
     isNotFound,
-    userInfo,
+    currentUser,
   } = state;
   return {
     locale,
-    articleList,
+    article,
     isNotFound,
-    userInfo,
+    currentUser,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleList: () => {
-      dispatch(fetchArticleList());
+    fetchArticle: (id) => {
+      dispatch(fetchArticle(id));
     },
     setIsNotFound: (val) => {
       dispatch(setIsNotFound(val));
@@ -266,18 +185,18 @@ function mapDispatchToProps(dispatch) {
 }
 
 Article.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 Article.propTypes = {
-  params: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
-  locale: React.PropTypes.string.isRequired,
-  userInfo: React.PropTypes.object.isRequired,
-  articleList: React.PropTypes.array.isRequired,
-  fetchArticleList: React.PropTypes.func.isRequired,
-  setIsNotFound: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object,
+  location: React.PropTypes.object,
+  isLoading: React.PropTypes.bool,
+  locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
+  article: React.PropTypes.object,
+  fetchArticle: React.PropTypes.func,
+  setIsNotFound: React.PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Article);

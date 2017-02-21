@@ -32,8 +32,8 @@ class ArticleCategoryList extends Component {
   }
 
   componentDidMount() {
-    let userInfo = this.props.userInfo;
-    if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+    let currentUser = this.props.currentUser;
+    if (!_.isNull(currentUser) && currentUser.role == 'admin'){
       this.props.fetchArticleCategoryList(1);
       if (!_.isNull(this.props.articleCategoryList)){
         this.setState({isLoading: false});
@@ -111,7 +111,7 @@ class ArticleCategoryList extends Component {
       articleCategoryList,
       articleCategoryListTotalPage,
       articleCategoryListCurrentPage,
-      userInfo,
+      currentUser,
     } = this.props;
     let {
       isLoading
@@ -128,7 +128,7 @@ class ArticleCategoryList extends Component {
       let newArticleCategoryButton;
       let paginationHtml;
       if (!isLoading){
-        if (!_.isNull(userInfo) && userInfo.role == 'admin'){
+        if (!_.isNull(currentUser) && currentUser.role == 'admin'){
           newArticleCategoryButton = (
             <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories/new')}>{LANG_ACTION['add']}{LANG_ARTICLE['article-category']}</div>
           );
@@ -155,7 +155,7 @@ class ArticleCategoryList extends Component {
                 updatedBy={item.updatedBy}
                 go={this.go.bind(this)}
                 remove={this.remove.bind(this)}
-                userInfo={userInfo}
+                currentUser={currentUser}
               />
             );
           });
@@ -210,7 +210,7 @@ function mapStateToProps(state) {
     locale,
     articleCategoryList,
     isNotFound,
-    userInfo,
+    currentUser,
     articleCategoryListCurrentPage,
     articleCategoryListTotalPage,
   } = state;
@@ -218,7 +218,7 @@ function mapStateToProps(state) {
     locale,
     articleCategoryList,
     isNotFound,
-    userInfo,
+    currentUser,
     articleCategoryListCurrentPage,
     articleCategoryListTotalPage,
   };
@@ -239,21 +239,21 @@ function mapDispatchToProps(dispatch) {
 }
 
 ArticleCategoryList.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };
 
 ArticleCategoryList.propTypes = {
-  params: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
-  locale: React.PropTypes.string.isRequired,
-  userInfo: React.PropTypes.object.isRequired,
-  articleCategoryListCurrentPage: React.PropTypes.number.isRequired,
-  articleCategoryListTotalPage: React.PropTypes.number.isRequired,
-  articleCategoryList: React.PropTypes.array.isRequired,
-  fetchArticleCategoryList: React.PropTypes.func.isRequired,
-  setIsNotFound: React.PropTypes.func.isRequired,
-  setArticleCategoryList: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object,
+  location: React.PropTypes.object,
+  isLoading: React.PropTypes.bool,
+  locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
+  articleCategoryListCurrentPage: React.PropTypes.number,
+  articleCategoryListTotalPage: React.PropTypes.number,
+  articleCategoryList: React.PropTypes.array,
+  fetchArticleCategoryList: React.PropTypes.func,
+  setIsNotFound: React.PropTypes.func,
+  setArticleCategoryList: React.PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleCategoryList);
