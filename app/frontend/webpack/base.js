@@ -18,11 +18,7 @@ var config = module.exports = {
     index: PATH.ROOT_PATH + 'app/frontend/js/index.js',
   },
   module: {
-    preLoaders: [{
-      test: /\.js$/,
-      loader: "eslint-loader",
-      exclude: /node_modules/
-    }, {
+    {
       test: /\.css$/,
       loaders: ['postcss'],
       include: PATH.ROOT_PATH + 'frontend/css'
