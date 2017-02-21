@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 
 
 class Modal extends Component {
@@ -21,4 +20,4 @@ class Modal extends Component {
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Modal);
+export default Modal;
