@@ -18,61 +18,49 @@ var config = module.exports = {
     index: PATH.ROOT_PATH + 'app/frontend/js/index.js',
   },
   module: {
-    preLoaders: [
-    {
+    preLoaders: [{
       test: /\.js$/,
       loader: "eslint-loader",
       exclude: /node_modules/
-    },
-    {
+    }, {
       test: /\.css$/,
       loaders: ['postcss'],
       include: PATH.ROOT_PATH + 'frontend/css'
-    }
-    ],
-    loaders: [
-    {
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loader: ['babel-loader'],
-      query: {
-        plugins: [
-            "transform-runtime"
-          ],
-        presets: ['react', 'es2015']
-      }
-    },
-    { test: /\.modernizrrc$/, loader: 'modernizr'},
-    { test: /\.xml$/, loader: 'xml-loader' },
-    {
-      test: /\.(woff|woff2|eot|ttf|otf)\??.*$/,
-      loader: 'url-loader?limit=8192&name=font/[name].[ext]'
-    },
-    {
-      test: /\.(jpe?g|png|gif|svg)\??.*$/,
-      loader: 'url-loader?limit=8192&name=img/[name].[ext]'
-    },
-    {
-      test: /\.less$/,
-      loader: 'style!css!less'
-    },
-    {
-      test: /\.(css|scss|sass)$/,
-      loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'postcss-loader', 'sass-loader'])
     }],
-    postLoaders: [
-      {
-        test: /\.js$/,
-        loaders: ['es3ify-loader'],
+    loaders: [{
+        test: /\.jsx?$/,
+        exclude: /(node_modules)/,
+        loader: ["babel-loader"],
+        query: {
+          presets: ["es2015"]
+        }
       },
-    ]
+      { test: /\.modernizrrc$/, loader: 'modernizr' },
+      { test: /\.xml$/, loader: 'xml-loader' }, {
+        test: /\.(woff|woff2|eot|ttf|otf)\??.*$/,
+        loader: 'url-loader?limit=8192&name=font/[name].[ext]'
+      }, {
+        test: /\.(jpe?g|png|gif|svg)\??.*$/,
+        loader: 'url-loader?limit=8192&name=img/[name].[ext]'
+      }, {
+        test: /\.less$/,
+        loader: 'style!css!less'
+      }, {
+        test: /\.(css|scss|sass)$/,
+        loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'postcss-loader', 'sass-loader'])
+      }
+    ],
+    postLoaders: [{
+      test: /\.js$/,
+      loaders: ['es3ify-loader'],
+    }, ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.coffee', '.json'],
     alias: {
       'react': 'react',
       'picker': 'pickadate/lib/picker',
-       modernizr$: path.resolve(__dirname, PATH.ROOT_PATH + '.modernizrrc')
+      modernizr$: path.resolve(__dirname, PATH.ROOT_PATH + '.modernizrrc')
     }
   },
   output: {
@@ -113,7 +101,7 @@ var config = module.exports = {
       // do not autoprefixer the css because of style lint in development env,
       // whereas it will be called in production env, see production.config.js
 
-      cssnext({autoprefixer: {browsers: "ie >= 9, ..."}}),
+      cssnext({ autoprefixer: { browsers: "ie >= 9, ..." } }),
       postcssReporter({ clearMessages: true })
     ]
   }
