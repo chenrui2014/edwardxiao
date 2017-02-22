@@ -49,11 +49,7 @@ var config = module.exports = {
         test: /\.(css|scss|sass)$/,
         loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'postcss-loader', 'sass-loader'])
       }
-    ],
-    postLoaders: [{
-      test: /\.js$/,
-      loaders: ['es3ify-loader'],
-    }, ]
+    ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.coffee', '.json'],
