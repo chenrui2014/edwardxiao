@@ -163,6 +163,9 @@ Nav.contextTypes = {
 
 Nav.propTypes = {
   locale: React.PropTypes.string,
+  activeTab: React.PropTypes.string,
+  className: React.PropTypes.string,
+  isIndex: React.PropTypes.bool,
   currentUser: React.PropTypes.object,
   changeLocale: React.PropTypes.func,
   setModalContentName: React.PropTypes.func,

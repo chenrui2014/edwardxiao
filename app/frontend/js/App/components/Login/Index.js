@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import Validator from '../../../common/my_validator';
 let validator = new Validator();
 
@@ -78,7 +77,7 @@ class Login extends Component {
     } = this.props;
     let {
       username,
-      password,
+      // password,
       captchaCode,
     } = this.state;
     let LANG_USER = require('../../../../../locales/' + locale + '/user');

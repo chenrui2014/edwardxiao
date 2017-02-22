@@ -14,7 +14,7 @@ import Utils from '../../../common/utils';
 import MobileNav from '../../components/MobileNav/Index';
 import Nav from '../../components/Nav/Index';
 import Footer from '../../components/Footer/Index';
-import NotFound from '../NotFound';
+import NotFound from '../NotFound/Index';
 import '../../../../css/articles.css';
 
 class ArticleForm extends Component {
@@ -23,7 +23,7 @@ class ArticleForm extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      backUrl: null,
+      // backUrl: null,
       id: '',
       title: '',
       uniqueKey: '',
@@ -160,14 +160,14 @@ class ArticleForm extends Component {
         chunk_size: '4mb',                  // 分块上传时，每块的体积
         auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
         init: {
-          'FilesAdded': (up, files) => {
-            plupload.each(files, function(file) {
-                // 文件添加进队列后,处理相关的事情
-            });
-          },
-          'BeforeUpload': (up, file) => {
-            // 每个文件上传前,处理相关的事情
-          },
+          // 'FilesAdded': (up, files) => {
+          //   plupload.each(files, function(file) {
+          //       // 文件添加进队列后,处理相关的事情
+          //   });
+          // },
+          // 'BeforeUpload': (up, file) => {
+          //   // 每个文件上传前,处理相关的事情
+          // },
           'UploadProgress': (up, file) => {
             // 每个文件上传时,处理相关的事情
             Utils.initSpin('cover-spin-loader', {
@@ -197,12 +197,12 @@ class ArticleForm extends Component {
               isUploading: false
             });
           },
-          'Error': (up, err, errTip) => {
-            //上传出错时,处理相关的事情
-          },
-          'UploadComplete': () => {
-            //队列文件处理完毕后,处理相关的事情
-          },
+          // 'Error': (up, err, errTip) => {
+          //   //上传出错时,处理相关的事情
+          // },
+          // 'UploadComplete': () => {
+          //   //队列文件处理完毕后,处理相关的事情
+          // },
         }
     });
     var uploader2 = Qiniu.uploader({
@@ -221,29 +221,29 @@ class ArticleForm extends Component {
         chunk_size: '4mb',                  // 分块上传时，每块的体积
         auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
         init: {
-          'FilesAdded': (up, files) => {
-            plupload.each(files, function(file) {
-                // 文件添加进队列后,处理相关的事情
-            });
-          },
-          'BeforeUpload': (up, file) => {
-            // 每个文件上传前,处理相关的事情
-          },
-          'UploadProgress': (up, file) => {
-            // 每个文件上传时,处理相关的事情
-          },
+          // 'FilesAdded': (up, files) => {
+          //   plupload.each(files, function(file) {
+          //       // 文件添加进队列后,处理相关的事情
+          //   });
+          // },
+          // 'BeforeUpload': (up, file) => {
+          //   // 每个文件上传前,处理相关的事情
+          // },
+          // 'UploadProgress': (up, file) => {
+          //   // 每个文件上传时,处理相关的事情
+          // },
           'FileUploaded': (up, file, info) => {
             var domain = `http://${__PRELOADED_STATE__.qiniuDomain}/`;
             var res = JSON.parse(info);
             var sourceLink = domain + res.key; //获取上传成功后的文件的Url
-            this.editor.insertContent('<img src="'+ sourceLink +'"/>');;
+            this.editor.insertContent('<img src="'+ sourceLink +'"/>');
           },
-          'Error': (up, err, errTip) => {
-            //上传出错时,处理相关的事情
-          },
-          'UploadComplete': () => {
-            //队列文件处理完毕后,处理相关的事情
-          },
+          // 'Error': (up, err, errTip) => {
+          //   //上传出错时,处理相关的事情
+          // },
+          // 'UploadComplete': () => {
+          //   //队列文件处理完毕后,处理相关的事情
+          // },
         }
     });
   }
@@ -458,12 +458,12 @@ class ArticleForm extends Component {
       locale,
       isNotFound,
       articleList,
-      currentUser,
+      // currentUser,
     } = this.props;
     let {
       isLoading,
       isUploading,
-      id,
+      // id,
       title,
       uniqueKey,
       author,
@@ -487,7 +487,7 @@ class ArticleForm extends Component {
     else{
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
-      let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
+      // let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
       let coverUrlHtml;
       let coverHtml;
@@ -535,7 +535,7 @@ class ArticleForm extends Component {
           </div>
         );
       }
-      let articleListHtml;
+      // let articleListHtml;
       let articleCategoryOptionsHtml;
       if (!isLoading){
         if (articleCategoryOptions.length){
@@ -545,7 +545,7 @@ class ArticleForm extends Component {
             );
           });
         }
-        let backUrl = this.state.backUrl;
+        // let backUrl = this.state.backUrl;
         contentHtml = (
           <div className="page-content article background-white">
             <MobileNav isIndex={false} activeTab="articles"/>

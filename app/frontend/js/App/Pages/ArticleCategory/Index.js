@@ -5,15 +5,12 @@ import {
   setIsNotFound,
 } from '../../actions/index';
 
-import Validator from '../../../common/my_validator';
-let validator = new Validator();
-
 import Utils from '../../../common/utils';
 
 import MobileNav from '../../components/MobileNav/Index';
 import Nav from '../../components/Nav/Index';
 import Footer from '../../components/Footer/Index';
-import NotFound from '../NotFound';
+import NotFound from '../NotFound/Index';
 import '../../../../css/articles.css';
 
 class ArticleCategory extends Component {
@@ -37,7 +34,7 @@ class ArticleCategory extends Component {
       isPrivate: false,
       content: '',
       articleCategoryOptions: [],
-      isUploading: false,
+      // isUploading: false,
     }
   }
 
@@ -55,11 +52,11 @@ class ArticleCategory extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // if (prevState.id == '' && this.state.id !== ''){
-    //   this.setIsLoading(false);
-    // }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   // if (prevState.id == '' && this.state.id !== ''){
+  //   //   this.setIsLoading(false);
+  //   // }
+  // }
 
   handleImageLoaded() {
     Utils.stopSpin('cover-spin-loader');
@@ -148,13 +145,12 @@ class ArticleCategory extends Component {
     let {
       locale,
       isNotFound,
-      articleCategoryList,
       currentUser,
     } = this.props;
     let {
       isLoading,
-      isUploading,
-      id,
+      // isUploading,
+      // id,
       title,
       uniqueKey,
       author,
@@ -162,12 +158,12 @@ class ArticleCategory extends Component {
       desc,
       cover,
       articleCategory,
-      type,
+      // type,
       tag,
       isBanned,
       isPrivate,
-      content,
-      articleCategoryOptions,
+      // content,
+      // articleCategoryOptions,
     } = this.state;
     if (isNotFound){
       contentHtml = (<NotFound />);
@@ -177,9 +173,6 @@ class ArticleCategory extends Component {
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
-      let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
-      let articleCategoryListHtml;
-      let articleCategoryOptionsHtml;
       let editArticleCategoryButton;
 
       let coverHtml;
@@ -196,7 +189,6 @@ class ArticleCategory extends Component {
             <div className="my-button my-button--blue" onClick={this.go.bind(this, '/article_categories/' + uniqueKey + '/edit')}>{LANG_ACTION['edit']}{LANG_NAV['articleCategory']}</div>
           );
         }
-        let backUrl = this.state.backUrl;
         contentHtml = (
           <div className="page-content article background-white">
             <MobileNav isIndex={false} activeTab="article"/>
@@ -254,13 +246,11 @@ class ArticleCategory extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    articleCategoryList,
     isNotFound,
     currentUser,
   } = state;
   return {
     locale,
-    articleCategoryList,
     isNotFound,
     currentUser,
   };
@@ -268,9 +258,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleCategoryList: () => {
-      dispatch(fetchArticleCategoryList());
-    },
     setIsNotFound: (val) => {
       dispatch(setIsNotFound(val));
     },
@@ -285,10 +272,9 @@ ArticleCategory.propTypes = {
   params: React.PropTypes.object,
   location: React.PropTypes.object,
   isLoading: React.PropTypes.bool,
+  isNotFound: React.PropTypes.bool,
   locale: React.PropTypes.string,
   currentUser: React.PropTypes.object,
-  articleCategoryList: React.PropTypes.array,
-  fetchArticleCategoryList: React.PropTypes.func,
   setIsNotFound: React.PropTypes.func,
 };
 

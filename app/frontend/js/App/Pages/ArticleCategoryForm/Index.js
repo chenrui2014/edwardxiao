@@ -4,7 +4,7 @@ import _ from 'lodash';
 import TinyMCE from 'react-tinymce';
 import {
   setIsNotFound,
-} from '../../actions/Index';
+} from '../../actions/index';
 
 import Validator from '../../../common/my_validator';
 let validator = new Validator();
@@ -14,7 +14,7 @@ import Utils from '../../../common/utils';
 import MobileNav from '../../components/MobileNav/Index';
 import Nav from '../../components/Nav/Index';
 import Footer from '../../components/Footer/Index';
-import NotFound from '../NotFound';
+import NotFound from '../NotFound/Index';
 import '../../../../css/articles.css';
 
 class ArticleCategoryForm extends Component {
@@ -23,7 +23,7 @@ class ArticleCategoryForm extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      backUrl: null,
+      // backUrl: null,
       id: '',
       title: '',
       uniqueKey: '',
@@ -164,14 +164,14 @@ class ArticleCategoryForm extends Component {
         chunk_size: '4mb',                  // 分块上传时，每块的体积
         auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
         init: {
-            'FilesAdded': (up, files) => {
-                plupload.each(files, function(file) {
-                    // 文件添加进队列后,处理相关的事情
-                });
-            },
-            'BeforeUpload': (up, file) => {
-              // 每个文件上传前,处理相关的事情
-            },
+            // 'FilesAdded': (up, files) => {
+            //     plupload.each(files, function(file) {
+            //         // 文件添加进队列后,处理相关的事情
+            //     });
+            // },
+            // 'BeforeUpload': (up, file) => {
+            //   // 每个文件上传前,处理相关的事情
+            // },
             'UploadProgress': (up, file) => {
               // 每个文件上传时,处理相关的事情
               Utils.initSpin('cover-spin-loader', {
@@ -201,12 +201,12 @@ class ArticleCategoryForm extends Component {
                 isUploading: false
               });
             },
-            'Error': (up, err, errTip) => {
-                   //上传出错时,处理相关的事情
-            },
-            'UploadComplete': () => {
-                   //队列文件处理完毕后,处理相关的事情
-            },
+            // 'Error': (up, err, errTip) => {
+            //        //上传出错时,处理相关的事情
+            // },
+            // 'UploadComplete': () => {
+            //        //队列文件处理完毕后,处理相关的事情
+            // },
         }
     });
     var uploader2 = Qiniu.uploader({
@@ -225,29 +225,29 @@ class ArticleCategoryForm extends Component {
         chunk_size: '4mb',                  // 分块上传时，每块的体积
         auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
         init: {
-          'FilesAdded': (up, files) => {
-            plupload.each(files, function(file) {
-                // 文件添加进队列后,处理相关的事情
-            });
-          },
-          'BeforeUpload': (up, file) => {
-            // 每个文件上传前,处理相关的事情
-          },
-          'UploadProgress': (up, file) => {
-            // 每个文件上传时,处理相关的事情
-          },
+          // 'FilesAdded': (up, files) => {
+          //   plupload.each(files, function(file) {
+          //       // 文件添加进队列后,处理相关的事情
+          //   });
+          // },
+          // 'BeforeUpload': (up, file) => {
+          //   // 每个文件上传前,处理相关的事情
+          // },
+          // 'UploadProgress': (up, file) => {
+          //   // 每个文件上传时,处理相关的事情
+          // },
           'FileUploaded': (up, file, info) => {
             var domain = `http://${__PRELOADED_STATE__.qiniuDomain}/`;
             var res = JSON.parse(info);
             var sourceLink = domain + res.key; //获取上传成功后的文件的Url
-            this.editor.insertContent('<img src="'+ sourceLink +'"/>');;
+            this.editor.insertContent('<img src="'+ sourceLink +'"/>');
           },
-          'Error': (up, err, errTip) => {
-            //上传出错时,处理相关的事情
-          },
-          'UploadComplete': () => {
-            //队列文件处理完毕后,处理相关的事情
-          },
+          // 'Error': (up, err, errTip) => {
+          //   //上传出错时,处理相关的事情
+          // },
+          // 'UploadComplete': () => {
+          //   //队列文件处理完毕后,处理相关的事情
+          // },
         }
     });
   }
@@ -485,13 +485,11 @@ class ArticleCategoryForm extends Component {
     let {
       locale,
       isNotFound,
-      articleCategoryList,
-      currentUser,
     } = this.props;
     let {
       isLoading,
       isUploading,
-      id,
+      // id,
       title,
       uniqueKey,
       author,
@@ -516,7 +514,6 @@ class ArticleCategoryForm extends Component {
     else{
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
-      let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
       let coverUrlHtml;
       let coverHtml;
@@ -564,36 +561,15 @@ class ArticleCategoryForm extends Component {
           </div>
         );
       }
-      let articleCategoryListHtml;
       let articleCategoryOptionsHtml;
       if (!isLoading){
         if (articleCategoryOptions.length){
           articleCategoryOptionsHtml = articleCategoryOptions.map((item, key) => {
             return (
-              <option value={item.uniqueKey}>{item.title}</option>
+              <option key={key} value={item.uniqueKey}>{item.title}</option>
             );
           });
         }
-        let backUrl = this.state.backUrl;
-        const toolbarConfig = {
-          // Optionally specify the groups to display (displayed in the order listed).
-          display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'IMAGE_BUTTON', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
-          INLINE_STYLE_BUTTONS: [
-            {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
-            {label: 'Italic', style: 'ITALIC'},
-            {label: 'Underline', style: 'UNDERLINE'}
-          ],
-          BLOCK_TYPE_DROPDOWN: [
-            {label: 'Normal', style: 'unstyled'},
-            {label: 'Heading Large', style: 'header-one'},
-            {label: 'Heading Medium', style: 'header-two'},
-            {label: 'Heading Small', style: 'header-three'}
-          ],
-          BLOCK_TYPE_BUTTONS: [
-            {label: 'UL', style: 'unordered-list-item'},
-            {label: 'OL', style: 'ordered-list-item'}
-          ]
-        };
         contentHtml = (
           <div className="page-content article background-white">
             <MobileNav isIndex={false} activeTab="article_categories"/>
@@ -897,13 +873,11 @@ class ArticleCategoryForm extends Component {
 function mapStateToProps(state) {
   let {
     locale,
-    articleCategoryList,
     isNotFound,
     currentUser,
   } = state;
   return {
     locale,
-    articleCategoryList,
     isNotFound,
     currentUser,
   };
@@ -911,9 +885,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchArticleCategoryList: () => {
-      dispatch(fetchArticleCategoryList());
-    },
     setIsNotFound: (val) => {
       dispatch(setIsNotFound(val));
     },
@@ -930,9 +901,8 @@ ArticleCategoryForm.propTypes = {
   isLoading: React.PropTypes.bool,
   locale: React.PropTypes.string,
   currentUser: React.PropTypes.object,
-  articleCategoryList: React.PropTypes.array,
-  fetchArticleCategoryList: React.PropTypes.func,
   setIsNotFound: React.PropTypes.func,
+  onChange: React.PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleCategoryForm);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import Utils from '../../../common/Utils';
 import Validator from '../../../common/my_validator';
 let validator = new Validator();
@@ -40,7 +39,7 @@ class MyAccount extends Component {
     this.initQiniu();
   }
 
-  componentDidUpdate(prevProps, prevState){
+  componentDidUpdate(prevProps){
     if (prevProps.isSendVerifyCode && !this.props.isSendVerifyCode){
       this.clearTime();
     }
@@ -50,7 +49,6 @@ class MyAccount extends Component {
   }
 
   initQiniu(){
-    var _this = this;
     var uploader = Qiniu.uploader({
         runtimes: 'html5,flash,html4',      // 上传模式,依次退化
         browse_button: 'pickfiles',         // 上传选择的点选按钮，**必需**
@@ -67,14 +65,14 @@ class MyAccount extends Component {
         chunk_size: '4mb',                  // 分块上传时，每块的体积
         auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
         init: {
-            'FilesAdded': (up, files) => {
-                plupload.each(files, function(file) {
-                    // 文件添加进队列后,处理相关的事情
-                });
-            },
-            'BeforeUpload': (up, file) => {
-              // 每个文件上传前,处理相关的事情
-            },
+            // 'FilesAdded': (up, files) => {
+            //     plupload.each(files, function(file) {
+            //         // 文件添加进队列后,处理相关的事情
+            //     });
+            // },
+            // 'BeforeUpload': (up, file) => {
+            //   // 每个文件上传前,处理相关的事情
+            // },
             'UploadProgress': (up, file) => {
               // 每个文件上传时,处理相关的事情
               Utils.initSpin('avatar-spin-loader', {
@@ -96,7 +94,7 @@ class MyAccount extends Component {
               //    "key": "gogopher.jpg"
               //  }
               // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
-              var domain = `http://${__PRELOADED_STATE__.qiniuDomain}/`;
+              var domain = `http://${window.__PRELOADED_STATE__.qiniuDomain}/`;
               var res = JSON.parse(info);
               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
               this.setState({
@@ -104,12 +102,12 @@ class MyAccount extends Component {
                 isUploading: false
               });
             },
-            'Error': (up, err, errTip) => {
-                   //上传出错时,处理相关的事情
-            },
-            'UploadComplete': () => {
-                   //队列文件处理完毕后,处理相关的事情
-            },
+            // 'Error': (up, err, errTip) => {
+            //        //上传出错时,处理相关的事情
+            // },
+            // 'UploadComplete': () => {
+            //        //队列文件处理完毕后,处理相关的事情
+            // },
         }
     });
   }
@@ -187,6 +185,7 @@ class MyAccount extends Component {
   }
 
   fetchVerifyCode(){
+    let $el;
     if (this.state.isPhone){
       $el = $('#phone');
     }
@@ -313,8 +312,8 @@ class MyAccount extends Component {
       nickname,
       phone,
       email,
-      password,
-      repassword,
+      // password,
+      // repassword,
       verifyCode,
       isSendVerifyCode,
       avatar,
@@ -334,7 +333,6 @@ class MyAccount extends Component {
     let nicknameHtml;
     let phoneHtml;
     let emailHtml;
-    let methodHtml;
     let avatarHtml;
     let avatarImageHtml;
     let previewClass;
@@ -607,7 +605,7 @@ class MyAccount extends Component {
         );
         toggleChangePasswordHtml = (
           <div className="form-check step-content__text mgt-15 mgb-20">
-            <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+            <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -685,11 +683,13 @@ function mapStateToProps(state) {
     locale,
     currentUser,
     captcha,
+    isSendVerifyCode,
   } = state;
   return {
     locale,
     currentUser,
     captcha,
+    isSendVerifyCode,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -712,10 +712,13 @@ MyAccount.contextTypes = {
 
 MyAccount.propTypes = {
   locale: React.PropTypes.string,
+  isSendVerifyCode: React.PropTypes.bool,
+  currentUser: React.PropTypes.object,
   captcha: React.PropTypes.string,
   signup: React.PropTypes.func,
   remove: React.PropTypes.func,
   changeCaptcha: React.PropTypes.func,
+  setIsSendVerifyCode: React.PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyAccount);

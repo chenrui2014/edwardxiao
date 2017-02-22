@@ -7,7 +7,6 @@ import {
   setArticleCategory,
   fetchArticleList,
   setArticleList,
-  setIsNotFound,
 } from '../../actions/index';
 
 import Utils from '../../../common/utils';
@@ -15,7 +14,7 @@ import Utils from '../../../common/utils';
 import MobileNav from '../../components/MobileNav/Index';
 import Nav from '../../components/Nav/Index';
 import Footer from '../../components/Footer/Index';
-import NotFound from '../NotFound';
+import NotFound from '../NotFound/Index';
 import ArticleItem from './components/ArticleItem';
 
 class ArticleList extends Component {
@@ -24,7 +23,6 @@ class ArticleList extends Component {
     super(props);
     this.state = {
       isLoading: typeof window !== 'undefined' ? true : false,
-      backUrl: null,
       articleType: !_.isNull(props.currentUser) && props.currentUser.role == 'admin' ? '' : 'article',
     }
   }
@@ -70,7 +68,7 @@ class ArticleList extends Component {
     this.removeApi(id).then((res) => {
       if (res.code === 0){
         let newArticleList = [];
-        this.props.articleList.map((item, key) => {
+        this.props.articleList.map((item) => {
           if (item.id != res.id){
             newArticleList.push(item);
           }
@@ -133,7 +131,6 @@ class ArticleList extends Component {
       content = (<NotFound />);
     }
     else{
-      let LANG_USER = require('../../../../../locales/' + locale + '/user');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
       let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
@@ -227,7 +224,6 @@ class ArticleList extends Component {
           );
         }
       }
-      let backUrl = this.state.backUrl;
       content = (
         <div className="page-content background-white">
           <MobileNav isIndex={false} activeTab="articles"/>
@@ -315,6 +311,7 @@ ArticleList.propTypes = {
   params: React.PropTypes.object,
   location: React.PropTypes.object,
   isLoading: React.PropTypes.bool,
+  isNotFound: React.PropTypes.bool,
   locale: React.PropTypes.string,
   currentUser: React.PropTypes.object,
   articleCategoryListCurrentPage: React.PropTypes.number,
@@ -325,8 +322,8 @@ ArticleList.propTypes = {
   articleList: React.PropTypes.array,
   fetchArticleCategoryList: React.PropTypes.func,
   fetchArticleList: React.PropTypes.func,
-  setIsNotFound: React.PropTypes.func,
   setArticleList: React.PropTypes.func,
+  setArticleCategory: React.PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);

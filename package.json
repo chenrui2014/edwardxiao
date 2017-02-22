@@ -18,8 +18,8 @@
     "build_prod": "rm -rf public/assets && npm run webpack_dll_prod && npm run webpack_prod",
     "deploy_cdn": "APP_VERSION=$npm_package_version NODE_ENV=production node ./scripts/deploy_cdn.js",
     "deploy_cdn_dev": "NODE_ENV=development node ./scripts/deploy_cdn.js",
-    "deploy": "git checkout master && git pull origin master && rm -rf node_modules && cnpm i && npm run build_prod && npm run deploy_cdn && npm run pm2:restart",
-    "deploy_dev": "git checkout master && git pull gitlab master && rm -rf node_modules && cnpm i && npm run build_dev && npm run deploy_cdn_dev && npm run pm2_dev:restart",
+    "deploy": "git checkout master && git pull origin master && rm -rf node_modules && npm i && npm run build_prod && npm run deploy_cdn && npm run pm2:restart",
+    "deploy_dev": "git checkout master && git pull gitlab master && rm -rf node_modules && npm i && npm run build_dev && npm run deploy_cdn_dev && npm run pm2_dev:restart",
     "migrate_up": "./node_modules/.bin/migrate up",
     "migrate_down": "./node_modules/.bin/migrate down",
     "migrate_create": "./node_modules/.bin/migrate create add-pets"

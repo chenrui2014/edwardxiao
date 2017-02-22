@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Spinner from 'spin.js';
-import moment from 'moment/min/moment.min';
+// import moment from 'moment/min/moment.min';
 import qrcode from 'arale-qrcode';
 let utils = {
   urlParam: (name) => {

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import {
   setPortfolioType,
   setSlideModalContentName,
@@ -33,10 +32,6 @@ class Index extends Component {
     this.destroyFullpage();
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
-
   go(url) {
     this.context.router.push(url);
   }
@@ -60,7 +55,7 @@ class Index extends Component {
         slidesNavPosition: 'bottom',
         scrollOverflow: false,
         normalScrollElements: '.slide-modal-content, .modal',
-        onLeave: (index, nextIndex) => {
+        onLeave: () => {
           $('.mo-nav-mobile__mask').click();
         },
         onSlideLeave: (anchorLink, index, slideIndex, direction, nextSlideIndex) => {
@@ -140,10 +135,6 @@ class Index extends Component {
     let {
       locale,
     } = this.props;
-    let articleListHtml;
-    articleListHtml = (
-      <Link>文章</Link>
-    );
     let LANG_GENERAL = require('../../../locales/' + locale + '/general');
     let content = (
       <div className="container-full">

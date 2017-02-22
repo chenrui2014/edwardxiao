@@ -6,15 +6,12 @@ import {
   setIsNotFound,
 } from '../../actions/index';
 
-import Validator from '../../../common/my_validator';
-let validator = new Validator();
-
 import Utils from '../../../common/utils';
 
 import MobileNav from '../../components/MobileNav/Index';
 import Nav from '../../components/Nav/Index';
 import Footer from '../../components/Footer/Index';
-import NotFound from '../NotFound';
+import NotFound from '../NotFound/Index';
 
 class Article extends Component {
 
@@ -83,14 +80,12 @@ class Article extends Component {
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
-      let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
-      let articleCategoryOptionsHtml;
       let editArticleButton;
       let coverHtml;
 
       if (!isLoading){
         let {
-          id,
+          // id,
           title,
           uniqueKey,
           author,
@@ -98,11 +93,11 @@ class Article extends Component {
           desc,
           cover,
           articleCategory,
-          type,
+          // type,
           tag,
           isBanned,
           isPrivate,
-          content,
+          // content,
         } = article;
         if (cover != ''){
           // coverHtml = <img className="" src={`${cover}?imageView/1/w/${300}/h/${300}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>;
@@ -192,6 +187,7 @@ Article.propTypes = {
   params: React.PropTypes.object,
   location: React.PropTypes.object,
   isLoading: React.PropTypes.bool,
+  isNotFound: React.PropTypes.bool,
   locale: React.PropTypes.string,
   currentUser: React.PropTypes.object,
   article: React.PropTypes.object,

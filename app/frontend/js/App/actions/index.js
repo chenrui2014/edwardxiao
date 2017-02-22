@@ -1,10 +1,9 @@
-import { PATH } from '../../common/path';
 import Utils from '../../common/utils';
 import MyMessage from '../../common/my_message';
 let message = new MyMessage();
 import _ from 'lodash';
-import { browserHistory } from 'react-router';
-import update from 'react-addons-update';
+// import { browserHistory } from 'react-router';
+// import update from 'react-addons-update';
 
 import Validator from '../../common/my_validator';
 let validator = new Validator();
@@ -296,7 +295,7 @@ function signupApi(id, nickname, role, phone, email, verifyCode, password, avata
   })
 }
 
-export const remove = (id) => (dispatch) => {
+export const remove = (id) => () => {
   removeApi(id).then((res) => {
     if (res.code === 0) {
       window.location = '/';
@@ -326,7 +325,7 @@ function removeApi(id) {
   })
 }
 
-export const logout = () => (dispatch) => {
+export const logout = () => () => {
   logoutApi().then((res) => {
     if (res.code === 0) {
       window.location = '/';
@@ -486,19 +485,19 @@ export const fetchArticle = (id) => (dispatch, getState) => {
     if (res.code === 0){
       if (res.data.length){
         let {
-          id,
-          title,
-          uniqueKey,
-          author,
-          preface,
-          desc,
-          cover,
-          articleCategory,
+          // id,
+          // title,
+          // uniqueKey,
+          // author,
+          // preface,
+          // desc,
+          // cover,
+          // articleCategory,
           type,
-          tag,
-          isBanned,
-          isPrivate,
-          content,
+          // tag,
+          // isBanned,
+          // isPrivate,
+          // content,
         } = res.data[0];
         let currentUser = getState().currentUser;
         if ((type != 'portfolio' && (_.isNull(currentUser) && currentUser.role != 'admin')) || (!_.isNull(currentUser) && currentUser.role == 'admin')){

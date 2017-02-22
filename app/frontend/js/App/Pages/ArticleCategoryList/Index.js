@@ -13,7 +13,7 @@ import Utils from '../../../common/utils';
 import MobileNav from '../../components/MobileNav/Index';
 import Nav from '../../components/Nav/Index';
 import Footer from '../../components/Footer/Index';
-import NotFound from '../NotFound';
+import NotFound from '../NotFound/Index';
 import '../../../../css/articles.css';
 import ArticleCategoryItem from './components/ArticleCategoryItem';
 
@@ -23,7 +23,6 @@ class ArticleCategoryList extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      backUrl: null,
     }
   }
 
@@ -64,7 +63,7 @@ class ArticleCategoryList extends Component {
     this.removeApi(id).then((res) => {
       if (res.code === 0){
         let newArticleCategoryList = [];
-        this.props.articleCategoryList.map((item, key) => {
+        this.props.articleCategoryList.map((item) => {
           if (item.id != res.id){
             newArticleCategoryList.push(item);
           }
@@ -120,7 +119,6 @@ class ArticleCategoryList extends Component {
       content = (<NotFound />);
     }
     else{
-      let LANG_USER = require('../../../../../locales/' + locale + '/user');
       let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
       let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
       let LANG_ARTICLE = require('../../../../../locales/' + locale + '/article');
@@ -137,6 +135,7 @@ class ArticleCategoryList extends Component {
           articleCategoryListHtml = articleCategoryList.map((item, key) => {
             return (
               <ArticleCategoryItem
+                key={key}
                 locale={locale}
                 id={item.id}
                 title={item.title}
@@ -177,7 +176,6 @@ class ArticleCategoryList extends Component {
           );
         }
       }
-      let backUrl = this.state.backUrl;
       content = (
         <div className="page-content background-white">
           <MobileNav isIndex={false} activeTab=""/>
@@ -244,6 +242,7 @@ ArticleCategoryList.contextTypes = {
 
 ArticleCategoryList.propTypes = {
   params: React.PropTypes.object,
+  isNotFound: React.PropTypes.bool,
   location: React.PropTypes.object,
   isLoading: React.PropTypes.bool,
   locale: React.PropTypes.string,

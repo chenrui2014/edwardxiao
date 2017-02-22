@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 
 import {
   MODAL_CONTENT_COMPONENT_OBJECT,
@@ -17,7 +16,6 @@ class Modal extends Component {
       modalContentName,
       className,
     } = this.props;
-    let title;
     let Component = MODAL_CONTENT_COMPONENT_OBJECT[modalContentName];
     if (!className){
       className = '';
@@ -40,7 +38,7 @@ function mapStateToProps(state) {
     modalContentName,
   };
 }
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps() {
   return {
 
   };
@@ -52,6 +50,7 @@ Modal.contextTypes = {
 
 Modal.propTypes = {
   modalContentName: React.PropTypes.string,
+  className: React.PropTypes.string,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modal);

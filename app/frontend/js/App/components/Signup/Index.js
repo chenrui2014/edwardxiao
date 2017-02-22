@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import Utils from '../../../common/Utils';
 import Validator from '../../../common/my_validator';
 let validator = new Validator();
@@ -29,13 +28,13 @@ class Signup extends Component {
       isSendVerifyCode: false,
       avatar: '',
       captchaCode: '',
-      isUploading: false,
+      // isUploading: false,
     }
   }
 
-  componentDidMount(){
-    this.initQiniu();
-  }
+  // componentDidMount(){
+  //   this.initQiniu();
+  // }
 
   componentDidUpdate(prevProps){
     if (prevProps.isSendVerifyCode && !this.props.isSendVerifyCode){
@@ -43,69 +42,69 @@ class Signup extends Component {
     }
   }
 
-  initQiniu(){
-    var uploader = Qiniu.uploader({
-        runtimes: 'html5,flash,html4',      // 上传模式,依次退化
-        browse_button: 'pickfiles',         // 上传选择的点选按钮，**必需**
-        uptoken_url: '/api/settings/uptoken',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
-        get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的 uptoken
-        unique_names: true,              // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
-        domain: __PRELOADED_STATE__.qiniuDomain,     // bucket 域名，下载资源时用到，**必需**
-        container: 'container',             // 上传区域 DOM ID，默认是 browser_button 的父元素，
-        max_file_size: '100mb',             // 最大文件体积限制
-        flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入 flash,相对路径
-        max_retries: 3,                     // 上传失败最大重试次数
-        dragdrop: true,                     // 开启可拖曳上传
-        drop_element: 'container',          // 拖曳上传区域元素的 ID，拖曳文件或文件夹后可触发上传
-        chunk_size: '4mb',                  // 分块上传时，每块的体积
-        auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
-        init: {
-            'FilesAdded': (up, files) => {
-                plupload.each(files, function(file) {
-                    // 文件添加进队列后,处理相关的事情
-                });
-            },
-            'BeforeUpload': (up, file) => {
-              // 每个文件上传前,处理相关的事情
-            },
-            'UploadProgress': (up, file) => {
-              // 每个文件上传时,处理相关的事情
-              Utils.initSpin('avatar-spin-loader', {
-                lines: 9,
-                length: 12,
-                width: 10,
-                radius: 14,
-                scale: 0.3,
-              });
-              this.setState({
-                isUploading: true,
-              });
-            },
-            'FileUploaded': (up, file, info) => {
-              // 每个文件上传成功后,处理相关的事情
-              // 其中 info 是文件上传成功后，服务端返回的json，形式如
-              // {
-              //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
-              //    "key": "gogopher.jpg"
-              //  }
-              // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
-              var domain = `http://${__PRELOADED_STATE__.qiniuDomain}/`;
-              var res = JSON.parse(info);
-              var sourceLink = domain + res.key; //获取上传成功后的文件的Url
-              this.setState({
-                avatar: `${sourceLink}`,
-                isUploading: false
-              });
-            },
-            'Error': (up, err, errTip) => {
-                   //上传出错时,处理相关的事情
-            },
-            'UploadComplete': () => {
-                   //队列文件处理完毕后,处理相关的事情
-            },
-        }
-    });
-  }
+  // initQiniu(){
+  //   var uploader = Qiniu.uploader({
+  //       runtimes: 'html5,flash,html4',      // 上传模式,依次退化
+  //       browse_button: 'pickfiles',         // 上传选择的点选按钮，**必需**
+  //       uptoken_url: '/api/settings/uptoken',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
+  //       get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的 uptoken
+  //       unique_names: true,              // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
+  //       domain: __PRELOADED_STATE__.qiniuDomain,     // bucket 域名，下载资源时用到，**必需**
+  //       container: 'container',             // 上传区域 DOM ID，默认是 browser_button 的父元素，
+  //       max_file_size: '100mb',             // 最大文件体积限制
+  //       flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入 flash,相对路径
+  //       max_retries: 3,                     // 上传失败最大重试次数
+  //       dragdrop: true,                     // 开启可拖曳上传
+  //       drop_element: 'container',          // 拖曳上传区域元素的 ID，拖曳文件或文件夹后可触发上传
+  //       chunk_size: '4mb',                  // 分块上传时，每块的体积
+  //       auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
+  //       init: {
+  //           // 'FilesAdded': (up, files) => {
+  //           //     plupload.each(files, function(file) {
+  //           //         // 文件添加进队列后,处理相关的事情
+  //           //     });
+  //           // },
+  //           // 'BeforeUpload': (up, file) => {
+  //           //   // 每个文件上传前,处理相关的事情
+  //           // },
+  //           'UploadProgress': (up, file) => {
+  //             // 每个文件上传时,处理相关的事情
+  //             Utils.initSpin('avatar-spin-loader', {
+  //               lines: 9,
+  //               length: 12,
+  //               width: 10,
+  //               radius: 14,
+  //               scale: 0.3,
+  //             });
+  //             // this.setState({
+  //             //   isUploading: true,
+  //             // });
+  //           },
+  //           'FileUploaded': (up, file, info) => {
+  //             // 每个文件上传成功后,处理相关的事情
+  //             // 其中 info 是文件上传成功后，服务端返回的json，形式如
+  //             // {
+  //             //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+  //             //    "key": "gogopher.jpg"
+  //             //  }
+  //             // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
+  //             var domain = `http://${__PRELOADED_STATE__.qiniuDomain}/`;
+  //             var res = JSON.parse(info);
+  //             var sourceLink = domain + res.key; //获取上传成功后的文件的Url
+  //             // this.setState({
+  //             //   avatar: `${sourceLink}`,
+  //             //   isUploading: false
+  //             // });
+  //           },
+  //           // 'Error': (up, err, errTip) => {
+  //           //        //上传出错时,处理相关的事情
+  //           // },
+  //           // 'UploadComplete': () => {
+  //           //        //队列文件处理完毕后,处理相关的事情
+  //           // },
+  //       }
+  //   });
+  // }
 
   createCaptcha() {
    return {__html: this.props.captcha};
@@ -177,6 +176,7 @@ class Signup extends Component {
   }
 
   fetchVerifyCode(){
+    let $el;
     if (this.state.isPhone){
       $el = $('#phone');
     }
@@ -282,14 +282,14 @@ class Signup extends Component {
       nickname,
       phone,
       email,
-      password,
-      repassword,
+      // password,
+      // repassword,
       isPhone,
       verifyCode,
       isSendVerifyCode,
       avatar,
       captchaCode,
-      isUploading,
+      // isUploading,
     } = this.state;
     let LANG_USER = require('../../../../../locales/' + locale + '/user');
     let phoneHtml;
@@ -398,21 +398,21 @@ class Signup extends Component {
         </div>
       );
     }
-    let avatarHtml;
-    let avatarImageHtml;
-    let previewClass;
-    let cameraHtml = (<div className="camera-mask"><span className="icon icon-camera-alt"></span></div>);
-    if (!isUploading && avatar != ''){
-      avatarImageHtml = (<img className="" src={`${avatar}?imageView/1/w/${100}/h/${100}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
-      previewClass = 'preview';
-    }
-    avatarHtml = (
+    // let avatarHtml;
+    // let avatarImageHtml;
+    // let previewClass;
+    // let cameraHtml = (<div className="camera-mask"><span className="icon icon-camera-alt"></span></div>);
+    // if (!isUploading && avatar != ''){
+      // avatarImageHtml = (<img className="" src={`${avatar}?imageView/1/w/${100}/h/${100}`} style={{'width':'100%'}} onLoad={this.handleImageLoaded.bind(this)}/>);
+      // previewClass = 'preview';
+    // }
+{/*    avatarHtml = (
       <div className={`avatar-holder ${previewClass}`}>
         <div className="spin-loader" id="avatar-spin-loader" style={{'zIndex':'999'}}></div>
         {avatarImageHtml}
         {cameraHtml}
       </div>
-    );
+    );*/}
     return(
       <div className="modal-content">
         <div className="modal-header">
@@ -548,10 +548,12 @@ Signup.contextTypes = {
 
 Signup.propTypes = {
   locale: React.PropTypes.string,
+  isSendVerifyCode: React.PropTypes.bool,
   captcha: React.PropTypes.string,
   signup: React.PropTypes.func,
   setModalContentName: React.PropTypes.func,
   changeCaptcha: React.PropTypes.func,
+  setIsSendVerifyCode: React.PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);

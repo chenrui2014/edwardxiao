@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 
 import {
   SLIDE_MODAL_CONTENT_COMPONENT_OBJECT,
@@ -30,7 +29,6 @@ class SlideModal extends Component {
       slideModalContentName,
       className,
     } = this.props;
-    let title;
     let Component = SLIDE_MODAL_CONTENT_COMPONENT_OBJECT[slideModalContentName];
     if (!className){
       className = '';
@@ -70,6 +68,7 @@ SlideModal.contextTypes = {
 };
 
 SlideModal.propTypes = {
+  className: React.PropTypes.string,
   setArticleList: React.PropTypes.func,
   setSlideModalContentName: React.PropTypes.func,
   slideModalContentName: React.PropTypes.string,

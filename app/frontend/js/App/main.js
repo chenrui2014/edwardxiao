@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import _ from 'lodash';
-import Utils from '../common/utils';
+// import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Modal from './components/Modal/Index';
 import SlideModal from './components/SlideModal/Index';
 import {
@@ -34,7 +32,7 @@ class Main extends Component {
   }
 
   render() {
-    let { children, location } = this.props;
+    let { children } = this.props;
     return(
       <div className="page-transition">
         {children}

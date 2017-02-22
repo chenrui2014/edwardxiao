@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import MobileNav from '../../components/MobileNav/Index';
 import Nav from '../../components/Nav/Index';
 
@@ -66,7 +65,7 @@ NotFound.contextTypes = {
   router: React.PropTypes.object
 };
 
-Nav.propTypes = {
+NotFound.propTypes = {
   locale: React.PropTypes.string,
 }
 

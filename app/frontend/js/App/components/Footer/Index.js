@@ -39,16 +39,16 @@ class Footer extends Component {
 
   render() {
     let {
-      locale,
-      currentUser,
+      // locale,
+      // currentUser,
       className,
     } = this.props;
     if (_.isUndefined(className)){
       className = '';
     }
-    let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
-    let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
-    let LANG_USER = require('../../../../../locales/' + locale + '/user');
+    // let LANG_GENERAL = require('../../../../../locales/' + locale + '/general');
+    // let LANG_NAV = require('../../../../../locales/' + locale + '/nav');
+    // let LANG_USER = require('../../../../../locales/' + locale + '/user');
     return(
       <div className={`footer ${className}`}>
         <div className='footer-content'>
@@ -89,6 +89,7 @@ Footer.contextTypes = {
 
 Footer.propTypes = {
   locale: React.PropTypes.string,
+  className: React.PropTypes.string,
   currentUser: React.PropTypes.object,
   changeLocale: React.PropTypes.func,
   setModalContentName: React.PropTypes.func,

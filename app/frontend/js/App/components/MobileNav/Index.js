@@ -12,11 +12,6 @@ class MobileNav extends Component {
     super(props);
   }
 
-  changeLocale(){
-    let val = this.refs.locale.value;
-    this.props.changeLocale(val);
-  }
-
   setModalContentName(val){
     this.props.setModalContentName(val);
   }
@@ -130,6 +125,8 @@ MobileNav.contextTypes = {
 
 MobileNav.propTypes = {
   locale: React.PropTypes.string,
+  activeTab: React.PropTypes.string,
+  isIndex: React.PropTypes.bool,
   currentUser: React.PropTypes.object,
   setModalContentName: React.PropTypes.func,
   logout: React.PropTypes.func,

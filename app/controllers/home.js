@@ -10,7 +10,10 @@ import { reducer } from '../frontend/js/App/reducers/index';
 import Index from '../frontend/js/App/Index.js';
 
 const index = async (ctx, _next) => {
-  const prerenderHtml = await handleRender(ctx.state.preloadedState);
+  console.log(8888888);
+  console.log(ctx.state.preloadedState);
+  console.log(8888888);
+  const prerenderHtml = await handleRender(ctx.state.preloadedState, <Index/>);
   const locals = {
     title: 'Home',
     nav: 'index',
@@ -30,21 +33,11 @@ const about = async (ctx, _next) => {
   await ctx.render('home/about', locals);
 };
 
-const handleRender = async (preloadedState) => {
-  let {
-    locale,
-    currentUser,
-    captcha,
-  } = preloadedState;
-  let props = {
-    locale: locale,
-    userInfo: currentUser,
-    captcha: captcha,
-  }
-  const store = createStore(reducer, props);
+const handleRender = async(preloadedState, component) => {
+  const store = createStore(reducer, preloadedState);
   const html = renderToString(
     <Provider store={store}>
-      <Index />
+      {component}
     </Provider>
   );
   return html;

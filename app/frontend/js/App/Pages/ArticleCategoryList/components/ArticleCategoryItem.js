@@ -15,14 +15,6 @@ class ArticleCategoryItem extends Component {
 
   }
 
-  go(url) {
-    this.context.router.push(url);
-  }
-
-  fetchArticleList(nextPage) {
-    this.props.fetchArticleList(nextPage);
-  }
-
   createContent() {
     return {__html: this.props.content};
   }
@@ -38,25 +30,24 @@ class ArticleCategoryItem extends Component {
 
   render() {
     let {
-      locale,
+      // locale,
       id,
       title,
       uniqueKey,
-      author,
+      // author,
       preface,
       desc,
       cover,
-      type,
+      // type,
       level,
-      isShow,
-      createdAt,
-      updatedAt,
-      createdBy,
-      updatedBy,
+      // isShow,
+      // createdAt,
+      // updatedAt,
+      // createdBy,
+      // updatedBy,
       currentUser,
     } = this.props;
     let trashHtml;
-    let LANG_USER = require('../../../../../../locales/' + locale + '/user');
     if (!_.isNull(currentUser) && currentUser.role == 'admin' && _.toNumber(level) != 0){
       trashHtml = (
         <div className="trash" onClick={this.remove.bind(this, id)}><span className="icon icon-trash"></span></div>
@@ -77,6 +68,7 @@ class ArticleCategoryItem extends Component {
 
 ArticleCategoryItem.propTypes = {
   locale: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
   id: React.PropTypes.string,
   title: React.PropTypes.string,
   uniqueKey: React.PropTypes.string,
@@ -85,12 +77,15 @@ ArticleCategoryItem.propTypes = {
   desc: React.PropTypes.string,
   content: React.PropTypes.string,
   cover: React.PropTypes.string,
+  level: React.PropTypes.string,
   type: React.PropTypes.string,
   isShow: React.PropTypes.bool,
   createdAt: React.PropTypes.string,
   updatedAt: React.PropTypes.string,
   createdBy: React.PropTypes.string,
   updatedBy: React.PropTypes.string,
+  go: React.PropTypes.func,
+  remove: React.PropTypes.func,
 };
 
 export default ArticleCategoryItem;

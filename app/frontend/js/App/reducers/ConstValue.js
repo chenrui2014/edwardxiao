@@ -1,8 +1,8 @@
-import Login from '../components/Login';
-import Signup from '../components/Signup';
-import MyAccount from '../components/MyAccount';
-import Portfolio from '../components/Portfolio';
-import Empty from '../components/Empty';
+import Login from '../components/Login/Index';
+import Signup from '../components/Signup/Index';
+import MyAccount from '../components/MyAccount/Index';
+import Portfolio from '../components/Portfolio/Index';
+import Empty from '../components/Empty/Index';
 
 export const DEFAULT_STATE = {
   locale: typeof __PRELOADED_STATE__ !== 'undefined' && typeof __PRELOADED_STATE__.locale !== 'undefined' ? __PRELOADED_STATE__.locale : 'zh-CN',

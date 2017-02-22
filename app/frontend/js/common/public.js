@@ -68,7 +68,7 @@ $(window).on('resize', () => {
     window.myPatentSearchChart3.resize();
   }
 });
-Utils.setupAjaxHeader(__PRELOADED_STATE__.csrf);
+Utils.setupAjaxHeader(window.__PRELOADED_STATE__.csrf);
 
 $(window).scroll(function() {
   var currentScrollHight, targetScrollHight;

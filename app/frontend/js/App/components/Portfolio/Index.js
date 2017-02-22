@@ -9,9 +9,6 @@ import {
   fetchArticleList,
 } from '../../actions/index';
 
-let masonryOptions = {
-    // isFitWidth: true,
-};
 
 class Portfolio extends Component {
 
@@ -42,7 +39,7 @@ class Portfolio extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState){
+  componentDidUpdate(prevProps){
     if (prevProps.portfolioType != this.props.portfolioType){
       this.props.fetchArticleList(1, this.props.portfolioType, 'portfolio');
     }
@@ -54,7 +51,7 @@ class Portfolio extends Component {
     }
   }
 
-  handleImageLoaded(id, imageElementId){
+  handleImageLoaded(id){
     Utils.stopSpin(id);
   }
 
@@ -84,9 +81,7 @@ class Portfolio extends Component {
     let {
       isLoading
     } = this.state;
-    let LANG_USER = require('../../../../../locales/' + locale + '/user');
     let LANG_ACTION = require('../../../../../locales/' + locale + '/action');
-    let LANG_MESSAGE = require('../../../../../locales/' + locale + '/message');
     let content;
     let listHtml;
     if (!isLoading){
