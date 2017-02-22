@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pm2": "NODE_ENV=production ./node_modules/.bin/pm2 start index.js -i 2 --name \"edwardxiao\" --max-memory-restart 300M --merge-logs --log-date-format=\"YYYY-MM-DD HH:mm Z\" --output=\"log/production.log\"",
+    "pm2:restart": "NODE_ENV=production ./node_modules/.bin/pm2 restart \"edwardxiao\"",
     "start": "./node_modules/.bin/nodemon index.js ",
     "start_dev": "./node_modules/.bin/nodemon index.js & npm run build_dev",
     "start_prod": "./node_modules/.bin/nodemon index.js & npm run build_prod",
@@ -18,7 +19,7 @@
     "build_prod": "rm -rf public/assets && npm run webpack_dll_prod && npm run webpack_prod",
     "deploy_cdn": "APP_VERSION=$npm_package_version NODE_ENV=production node ./scripts/deploy_cdn.js",
     "deploy_cdn_dev": "NODE_ENV=development node ./scripts/deploy_cdn.js",
-    "deploy": "git checkout master && git pull origin master && rm -rf node_modules && npm i && npm run build_prod && npm run deploy_cdn && pm2:restart",
+    "deploy": "git checkout master && git pull origin master && rm -rf node_modules && npm i && npm run build_prod && npm run deploy_cdn && npm run pm2:restart",
     "deploy_dev": "git checkout master && git pull gitlab master && rm -rf node_modules && npm i && npm run build_dev && npm run deploy_cdn_dev && npm run pm2_dev:restart",
     "migrate_up": "./node_modules/.bin/migrate up",
     "migrate_down": "./node_modules/.bin/migrate down",

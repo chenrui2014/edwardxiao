@@ -7,7 +7,7 @@ import objectAssign from 'object-assign';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { reducer } from '../frontend/js/App/reducers/index';
-import Index from '../frontend/js/App/Index.js';
+import Index from '../frontend/js/App/index.js';
 
 const index = async (ctx, _next) => {
   const prerenderHtml = await handleRender(ctx.state.preloadedState, <Index/>);
