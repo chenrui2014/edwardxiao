@@ -10,14 +10,11 @@ import { reducer } from '../frontend/js/App/reducers/index';
 import Index from '../frontend/js/App/Index.js';
 
 const index = async (ctx, _next) => {
-  console.log(8888888);
-  console.log(ctx.state.preloadedState);
-  console.log(8888888);
   const prerenderHtml = await handleRender(ctx.state.preloadedState, <Index/>);
   const locals = {
     title: 'Home',
     nav: 'index',
-    prerenderHtml: prerenderHtml,
+    // prerenderHtml: prerenderHtml,
     baseUrl: '/',
   };
   await ctx.render('home/index', locals);
@@ -34,7 +31,13 @@ const about = async (ctx, _next) => {
 };
 
 const handleRender = async(preloadedState, component) => {
-  const store = createStore(reducer, preloadedState);
+  let newState = {};
+  Object.keys(preloadedState).map((key) => {
+    if (key !== 'csrf' && key !== 'captchaData' && key !== 'qiniuDomain'){
+      newState[key] = preloadedState[key];
+    }
+  });
+  const store = createStore(reducer, newState);
   const html = renderToString(
     <Provider store={store}>
       {component}

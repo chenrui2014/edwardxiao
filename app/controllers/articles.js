@@ -126,7 +126,13 @@ const show = async(ctx, _next) => {
 };
 
 const handleRender = async(preloadedState, component) => {
-  const store = createStore(reducer, preloadedState);
+  let newState = {};
+  Object.keys(preloadedState).map((key) => {
+    if (key !== 'csrf' && key !== 'captchaData' && key !== 'qiniuDomain'){
+      newState[key] = preloadedState[key];
+    }
+  });
+  const store = createStore(reducer, newState);
   const html = renderToString(
     <Provider store={store}>
       {component}

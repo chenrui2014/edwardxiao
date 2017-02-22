@@ -88,19 +88,19 @@ class Portfolio extends Component {
       if (articleList.length){
         listHtml = articleList.map((item, key) => {
           let itemHtml = (
-            <div className="portfolio-item">
+            <div className="portfolio-item" key={key}>
               <div className="spin-loader" id={`spin-loader-${key}`}></div>
               <img src={`${item.cover}`} className="" id={`gallery-image-${key}`} onLoad={this.handleImageLoaded.bind(this, `spin-loader-${key}`, `gallery-image-${key}`)}/>
             </div>
           );
           let html = (
-            <div className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12" >
+            <div className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12" key={key}>
               {itemHtml}
             </div>
           );
           if (item.title != '' && item.title != ' '){
             html = (
-              <div className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12" title={item.title}>
+              <div className="portfolio-item-wrapper col-lg-3 col-md-4 col-sm-6 col-xs-12" title={item.title} key={key}>
                 {itemHtml}
               </div>
             );

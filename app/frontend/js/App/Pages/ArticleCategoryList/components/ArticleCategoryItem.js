@@ -83,7 +83,7 @@ ArticleCategoryItem.propTypes = {
   createdAt: React.PropTypes.string,
   updatedAt: React.PropTypes.string,
   createdBy: React.PropTypes.string,
-  updatedBy: React.PropTypes.string,
+  updatedBy: React.PropTypes.object,
   go: React.PropTypes.func,
   remove: React.PropTypes.func,
 };

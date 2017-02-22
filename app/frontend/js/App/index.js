@@ -20,10 +20,7 @@ class Index extends Component {
   }
 
   componentDidMount() {
-    if (window){
-      require('fullpage.js/dist/jquery.fullpage.min.js');
-      require('fullpage.js/vendors/scrolloverflow.min.js');
-    }
+    require('fullpage.js/dist/jquery.fullpage.min.js');
     this.destroyFullpage();
     this.initFullpage();
   }
@@ -37,87 +34,83 @@ class Index extends Component {
   }
 
   destroyFullpage(){
-    if (window){
-      if (typeof $.fn.fullpage.destroy == 'function') {
-        $.fn.fullpage.destroy('all');
-      }
+    if (typeof $.fn.fullpage.destroy == 'function') {
+      $.fn.fullpage.destroy('all');
     }
   }
 
   initFullpage(){
-    if (window){
-      $('#fullpage').fullpage({
-        sectionsColor: ['#f8f8f8', '#ececec', '#f8f8f8', '#ececec', '#f8f8f8'],
-        menu: '.menu',
-        navigation: false,
-        navigationPosition: 'right',
-        slidesNavigation: true,
-        slidesNavPosition: 'bottom',
-        scrollOverflow: false,
-        normalScrollElements: '.slide-modal-content, .modal',
-        onLeave: () => {
-          $('.mo-nav-mobile__mask').click();
-        },
-        onSlideLeave: (anchorLink, index, slideIndex, direction, nextSlideIndex) => {
-          if(nextSlideIndex == 1){
-            $('.logo-design').addClass('visible');
+    $('#fullpage').fullpage({
+      sectionsColor: ['#f8f8f8', '#ececec', '#f8f8f8', '#ececec', '#f8f8f8'],
+      menu: '.menu',
+      navigation: false,
+      navigationPosition: 'right',
+      slidesNavigation: true,
+      slidesNavPosition: 'bottom',
+      scrollOverflow: false,
+      normalScrollElements: '.slide-modal-content, .modal',
+      onLeave: () => {
+        $('.mo-nav-mobile__mask').click();
+      },
+      onSlideLeave: (anchorLink, index, slideIndex, direction, nextSlideIndex) => {
+        if(nextSlideIndex == 1){
+          $('.logo-design').addClass('visible');
+        }
+        if(nextSlideIndex == 2){
+          $('.industrial-design').addClass('visible');
+        }
+        if(nextSlideIndex == 3){
+          $('.web-design').addClass('visible');
+        }
+        if(nextSlideIndex == 4){
+          $('.photograph').addClass('visible');
+        }
+      },
+      afterLoad: (anchorLink, index) => {
+        $('.fullpage-wrapper').addClass('visible');
+        $('.section-' + index + ' .fade').addClass('visible');
+        if (index == 1){
+          if (!$('.intros').hasClass('visible')){
+            Utils.initSpin('spin-loader');
+              setTimeout(() => {
+              $('.intros').addClass('visible');
+              Utils.stopSpin('spin-loader');
+              return;
+            }, 800);
           }
-          if(nextSlideIndex == 2){
-            $('.industrial-design').addClass('visible');
+        }
+        if (index == 2){
+          if (!$('.graphic-design').hasClass('visible')){
+            Utils.initSpin('spin-loader');
+              setTimeout(() => {
+              $('.graphic-design').addClass('visible');
+              Utils.stopSpin('spin-loader');
+              return;
+            }, 800);
           }
-          if(nextSlideIndex == 3){
-            $('.web-design').addClass('visible');
+        }
+        if (index == 3){
+          if (!$('.article').hasClass('visible')){
+            Utils.initSpin('spin-loader');
+              setTimeout(() => {
+              $('.article').addClass('visible');
+              Utils.stopSpin('spin-loader');
+              return;
+            }, 800);
           }
-          if(nextSlideIndex == 4){
-            $('.photograph').addClass('visible');
+        }
+        if (index == 4 || index == 5){
+          if (!$('.contact').hasClass('visible')){
+            Utils.initSpin('spin-loader');
+              setTimeout(() => {
+              $('.contact').addClass('visible');
+              Utils.stopSpin('spin-loader');
+              return;
+            }, 800);
           }
-        },
-        afterLoad: (anchorLink, index) => {
-          $('.fullpage-wrapper').addClass('visible');
-          $('.section-' + index + ' .fade').addClass('visible');
-          if (index == 1){
-            if (!$('.intros').hasClass('visible')){
-              Utils.initSpin('spin-loader');
-                setTimeout(() => {
-                $('.intros').addClass('visible');
-                Utils.stopSpin('spin-loader');
-                return;
-              }, 800);
-            }
-          }
-          if (index == 2){
-            if (!$('.graphic-design').hasClass('visible')){
-              Utils.initSpin('spin-loader');
-                setTimeout(() => {
-                $('.graphic-design').addClass('visible');
-                Utils.stopSpin('spin-loader');
-                return;
-              }, 800);
-            }
-          }
-          if (index == 3){
-            if (!$('.article').hasClass('visible')){
-              Utils.initSpin('spin-loader');
-                setTimeout(() => {
-                $('.article').addClass('visible');
-                Utils.stopSpin('spin-loader');
-                return;
-              }, 800);
-            }
-          }
-          if (index == 4 || index == 5){
-            if (!$('.contact').hasClass('visible')){
-              Utils.initSpin('spin-loader');
-                setTimeout(() => {
-                $('.contact').addClass('visible');
-                Utils.stopSpin('spin-loader');
-                return;
-              }, 800);
-            }
-          }
-        },
-      });
-    }
+        }
+      },
+    });
   }
 
   setSlideModalContentName(val){
