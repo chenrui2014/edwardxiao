@@ -6,7 +6,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { reducer } from '../frontend/js/App/reducers/Index';
+import { reducer } from '../frontend/js/App/reducers/index';
 import Article from '../frontend/js/App/pages/Article/Index.js';
 import ArticleList from '../frontend/js/App/pages/ArticleList/Index.js';
 
