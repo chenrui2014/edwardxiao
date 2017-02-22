@@ -122,7 +122,7 @@
     "stylelint": "^7.2.0",
     "stylelint-config-standard": "^15.0.1",
     "url-loader": "^0.5.7",
-    "webpack": "^1.13.1",
+    "webpack": "^1.13.2",
     "webpack-manifest-plugin": "^1.0.0"
   }
 }

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import TinyMCE from 'react-tinymce';
 import {
   setIsNotFound,
-} from '../../actions/index';
+} from '../../actions/Index';
 
 import Validator from '../../../common/my_validator';
 let validator = new Validator();

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import MobileNav from '../../components/MobileNav/index';
-import Nav from '../../components/Nav/index';
+import MobileNav from '../../components/MobileNav/Index';
+import Nav from '../../components/Nav/Index';
 
 class NotFound extends Component {
 
