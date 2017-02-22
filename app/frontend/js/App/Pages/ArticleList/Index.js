@@ -12,9 +12,9 @@ import {
 
 import Utils from '../../../common/utils';
 
-import MobileNav from '../../components/MobileNav/index';
-import Nav from '../../components/Nav/index';
-import Footer from '../../components/Footer/index';
+import MobileNav from '../../components/MobileNav/Index';
+import Nav from '../../components/Nav/Index';
+import Footer from '../../components/Footer/Index';
 import NotFound from '../NotFound';
 import ArticleItem from './components/ArticleItem';
 

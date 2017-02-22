@@ -6,8 +6,8 @@ import {
   setSlideModalContentName,
 } from './actions/index';
 
-import Nav from './components/Nav/index';
-import MobileNav from './components/MobileNav/index';
+import Nav from './components/Nav/Index';
+import MobileNav from './components/MobileNav/Index';
 
 import Utils from '../common/utils';
 
