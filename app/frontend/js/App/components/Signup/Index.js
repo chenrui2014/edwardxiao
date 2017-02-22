@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Utils from '../../../common/Utils';
+import Utils from '../../../common/utils';
 import Validator from '../../../common/my_validator';
 let validator = new Validator();
 

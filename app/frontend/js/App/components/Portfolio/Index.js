@@ -2,7 +2,7 @@ import bowser from 'bowser';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import Utils from '../../../common/Utils';
+import Utils from '../../../common/utils';
 import Masonry from 'react-masonry-component';
 
 import {
