@@ -133,6 +133,13 @@ class Index extends Component {
       <div className="container-full">
         <MobileNav isIndex={true}/>
         <Nav isIndex={true} className="gradient"/>
+        <div id="profile" className="hidden">
+          <div className="profile-picture" style={{'width':'300px', 'height':'300px', 'overflow': 'hidden'}}>
+            <a href="edwardxiao.com">
+              <img src={require('../../img/edwardxiao.jpg')} alt="Edward Xiao 肖肖梦" style={{'width':'100%', 'height':'auto'}}/>
+            </a>
+          </div>
+        </div>
         <div id="fullpage" className="fullpage-wrapper">
           <div className="section intros" data-anchor="intros">
             <div className="content">
