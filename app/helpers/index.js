@@ -26,13 +26,13 @@ exports.assetUrl = (assetsName) => {
     if (!vendorAsset) {
       vendorAsset = assetsName;
     }
-    if (ENV.APP_ENV == 'production') {
+    if (ENV.APP_ENV == 'production(remove)') {
       return `http://${CDN.URL}/assets/${vendorAsset}`;
     } else {
       return `/assets/${vendorAsset}`;
     }
   } else {
-    if (ENV.APP_ENV == 'production') {
+    if (ENV.APP_ENV == 'production(remove)') {
       return `http://${CDN.URL}/assets/${publicAsset}`;
     } else {
       return `/assets/${publicAsset}`;
