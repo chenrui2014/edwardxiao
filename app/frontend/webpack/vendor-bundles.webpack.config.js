@@ -46,15 +46,10 @@ module.exports = {
     // new ManifestPlugin({
     //   fileName: 'manifest_vendor.json'
     // }),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
       }
     }),
-  ],
-  resolve: {
-    root: PATH.ROOT_PATH,
-    modulesDirectories: ['node_modules']
-  }
+  ]
 }

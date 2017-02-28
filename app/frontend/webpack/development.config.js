@@ -5,13 +5,9 @@ const PATH = require('./build_path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = _.merge(base, {
-  debug: true,
-  outputPathinfo: true,
-  displayErrorDetails: true,
   devtool: 'cheap-module-eval-source-map',
   output: {
     publicPath: '/assets/'
-    // publicPath: PATH.SERVER_PATH
   },
   devServer: {
     historyApiFallback: true
@@ -19,10 +15,11 @@ const config = _.merge(base, {
 });
 
 config.plugins.push(
-  new webpack.optimize.CommonsChunkPlugin('common', 'common.js'),
-  new ExtractTextPlugin('css/[name].css', {
-    allChunks: true
-  })
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'common',
+    filename: 'common.js',
+  }),
+  new ExtractTextPlugin({ filename: 'css/[name].css', disable: false, allChunks: true })
 );
 
 module.exports = config;
