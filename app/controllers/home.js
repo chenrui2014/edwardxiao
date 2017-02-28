@@ -12,7 +12,7 @@ import Index from '../frontend/js/App/index.js';
 const index = async (ctx, _next) => {
   const prerenderHtml = await handleRender(ctx.state.preloadedState, <Index/>);
   const locals = {
-    title: 'Home',
+    title: 'Edward Xiao',
     nav: 'index',
     prerenderHtml: prerenderHtml,
     baseUrl: '/',

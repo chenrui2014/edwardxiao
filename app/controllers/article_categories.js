@@ -3,7 +3,7 @@ import fs from 'fs';
 
 const index = async (ctx, _next) => {
   const locals = {
-    title: 'Home',
+    title: 'Edward Xiao | Article Categories',
     nav: 'index',
     preloadedState: { articles: '' },
     baseUrl: '/',

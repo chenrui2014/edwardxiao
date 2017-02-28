@@ -81,7 +81,7 @@ const index = async(ctx, _next) => {
   const prerenderHtml = await handleRender(preloadedState, <ArticleList/>);
 
   const locals = {
-    title: 'Home',
+    title: 'Edward Xiao | Articles',
     nav: 'index',
     prerenderHtml: prerenderHtml,
     preloadedState: preloadedState,
