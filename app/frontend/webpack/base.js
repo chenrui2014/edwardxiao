@@ -15,6 +15,10 @@ var config = module.exports = {
   },
   module: {
     rules: [{
+      test: /\.jsx?$/,
+      exclude: /(node_modules)/,
+      use: [{ loader: 'babel-loader', options: { presets: ['es2015', 'react', 'stage-2'] } }],
+    }, {
       test: /\.(woff|woff2|eot|ttf|otf)\??.*$/,
       use: 'url-loader?limit=8192&name=font/[name].[ext]'
     }, {
