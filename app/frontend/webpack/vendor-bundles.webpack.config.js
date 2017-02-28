@@ -1,4 +1,3 @@
-// vendor-bundles.webpack.config.js
 const webpack = require('webpack')
 const path = require('path');
 const PATH = require('./build_path');
@@ -42,14 +41,6 @@ module.exports = {
       // output.library option above
       name: '[name]_lib',
       context: PATH.ROOT_PATH
-    }),
-    // new ManifestPlugin({
-    //   fileName: 'manifest_vendor.json'
-    // }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    }),
+    })
   ]
 }

@@ -14,7 +14,7 @@ const index = async (ctx, _next) => {
   const locals = {
     title: 'Home',
     nav: 'index',
-    // prerenderHtml: prerenderHtml,
+    prerenderHtml: prerenderHtml,
     baseUrl: '/',
   };
   await ctx.render('home/index', locals);

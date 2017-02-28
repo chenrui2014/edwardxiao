@@ -20,7 +20,7 @@ class Index extends Component {
   }
 
   componentDidMount() {
-    require('fullpage.js/dist/jquery.fullpage.min.js');
+    require('../../vendor/js/jquery.fullpage.js');
     this.destroyFullpage();
     this.initFullpage();
   }
@@ -133,53 +133,71 @@ class Index extends Component {
       <div className="container-full">
         <MobileNav isIndex={true}/>
         <Nav isIndex={true} className="gradient"/>
-        <div id="fullpage">
+        <div id="fullpage" className="fullpage-wrapper">
           <div className="section intros" data-anchor="intros">
-            <div className="title" onClick={this.readMore.bind(this)}><div className="dp-inline-block middle"><span className="text">{LANG_GENERAL['read-more']}</span></div>&nbsp;<div className="dp-inline-block middle"><div className="arrow-down-wrapper"><span className="icon icon-expand-more"></span></div></div></div>
+            <div className="content">
+              <div className="title" onClick={this.readMore.bind(this)}><div className="dp-inline-block middle"><span className="text">{LANG_GENERAL['read-more']}</span></div>&nbsp;<div className="dp-inline-block middle"><div className="arrow-down-wrapper"><span className="icon icon-expand-more"></span></div></div></div>
+            </div>
           </div>
           <div className="section design" data-anchor="designs">
             <div className="slide graphic-design">
-              <div className="spin-loader" id="graphic-design-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'graphic_design')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div>
+              <div className="content">
+                <div className="spin-loader" id="graphic-design-loader"></div>
+                <div className="title" onClick={this.setSlideModalContentName.bind(this, 'graphic_design')}><span className="text">{LANG_GENERAL['graphic-design']}</span><span className="icon icon-more"></span></div>
+              </div>
             </div>
             <div className="slide logo-design">
-              <div className="spin-loader" id="logo-design-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'logo_design')}><span className="text">{LANG_GENERAL['logo-design']}</span><span className="icon icon-more"></span></div>
+              <div className="content">
+                <div className="spin-loader" id="logo-design-loader"></div>
+                <div className="title" onClick={this.setSlideModalContentName.bind(this, 'logo_design')}><span className="text">{LANG_GENERAL['logo-design']}</span><span className="icon icon-more"></span></div>
+              </div>
             </div>
             <div className="slide industrial-design">
-              <div className="spin-loader" id="industrial-design-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'industrial_design')}><span className="text">{LANG_GENERAL['industrial-design']}</span><span className="icon icon-more"></span></div>
+              <div className="content">
+                <div className="spin-loader" id="industrial-design-loader"></div>
+                <div className="title" onClick={this.setSlideModalContentName.bind(this, 'industrial_design')}><span className="text">{LANG_GENERAL['industrial-design']}</span><span className="icon icon-more"></span></div>
+              </div>
             </div>
             <div className="slide web-design">
-              <div className="spin-loader" id="web-design-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'web_design')}><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div>
+              <div className="content">
+                <div className="spin-loader" id="web-design-loader"></div>
+                <div className="title" onClick={this.setSlideModalContentName.bind(this, 'web_design')}><span className="text">{LANG_GENERAL['web-design']}</span><span className="icon icon-more"></span></div>
+              </div>
             </div>
             <div className="slide photograph">
-              <div className="spin-loader" id="photograph-loader"></div>
-              <div className="title" onClick={this.setSlideModalContentName.bind(this, 'photograph')}><span className="text">{LANG_GENERAL['photograph']}</span><span className="icon icon-more"></span></div>
+              <div className="content">
+                <div className="spin-loader" id="photograph-loader"></div>
+                <div className="title" onClick={this.setSlideModalContentName.bind(this, 'photograph')}><span className="text">{LANG_GENERAL['photograph']}</span><span className="icon icon-more"></span></div>
+              </div>
             </div>
           </div>
           <div className="section article" data-anchor="articles">
-            <div className="title"><span className="text" onClick={this.go.bind(this, 'articles')}>{LANG_GENERAL['read-article']}</span><span className="icon icon-more"></span></div>
+            <div className="content">
+              <div className="title"><span className="text" onClick={this.go.bind(this, 'articles')}>{LANG_GENERAL['read-article']}</span><span className="icon icon-more"></span></div>
+            </div>
           </div>
           <div className="section contact" data-anchor="contacts">
-            <div className="contact-content">
-              <div className="row">
-                <div className="col-md-4 col-xs-4">
-                  <a href="https://github.com/edwardfhsiao"><div className="contact-icon-wrapper"><span className="icon fa fa-github-alt" aria-hidden="true"></span></div></a>
+            <div className="content">
+              <div className="contact-content">
+                <div className="row">
+                  <div className="col-md-4 col-xs-4">
+                    <a href="https://github.com/edwardfhsiao"><div className="contact-icon-wrapper"><span className="icon fa fa-github-alt" aria-hidden="true"></span></div></a>
+                  </div>
+                  <div className="col-md-4 col-xs-4">
+                    <a href="https://www.facebook.com/edward.hsiao.98"><div className="contact-icon-wrapper"><span className="icon fa fa-facebook" aria-hidden="true"></span></div></a>
+                  </div>
+                  <div className="col-md-4 col-xs-4">
+                    <a href="http://weibo.com/fourit"><div className="contact-icon-wrapper"><span className="icon fa fa-weibo" aria-hidden="true"></span></div></a>
+                  </div>
                 </div>
-                <div className="col-md-4 col-xs-4">
-                  <a href="https://www.facebook.com/edward.hsiao.98"><div className="contact-icon-wrapper"><span className="icon fa fa-facebook" aria-hidden="true"></span></div></a>
-                </div>
-                <div className="col-md-4 col-xs-4">
-                  <a href="http://weibo.com/fourit"><div className="contact-icon-wrapper"><span className="icon fa fa-weibo" aria-hidden="true"></span></div></a>
-                </div>
+                <div className="title mgt-20"><span className="fa fa-envelope"></span>&nbsp;<span className="text"><a className="white" href="mailto:edwardfhsiao@gmail.com">edwardfhsiao@gmail.com</a></span></div>
               </div>
-              <div className="title mgt-20"><span className="fa fa-envelope"></span>&nbsp;<span className="text"><a className="white" href="mailto:edwardfhsiao@gmail.com">edwardfhsiao@gmail.com</a></span></div>
             </div>
           </div>
           <div className="section fp-auto-height footer" data-anchor="footer">
-            <div className="copyright al-center">Copyright © Edward Xiao</div>
+            <div className="content">
+              <div className="copyright al-center">Copyright © Edward Xiao</div>
+            </div>
           </div>
         </div>
       </div>

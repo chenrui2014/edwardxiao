@@ -5,7 +5,7 @@ html
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no")
     meta(name="author" content=(author || "Edward Xiao"))
-    meta(name="keywords" content=(keywords || "Edward, Xiao, Xiaomeng, Edward Xiao, web, design, designer, development, developer, programmer, front-end, frontend, creative, react, node, koa, 肖肖梦, website, webpage, 网站开发, 前端, 设计"))
+    meta(name="keywords" content=(keywords || "Edward, Xiao, Xiaomeng, Edward Xiao, web, design, designer, development, developer, programmer, front-end, frontend, creative, react, node, koa, 肖肖梦, website, webpage, 网站开发, 前端, 设计, js, javascript, html, css"))
     meta(name="description" content=(description || "Edward Xiao"))
     title
       = title || 'Edward Xiao'
@@ -38,6 +38,17 @@ html
       })();
   body
     #spin-loader.spin-loader
+    .hidden
+      h1
+        | 肖肖梦
+      h1
+        | Edward, Xiao, Xiaomeng, Edward Xiao
+      h1
+        | web, design, designer, developer, programmer, front-end, frontend, creative, react, node, koa, website, webpage
+      h1
+        | webpack, webpack2, node js, javascript, html, css
+      h1
+        | 网站开发, 前端, 设计
     block content
     <!--[if lte IE 8]>
     script.
@@ -53,7 +64,7 @@ html
     <!--[if gt IE 8]>
     script.
       window.__PRELOADED_STATE__ = !{ JSON.stringify(preloadedState) }
-    script(src=helpers.assetUrl('static/js/plupload.full.min.js'))
+    script(src=helpers.assetUrl('vendor/js/plupload.full.min.js'))
     script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src=helpers.assetUrl('react_vendors.js'))
     script(src=helpers.assetUrl('common.js'))
@@ -63,7 +74,7 @@ html
     <!--[if !IE]>-->
     script.
       window.__PRELOADED_STATE__ = !{ JSON.stringify(preloadedState) }
-    script(src=helpers.assetUrl('static/js/plupload.full.min.js'))
+    script(src=helpers.assetUrl('vendor/js/plupload.full.min.js'))
     script(src='https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js')
     script(src='https://cdn.staticfile.org/tinymce/4.5.1/tinymce.min.js')
     script(src=helpers.assetUrl('react_vendors.js'))

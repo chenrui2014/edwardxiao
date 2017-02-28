@@ -14,7 +14,12 @@ var config = module.exports = {
     index: PATH.ROOT_PATH + 'app/frontend/js/index.js',
   },
   module: {
-    rules: [{
+    rules: [/*{
+      enforce: 'pre',
+      test: /\.js?$/,
+      exclude: /node_modules/,
+      use: [{ loader: 'eslint-loader', options: {} }],
+    }, */{
       test: /\.jsx?$/,
       exclude: /(node_modules)/,
       use: [{ loader: 'babel-loader', options: { presets: ['es2015', 'react', 'stage-2'] } }],
@@ -78,7 +83,7 @@ var config = module.exports = {
       fileName: 'rev-manifest.json'
     }),
     new CopyWebpackPlugin([
-      { from: PATH.ROOT_PATH + 'app/frontend/static/', to: PATH.ROOT_PATH + 'public/assets/static/' },
+      { from: PATH.ROOT_PATH + 'app/frontend/vendor/', to: PATH.ROOT_PATH + 'public/assets/vendor/' },
     ])
   ]
 };
