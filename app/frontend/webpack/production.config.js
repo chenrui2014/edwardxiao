@@ -7,7 +7,8 @@ const ENV = require('../../../.env');
 const config = _.merge(base, {
   devtool: 'cheap-source-map',
   output: {
-    publicPath: '/' + ENV.APP_NAME + '/assets/',
+    // publicPath: '/' + ENV.APP_NAME + '/assets/',
+    publicPath: '/assets/',
     filename: '[name]-[chunkhash].js'
   },
 });
