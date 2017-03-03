@@ -14,10 +14,10 @@ const index = async(ctx, _next) => {
   let categoryQuery;
   const currentUser = ctx.state.preloadedState.currentUser;
   if (!_.isNull(currentUser) && currentUser.role == 'admin'){
-    query = {uniqueKey: {'$ne': 'root'}};
+    categoryQuery = {uniqueKey: {'$ne': 'root'}};
   }
   else{
-    query = { isBanned: false, isPrivate: false, $and:[{isAdminOnly: false}] };
+    categoryQuery = { isBanned: false, isPrivate: false, $and:[{isAdminOnly: false}] };
   }
   let categorySelect = ['title', 'uniqueKey', 'author', 'preface', 'desc', 'content', 'articleCategory', 'sequence', 'cover', 'type', 'level', 'tag', 'isBanned', 'isPrivate', 'isAdminOnly', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy'];
   let categoryPopulate = 'createdBy';

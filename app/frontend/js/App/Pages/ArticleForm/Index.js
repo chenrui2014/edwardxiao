@@ -555,7 +555,7 @@ class ArticleForm extends Component {
                 <div className="my-button my-button--red" onClick={uniqueKey == '' ? this.go.bind(this, '/articles/') : this.go.bind(this, '/articles/' + uniqueKey)}>{LANG_NAV['back']}</div>
                 <form className="submit" id="submit" onSubmit={this.submit.bind(this)} autoComplete="off">
                   <div className="form-check step-content__text mgt-15 mgb-20">
-                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                    <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
                       <input
                         type="checkbox"
                         className="form-check-input"
@@ -701,7 +701,7 @@ class ArticleForm extends Component {
                       <select
                         ref="articleCategory"
                         onChange={this.setArticleCategory.bind(this)}
-                        style={{'float':'none','display':'inline-block','padding-right':'28px', 'padding-left':'8px', 'height':'30px', 'width':'100%', 'border-color':'#ccc'}}
+                        style={{'float':'none','display':'inline-block','paddingRight':'28px', 'paddingLeft':'8px', 'height':'30px', 'width':'100%', 'borderColor':'#ccc'}}
                         value={articleCategory}
                       >
                         {articleCategoryOptionsHtml}
@@ -772,7 +772,7 @@ class ArticleForm extends Component {
                   />
                   <div className="height-20"></div>
                   <div className="form-check step-content__text mgt-15 mgb-20">
-                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                    <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
                       <input
                         type="checkbox"
                         className="form-check-input"
@@ -783,7 +783,7 @@ class ArticleForm extends Component {
                     </label>
                   </div>
                   <div className="form-check step-content__text mgt-15 mgb-20">
-                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                    <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
                       <input
                         type="checkbox"
                         className="form-check-input"
@@ -794,7 +794,7 @@ class ArticleForm extends Component {
                     </label>
                   </div>
                   <div className="form-check step-content__text mgt-15 mgb-20">
-                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                    <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
                       <input
                         type="checkbox"
                         className="form-check-input"

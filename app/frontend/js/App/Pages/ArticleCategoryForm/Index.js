@@ -480,6 +480,10 @@ class ArticleCategoryForm extends Component {
     this.setState({content: e.target.getContent()});
   }
 
+  onCheckChange() {
+
+  }
+
   render() {
     let contentHtml;
     let {
@@ -579,12 +583,13 @@ class ArticleCategoryForm extends Component {
                 <div className="my-button my-button--red" onClick={uniqueKey == '' ? this.go.bind(this, '/article_categories/') : this.go.bind(this, '/article_categories/' + uniqueKey)}>{LANG_NAV['back']}</div>
                 <form className="submit" id="submit" onSubmit={this.submit.bind(this)} autoComplete="off">
                   <div className="form-check step-content__text mgt-15 mgb-20">
-                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                    <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
                       <input
                         type="checkbox"
                         className="form-check-input"
                         onClick={this.setIsUseUrl.bind(this, !isUseUrl)}
                         checked={isUseUrl}
+                        onChange={this.onCheckChange.bind(this)}
                       />
                       &nbsp;<span className="">{`${LANG_ARTICLE['use-image-url']}`}</span>
                     </label>
@@ -746,7 +751,7 @@ class ArticleCategoryForm extends Component {
                       <select
                         ref="articleCategory"
                         onChange={this.setArticleCategory.bind(this)}
-                        style={{'float':'none','display':'inline-block','padding-right':'28px', 'padding-left':'8px', 'height':'30px', 'width':'100%', 'border-color':'#ccc'}}
+                        style={{'float':'none','display':'inline-block','paddingRight':'28px', 'paddingLeft':'8px', 'height':'30px', 'width':'100%', 'borderColor':'#ccc'}}
                         value={articleCategory}
                       >
                         {articleCategoryOptionsHtml}
@@ -817,34 +822,37 @@ class ArticleCategoryForm extends Component {
                   />
                   <div className="height-20"></div>
                   <div className="form-check step-content__text mgt-15 mgb-20">
-                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                    <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
                       <input
                         type="checkbox"
                         className="form-check-input"
                         onClick={this.setIsBanned.bind(this, !isBanned)}
                         checked={isBanned}
+                        onChange={this.onCheckChange.bind(this)}
                       />
                       &nbsp;<span className="">{`${LANG_ARTICLE['banned']}`}</span>
                     </label>
                   </div>
                   <div className="form-check step-content__text mgt-15 mgb-20">
-                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                    <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
                       <input
                         type="checkbox"
                         className="form-check-input"
                         onClick={this.setIsPrivate.bind(this, !isPrivate)}
                         checked={isPrivate}
+                        onChange={this.onCheckChange.bind(this)}
                       />
                       &nbsp;<span className="">{`${LANG_ARTICLE['private']}`}</span>
                     </label>
                   </div>
                   <div className="form-check step-content__text mgt-15 mgb-20">
-                    <label className="form-check-label fw-reg" style={{'margin-bottom':'0'}}>
+                    <label className="form-check-label fw-reg" style={{'marginBottom':'0'}}>
                       <input
                         type="checkbox"
                         className="form-check-input"
                         onClick={this.setIsAdminOnly.bind(this, !isAdminOnly)}
                         checked={isAdminOnly}
+                        onChange={this.onCheckChange.bind(this)}
                       />
                       &nbsp;<span className="">{`${LANG_ARTICLE['admin-only']}`}</span>
                     </label>

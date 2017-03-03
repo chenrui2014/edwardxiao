@@ -16,7 +16,7 @@ class NotFound extends Component {
   }
 
   go() {
-    this.context.router.push('/');
+    window.location = '/';
   }
 
   render() {

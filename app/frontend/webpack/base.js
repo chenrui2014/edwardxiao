@@ -84,6 +84,7 @@ var config = module.exports = {
     }),
     new CopyWebpackPlugin([
       { from: PATH.ROOT_PATH + 'app/frontend/vendor/', to: PATH.ROOT_PATH + 'public/assets/vendor/' },
+      { from: PATH.ROOT_PATH + 'app/frontend/site/', to: PATH.ROOT_PATH + 'public/assets/site/' },
       { from: PATH.ROOT_PATH + 'app/frontend/img/edwardxiao.jpg', to: PATH.ROOT_PATH + 'public/assets/img/edwardxiao.jpg' },
     ])
   ]
